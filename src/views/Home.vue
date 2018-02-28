@@ -17,24 +17,21 @@
     </b-container>
   </div>
 </div>
-  
+
 </template>
 <script>
 export default {
     data () {
         return {
-            goods: [
-                { name: 'test', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'xoll', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'xocl', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'cool', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'bool', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'wool', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'nooo', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'erro', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' },
-                { name: 'aass', img: 'https://img.buzzfeed.com/buzzfeed-static/static/2016-08/17/18/campaign_images/buzzfeed-prod-fastlane02/19-poop-facts-that-will-make-you-say-shit-2-22195-1471473131-1_dblbig.jpg' }
-            ]
+            goods: []
         }
+    },
+    mounted () {
+      this.axios.get('/item').then(response => {
+        this.goods = response.data
+      }).catch(error => {
+        console.log(error)
+      })
     }
 }
 </script>
@@ -46,5 +43,5 @@ export default {
     .col-wrapper {
         margin-top: 25px;
     }
-    
+
 </style>
