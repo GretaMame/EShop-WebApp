@@ -31,7 +31,7 @@
           {{(goodsInCart)}}
         </b-navbar-brand>
 
-      <b-nav-item-dropdown right>
+      <b-nav-item-dropdown right v-if="isAuthorised">
         <template slot="button-content">
             <icon name="user"></icon>
         </template>
@@ -39,6 +39,8 @@
         <b-dropdown-item href="#">Signout</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
+
+    <b-navbar-brand to="/login" v-if="isNotAuthorised">Login</b-navbar-brand>
 
   </b-collapse>
 </b-navbar>
@@ -49,7 +51,9 @@
 export default {
   data () {
     return {
-      goodsInCart: 0
+      goodsInCart: 0,
+      isAuthorised: false,
+      isNotAuthorised: true
     }
   }
 }
