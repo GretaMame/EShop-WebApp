@@ -2,27 +2,25 @@
   <div>
     <h1 class="m-3">Login</h1>
     <b-form @submit="onSubmit">
-      <b-row align-h="center">
-        <b-col md="auto" class="m-2">
+      <b-row align-h="center" md="auto">
           <b-form-group id="emailInputGroup"
                         label="Email"
                         for="emailInput">
             <b-form-input id="emailInput"
                           type="email"
-                          required="true">
+                          required>
             </b-form-input>
           </b-form-group>
-        </b-col>
-        <b-col md="auto" class="m-2">
+      </b-row>
+      <b-row align-h="center" md="auto">
           <b-form-group id="passwInputGroup"
                         label="Password"
                         for="passwInput">
             <b-form-input id="passwInput"
                           type="password"
-                          required="true">
+                          required>
             </b-form-input>
           </b-form-group>
-        </b-col>
       </b-row>
       <b-row align-h="center" align-v="center" class="my-2"><b-button id="LoginBtn" type="submit">Login</b-button></b-row>
       <b-row align-h="center" align-v="center"><b-link href="forgotPassword">Forgot password?</b-link></b-row>
