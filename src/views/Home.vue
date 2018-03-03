@@ -27,7 +27,7 @@ export default {
         }
     },
     mounted () {
-      this.axios.get('/item').then(response => {
+      this.axios.get('api/items').then(response => {
         this.goods = response.data
       }).catch(error => {
         console.log(error)

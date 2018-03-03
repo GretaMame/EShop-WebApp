@@ -14,7 +14,7 @@ import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 
-Vue.axios.defaults.baseURL = 'http://localhost:8080/'
+Vue.axios.defaults.baseURL = 'http://localhost:60014/'
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
