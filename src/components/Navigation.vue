@@ -40,8 +40,8 @@
       </b-nav-item-dropdown>
     </b-navbar-nav>
     <b-navbar-nav v-if="!isAuthorised">
-      <b-nav-item class="login" to="/login" v-on:click="makeActive('login')">Login</b-nav-item>
-      <b-nav-item class="register" to="/register" v-on:click="makeActive('register')">Register</b-nav-item>
+      <b-nav-item class="login" to="/login">Login</b-nav-item>
+      <b-nav-item class="register" to="/register">Register</b-nav-item>
     </b-navbar-nav>
   </b-collapse>
 </b-navbar>
@@ -54,11 +54,6 @@ export default {
     return {
       goodsInCart: 0,
       isAuthorised: false
-    }
-  },
-  methods: {
-    makeActive: function (item) {
-        this.active = item
     }
   }
 }
