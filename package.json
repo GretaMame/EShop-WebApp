@@ -18,6 +18,7 @@
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.4",
     "vue-axios": "^2.0.2",
+    "vue-loading-template": "^0.1.7",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
