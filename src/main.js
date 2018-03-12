@@ -10,12 +10,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 
 Vue.axios.defaults.baseURL = 'http://localhost:60014/'
 Vue.use(BootstrapVue)
+Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
