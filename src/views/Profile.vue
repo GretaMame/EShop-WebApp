@@ -11,7 +11,7 @@
 </div>
 </template>
 <script>
-  import ProfileEditing from '../components/ProfileEditing.vue'
+  import ProfileEditing from '@/components/ProfileEditing.vue'
   export default {
     components: {
       'profile-editing': ProfileEditing
