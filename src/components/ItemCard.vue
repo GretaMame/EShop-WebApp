@@ -32,6 +32,11 @@
   </el-card>
 </template>
 
+<script>
+export default {
+  props: [ 'item' ]
+}
+</script>
 
 <style>
   .bottom {
@@ -77,9 +82,3 @@
     padding-top: 2%;
   }
 </style>
-
-<script>
-export default {
-  props: [ 'item' ]
-}
-</script>
