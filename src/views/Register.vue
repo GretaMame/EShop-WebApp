@@ -20,23 +20,6 @@
   </el-row>
 </template>
 
-<style scoped>
-  .box-card {
-    margin: auto;
-    max-width: 600px;
-    margin-top: 40px;
-    padding: 40px 60px 0px 60px;
-  }
-  form {
-    margin: 10px;
-    margin-top: 30px;
-  }
-  button {
-    min-width: 150px;
-    margin-top: 30px;
-  }
-</style>
-
 <script>
   export default {
     data () {
@@ -84,3 +67,20 @@
     }
   }
 </script>
+
+<style scoped>
+  .box-card {
+    margin: auto;
+    max-width: 600px;
+    margin-top: 40px;
+    padding: 40px 60px 0px 60px;
+  }
+  form {
+    margin: 10px;
+    margin-top: 30px;
+  }
+  button {
+    min-width: 150px;
+    margin-top: 30px;
+  }
+</style>
