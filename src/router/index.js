@@ -4,9 +4,11 @@ import Profile from '@/views/Profile'
 import Home from '@/views/Home'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
+import ForgotPassword from '@/views/ForgotPassword'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/user/profile',
@@ -22,6 +24,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/login/forgotpassword',
+      name: 'forgotPassword',
+      component: ForgotPassword
     },
     {
       path: '/register',
