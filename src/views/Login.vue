@@ -23,27 +23,7 @@
   </el-row>
 </template>
 
-<style scoped>
-  .box-card {
-    margin: auto;
-    max-width: 600px;
-    margin-top: 40px;
-    padding: 40px 60px 20px 60px;
-  }
-  form {
-    margin: 10px;
-    margin-top: 30px;
-  }
-  #forgotPasswordLinkItem {
-    text-align: end;
-  }
-  div#passwordItem {
-    margin-bottom: 0px;
-  }
-  button {
-    min-width: 120px;
-  }
-</style>
+
 
 <script>
 export default {
@@ -88,3 +68,24 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .box-card {
+    margin: auto;
+    max-width: 600px;
+    margin-top: 40px;
+    padding: 40px 60px 20px 60px;
+  }
+  form {
+    margin: 10px;
+    margin-top: 30px;
+  }
+  #forgotPasswordLinkItem {
+    text-align: end;
+  }
+  div#passwordItem {
+    margin-bottom: 0px;
+  }
+  button {
+    min-width: 120px;
+  }
+</style>
