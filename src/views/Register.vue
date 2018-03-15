@@ -1,59 +1,86 @@
 <template>
-  <div>
-    <b-form @submit="onSubmit">
-      <b-row align-h="center">
-        <b-col cols="3" align-v="start" align-h="center">
-          <b-img class="m-2" md="auto" src="https://images.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F440563522632552448%2FivG2Cb9-.png&f=1" fluid alt="Cat" />
-        </b-col>
-        <b-col cols="8" md="auto" class="m-2" align-h="start" align-v="center">
-          <b-form-group label="Email address:" class="m-2">
-            <b-form-input type="email"
-                          required
-                          v-model="email"
-                          placeholder="example@example.com">
-            </b-form-input>
-          </b-form-group>
-          <b-form-group label="Enter password:" class="m-2">
-            <b-form-input id="passwInput"
-                          type="password"
-                          v-model="password"
-                          required>
-            </b-form-input>
-          </b-form-group>
-          <b-form-group label="Repeat password:" class="m-2">
-            <b-form-input type="password"
-                          v-model="passwordRepeat"
-                          :state="passwordsMatch"
-                          required>
-            </b-form-input>
-          </b-form-group>
-          <b-button class="my-2" :disabled="!passwordsMatch" type="submit">Register</b-button>
-        </b-col>
-      </b-row>
-    </b-form>
-  </div>
+  <el-row>
+    <el-card class="box-card">
+      <h2>Create new account</h2>
+      <el-form :model="registerForm" :rules="rules" ref="registerForm" size="medium">
+        <el-form-item prop="email" label="Email">
+          <el-input :autofocus="true" v-model="registerForm.email" placeholder="Enter your email"></el-input>
+        </el-form-item>
+        <el-form-item prop="password" label="Password">
+          <el-input type="password" v-model="registerForm.password" placeholder="Enter your password"></el-input>
+        </el-form-item>
+        <el-form-item prop="passwordRepeat" label="Repeat password">
+          <el-input type="password" v-model="registerForm.passwordRepeat" placeholder="Repeat your password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('registerForm')">Sign up</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </el-row>
 </template>
 
 <script>
-export default {
-  name: 'Register',
-  computed: {
-    passwordsMatch () {
-      return this.password === this.passwordRepeat
-    }
-  },
-  data () {
-    return {
-      email: '',
-      password: '',
-      passwordRepeat: ''
-    }
-  },
-  methods: {
-    onSubmit (evt) {
-      evt.preventDefault()
-      alert('Please check your email to very your account!')
+  export default {
+    data () {
+      var validatePasswordRepeat = (rule, value, callback) => {
+        if (value !== this.registerForm.password) {
+          callback(new Error('Passwords don\'t match!'))
+        } else {
+          callback()
+        }
+      }
+      return {
+        registerForm: {
+        email: '',
+        password: '',
+        passwordRepeat: ''
+        },
+        rules: {
+          email: [
+            { required: true, message: 'Please enter your email address', trigger: 'blur' },
+            { type: 'email', message: 'Please input correct email address', trigger: 'blur,change' }
+          ],
+          password: [
+            { required: true, message: 'Please enter your password', trigger: 'blur' },
+            { min: 6, message: 'Password must be at least 5 characters', trigger: 'change, blur' }
+          ],
+          passwordRepeat: [
+            { required: true, message: 'Please repeat your password', trigger: 'blur' },
+            { validator: validatePasswordRepeat, trigger: 'blur' }
+          ]
+        }
+      }
+    },
+    methods: {
+      submitForm (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log('Sign up successful')
+            alert('Your registration was successful! Please check your email to validate your account.')
+          } else {
+            console.log('Sign up error :(')
+            return false
+          }
+        })
+      }
     }
   }
-}
 </script>
+
+<style scoped>
+  .box-card {
+    margin: auto;
+    max-width: 600px;
+    margin-top: 40px;
+    padding: 40px 60px 0px 60px;
+  }
+  form {
+    margin: 10px;
+    margin-top: 30px;
+  }
+  button {
+    min-width: 150px;
+    margin-top: 30px;
+  }
+</style>

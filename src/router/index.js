@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import Admin from '@/views/Admin'
+import ForgotPassword from '@/views/ForgotPassword'
 Vue.use(Router)
 
 export default new Router({
@@ -24,6 +25,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/login/forgotpassword',
+      name: 'forgotPassword',
+      component: ForgotPassword
     },
     {
       path: '/register',
