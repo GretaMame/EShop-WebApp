@@ -12,8 +12,48 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-dialog
+      title="Password reset link has been sent!"
+      :visible.sync="dialogVisible"
+      width="35%">
+      <span>Please check your email to reset your password.</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible=false">Ok</el-button>
+      </span>
+    </el-dialog>
   </el-row>
 </template>
+
+<script>
+  export default {
+    data () {
+      return {
+        dialogVisible: false,
+        forgotPasswordForm: {
+          email: ''
+        },
+        rules: {
+          email: [
+            { required: true, message: 'Please enter your email address', trigger: 'blur' },
+            { type: 'email', message: 'Please input correct email address', trigger: 'blur,change' }
+          ]
+        }
+      }
+    },
+    methods: {
+      submitForm (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log('Reset password successful!')
+            this.dialogVisible = true
+          } else {
+            console.log('Forgot password form submit error :(')
+          }
+        })
+      }
+    }
+  }
+</script>
 
 <style scoped>
   .box-card {
@@ -33,33 +73,3 @@
     margin-top: 50px;
   }
 </style>
-
-<script>
-  export default {
-    data () {
-      return {
-        forgotPasswordForm: {
-          email: ''
-        },
-        rules: {
-          email: [
-            { required: true, message: 'Please enter your email address', trigger: 'blur' },
-            { type: 'email', message: 'Please input correct email address', trigger: 'blur,change' }
-          ]
-        }
-      }
-    },
-    methods: {
-      submitForm (formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            console.log('Reset password successful!')
-            alert('Please check your email to reset your password!')
-          } else {
-            console.log('Forgot password form submit error :(')
-          }
-        })
-      }
-    }
-  }
-</script>
