@@ -4,33 +4,13 @@
       background-color="#545c64" text-color="#fff" active-text-color="#0080FF"
       v-if="!smallScreen">
       <el-menu-item index="1" route="/home">
-        <template slot="title">
-          <span>Goal Diggers</span>
-        </template>
+        <template slot="title">Goal Diggers</template>
       </el-menu-item>
       <el-submenu index="2">
-        <template slot="title">Category 0</template>
-        <el-menu-item index="2-1">Subcategory 0</el-menu-item>
-        <el-menu-item index="2-2">Subcategory 1</el-menu-item>
-        <el-menu-item index="2-3">Subcategory 2</el-menu-item>
-        <el-submenu index="2-4">
-          <template slot="title">Subcategory 3</template>
-          <el-menu-item index="2-4-1">Sub-subcategory 0</el-menu-item>
-          <el-menu-item index="2-4-2">Sub-subcategory 1</el-menu-item>
-          <el-menu-item index="2-4-3">Sub-subcategory 2</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title">Category 1</template>
-        <el-menu-item index="3-1">Subcategory 0</el-menu-item>
-        <el-menu-item index="3-2">Subcategory 1</el-menu-item>
-        <el-menu-item index="3-3">Subcategory 2</el-menu-item>
-      </el-submenu>
-      <el-submenu index="4">
-        <template slot="title">Category 2</template>
-        <el-menu-item index="4-1">Subcategory 0</el-menu-item>
-        <el-menu-item index="4-2">Subcategory 1</el-menu-item>
-        <el-menu-item index="4-3">Subcategory 2</el-menu-item>
+        <template slot="title">Goods</template>
+        <el-menu-item index="2-1" v-for="category in categories">
+          {{category.name}}
+        </el-menu-item>
       </el-submenu>
       <el-menu-item class="gd_right" index="8" v-if="!isAuthorised" route="/register">Sign up</el-menu-item>
       <el-menu-item class="gd_right" index="7" v-if="!isAuthorised" route="/login">Log in</el-menu-item>
@@ -58,30 +38,9 @@
             <span>Goal Diggers</span>
           </template>
         </el-menu-item>
-        <el-submenu index="1-2">
-          <template slot="title">Category 0</template>
-          <el-menu-item index="1-2-1">Subcategory 0</el-menu-item>
-          <el-menu-item index="1-2-2">Subcategory 1</el-menu-item>
-          <el-menu-item index="1-2-3">Subcategory 2</el-menu-item>
-          <el-submenu index="1-2-4">
-            <template slot="title">Subcategory 3</template>
-            <el-menu-item index="1-2-4-1">Sub-subcategory 0</el-menu-item>
-            <el-menu-item index="1-2-4-2">Sub-subcategory 1</el-menu-item>
-            <el-menu-item index="1-2-4-3">Sub-subcategory 2</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-submenu index="1-3">
-          <template slot="title">Category 1</template>
-          <el-menu-item index="1-3-1">Subcategory 0</el-menu-item>
-          <el-menu-item index="1-3-2">Subcategory 1</el-menu-item>
-          <el-menu-item index="1-3-3">Subcategory 2</el-menu-item>
-        </el-submenu>
-        <el-submenu index="1-4">
-          <template slot="title">Category 2</template>
-          <el-menu-item index="1-4-1">Subcategory 0</el-menu-item>
-          <el-menu-item index="1-4-2">Subcategory 1</el-menu-item>
-          <el-menu-item index="1-4-3">Subcategory 2</el-menu-item>
-        </el-submenu>
+        <el-menu-item index="2-1" v-for="category in categories">
+          {{category.name}}
+        </el-menu-item>
       </el-submenu>
       <el-menu-item class="gd_right" index="1-8" v-if="!isAuthorised" route="/register">Sign up</el-menu-item>
       <el-menu-item class="gd_right" index="1-7" v-if="!isAuthorised" route="/login">Log in</el-menu-item>
@@ -109,7 +68,27 @@ export default {
       isAuthorised: false,
       displayMode: 'horizontal',
       smallScreen: '',
-      fullWidth: document.documentElement.clientWidth
+      fullWidth: document.documentElement.clientWidth,
+      categories: [
+        {
+          name: 'Category 0',
+          subcategories: [
+
+          ]
+        },
+        {
+          name: 'Category 1',
+          subcategories: [
+
+          ]
+        },
+        {
+          name: 'Category 2',
+          subcategories: [
+
+          ]
+        }
+      ]
     }
   },
   beforeDestroy: function () {
