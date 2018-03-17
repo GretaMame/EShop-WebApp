@@ -26,7 +26,7 @@
     <!-- Right aligned nav items -->
     <b-navbar-nav class="ml-auto">
 
-       <b-navbar-brand to="#">
+       <b-navbar-brand to="/cart">
           <icon name="shopping-cart"></icon>
           {{(goodsInCart)}}
         </b-navbar-brand>
