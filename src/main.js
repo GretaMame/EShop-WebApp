@@ -6,6 +6,7 @@ import VueAxios from 'vue-axios'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
+import store from '@/store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
@@ -16,13 +17,16 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 
-Vue.axios.defaults.baseURL = 'http://localhost:60014/'
+Vue.axios.defaults.baseURL = 'http://localhost:64000/api/'
+// Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
+Vue.axios.defaults.withCredentials = true
 Vue.use(BootstrapVue)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+  store,
   el: '#app',
   router,
   template: '<App/>',
