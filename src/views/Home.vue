@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ItemCard from './../components/ItemCard'
+import ItemCard from '@/components/ItemCard'
 export default {
   data () {
       return {

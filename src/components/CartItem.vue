@@ -2,7 +2,7 @@
   <el-card>
     <div slot="header" class="clearfix">
       <span class="item-padding-align">SKU: {{item.SKU}}</span>
-      <time class="time">{{item.CreateDate}}</time>
+      <time class="create-time">{{item.CreateDate}}</time>
     </div>
     <el-row>
         <el-col :xs="24" :sm="7" :md="7" :lg="6">
@@ -46,7 +46,6 @@
                         placeholder="1"
                         :value="item.Count"
                         min="1"
-                        minlength="1"
                         type="number"/>
                   </el-row>
                 </el-col>
@@ -81,7 +80,7 @@ export default {
     padding: 0px !important;
     background-color:#F5F5F5;
   }
-  .time {
+  .create-time {
     font-size: 13px;
     color: #999;
     float: right;
