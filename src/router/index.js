@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import Login from '@/views/account/Login'
 import Register from '@/views/account/Register'
 import ForgotPassword from '@/views/account/ForgotPassword'
+import Cart from '@/views/Cart'
 Vue.use(Router)
 
 export default new Router({
