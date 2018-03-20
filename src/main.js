@@ -13,6 +13,7 @@ import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/display.css'
 
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)

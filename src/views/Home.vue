@@ -7,9 +7,9 @@
 </template>
 
 <script>
-  import ItemCard from './../components/ItemCard'
-  export default {
-    data () {
+import ItemCard from '@/components/ItemCard'
+export default {
+  data () {
       return {
         items: []
       }
