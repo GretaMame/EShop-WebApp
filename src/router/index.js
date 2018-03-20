@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Profile from '@/views/Profile'
+import Profile from '@/views/account/Profile'
 import Home from '@/views/Home'
-import Login from '@/views/Login'
-import Register from '@/views/Register'
-import ForgotPassword from '@/views/ForgotPassword'
-import Cart from '@/views/Cart'
+import Login from '@/views/account/Login'
+import Register from '@/views/account/Register'
+import ForgotPassword from '@/views/account/ForgotPassword'
 Vue.use(Router)
 
 export default new Router({

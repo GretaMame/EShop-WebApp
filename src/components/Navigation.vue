@@ -1,25 +1,23 @@
 <template>
   <div>
-    <el-menu :default-active="activeIndex" :mode="displayMode" :router="true"
-      background-color="#545c64" text-color="#fff" active-text-color="#0080FF"
-      v-if="!smallScreen">
+    <el-menu :default-active="activeIndex" :mode="displayMode" :router="true" background-color="#545c64" text-color="#fff" active-text-color="#0080FF">
       <el-menu-item index="1" route="/home">
         <template slot="title">Goal Diggers</template>
       </el-menu-item>
       <el-submenu index="2">
         <template slot="title">Goods</template>
-        <el-menu-item index="2-1" v-for="category in categories">
+        <el-menu-item index="2-1" v-for="category in categories" :key="category.name">
           {{category.name}}
         </el-menu-item>
       </el-submenu>
-      <el-menu-item class="gd_right" index="8" v-if="!isAuthorised" route="/register">Sign up</el-menu-item>
-      <el-menu-item class="gd_right" index="7" v-if="!isAuthorised" route="/login">Log in</el-menu-item>
-      <el-submenu class="gd_right" index="6" v-if="isAuthorised">
+      <el-menu-item class="gd_right" index="8" v-if="!this.$store.getters.isAuthenticated" route="/register">Sign up</el-menu-item>
+      <el-menu-item class="gd_right" index="7" v-if="!this.$store.getters.isAuthenticated" route="/login">Log in</el-menu-item>
+      <el-submenu class="gd_right" index="6" v-if="this.$store.getters.isAuthenticated">
         <template slot="title">
           <i class="el-icon-menu"></i>
         </template>
         <el-menu-item index="6-1" route="/user/profile">My profile</el-menu-item>
-        <el-menu-item index="6-2" route="#">Sign out</el-menu-item>
+        <el-menu-item index="6-1" v-on:click="signOut">Sign out</el-menu-item>
       </el-submenu>
       <el-menu-item class="gd_right" index="5" route="#">
         <i class="el-icon-goods"></i>
@@ -30,41 +28,58 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      activeIndex: '1',
-      goodsInCart: 0,
-      isAuthorised: false,
-      displayMode: 'horizontal',
-      categories: [
-        {
-          name: 'Category 0',
-          subcategories: [
+  export default {
+    data () {
+      return {
+        activeIndex: '1',
+        goodsInCart: 0,
+        isAuthorised: false,
+        displayMode: 'horizontal',
+        categories: [{
+            name: 'Category 0',
+            subcategories: [
 
-          ]
-        },
-        {
-          name: 'Category 1',
-          subcategories: [
+            ]
+          },
+          {
+            name: 'Category 1',
+            subcategories: [
 
-          ]
-        },
-        {
-          name: 'Category 2',
-          subcategories: [
+            ]
+          },
+          {
+            name: 'Category 2',
+            subcategories: [
 
-          ]
-        }
-      ]
+            ]
+          }
+        ]
+      }
+    },
+    methods: {
+      signOut () {
+        this.axios.post('account/logout').then(response => {
+          this.$store.dispatch('logOut')
+          this.$notify.success({
+            title: 'Successfull logout'
+          })
+          this.$router.push('/home')
+        }).catch(err => {
+          console.log('error: ', err)
+          this.$notify.error({
+            title: 'Error',
+            message: 'Unable to log out.'
+          })
+        })
+      }
     }
   }
-}
+
 </script>
 
 <style scoped>
   .gd_right {
     float: right;
   }
-</style>
 
+</style>
