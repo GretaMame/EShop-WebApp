@@ -18,7 +18,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 
-Vue.axios.defaults.baseURL = 'http://localhost:64000/api/'
+Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 // Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
 Vue.axios.defaults.withCredentials = true
 Vue.use(BootstrapVue)
