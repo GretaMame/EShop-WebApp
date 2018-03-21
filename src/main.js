@@ -14,6 +14,7 @@ import Icon from 'vue-awesome/components/Icon'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/element-#DF3A01/index.css'
 import 'element-ui/lib/element-#DF3A01/display.css'
+import interceptor from '@/helpers/httpInterceptor.js'
 
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
@@ -24,6 +25,8 @@ Vue.axios.defaults.withCredentials = true
 Vue.use(BootstrapVue)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+
+interceptor()
 
 /* eslint-disable no-new */
 new Vue({
