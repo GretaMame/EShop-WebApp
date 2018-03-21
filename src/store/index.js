@@ -8,12 +8,16 @@ const store = new Vuex.Store({
   state: {
     user: {
       authenticated: false,
+      token: '',
       profile: null
     }
   },
   getters: {
     isAuthenticated: state => {
       return state.user.authenticated
+    },
+    token: state => {
+      return state.user.token
     }
   },
   actions: {
@@ -27,9 +31,12 @@ const store = new Vuex.Store({
   mutations: {
     login (state, payload) {
       state.user.authenticated = true
+      console.log(payload.data.token)
+      state.user.token = payload.data.token
     },
     logout (state) {
       state.user.authenticated = false
+      state.user.token = ''
     }
   },
   plugins: [createPersistedState()]
