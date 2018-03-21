@@ -1,0 +1,70 @@
+<template>
+  <el-card class="box-card">
+    <h2>Change password</h2>
+    <el-form :model="user" :rules="rules" ref="changePasswordForm" size="medium">
+      <el-form-item label="Current password">
+        <el-input type="password" :autofocus="true" v-model="user.currentPassword" placeholder="Enter your current password"></el-input>
+      </el-form-item>
+      <el-form-item prop="newPassword" label="New password">
+        <el-input type="password" v-model="user.newPassword" placeholder="Enter your new password"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('changePasswordForm')">Change password</el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        user: {
+          email: '',
+          currentPassword: '',
+          newPassword: ''
+        },
+        rules: {
+          newPassword: [
+            {
+              required: true,
+              message: 'Please enter your new password',
+              trigger: 'blur'
+            },
+            {
+              min: 6,
+              message: 'Password must be at least 5 characters',
+              trigger: 'change, blur'
+            }
+          ]
+        }
+      }
+    },
+    methods: {
+      submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log('Password change successful')
+          this.dialogVisible = true
+        } else {
+          console.log('Password change error :(')
+          return false
+        }
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .box-card {
+    margin: auto;
+    max-width: 800px;
+    margin-top: 40px;
+    padding: 40px 140px 20px 140px;
+  }
+  form {
+    margin: 10px;
+    margin-top: 30px;
+  }
+</style>

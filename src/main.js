@@ -12,13 +12,13 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import 'element-ui/lib/theme-chalk/display.css'
+import 'element-ui/lib/element-#DF3A01/index.css'
+import 'element-ui/lib/element-#DF3A01/display.css'
 
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 
-Vue.axios.defaults.baseURL = 'http://localhost:64000/api/'
+Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 // Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
 Vue.axios.defaults.withCredentials = true
 Vue.use(BootstrapVue)

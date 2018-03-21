@@ -42,22 +42,45 @@
       return {
         dialogVisible: false,
         registerForm: {
-        email: '',
-        password: '',
-        passwordRepeat: ''
+          email: '',
+          password: '',
+          passwordRepeat: ''
         },
         rules: {
           email: [
-            { required: true, message: 'Please enter your email address', trigger: 'blur' },
-            { type: 'email', message: 'Please input correct email address', trigger: 'blur,change' }
+            {
+              required: true,
+              message: 'Please enter your email address',
+              trigger: 'blur'
+            },
+            {
+              type: 'email',
+              message: 'Please input correct email address',
+              trigger: 'blur,change'
+            }
           ],
           password: [
-            { required: true, message: 'Please enter your password', trigger: 'blur' },
-            { min: 6, message: 'Password must be at least 5 characters', trigger: 'change, blur' }
+            {
+              required: true,
+              message: 'Please enter your password',
+              trigger: 'blur'
+            },
+            {
+              min: 6,
+              message: 'Password must be at least 5 characters',
+              trigger: 'change, blur'
+            }
           ],
           passwordRepeat: [
-            { required: true, message: 'Please repeat your password', trigger: 'blur' },
-            { validator: validatePasswordRepeat, trigger: 'blur' }
+            {
+              required: true,
+              message: 'Please repeat your password',
+              trigger: 'blur'
+            },
+            {
+              validator: validatePasswordRepeat,
+              trigger: 'blur'
+            }
           ]
         }
       }
@@ -67,12 +90,18 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             console.log('Sign up successful')
+            this.clearFields()
             this.dialogVisible = true
           } else {
             console.log('Sign up error :(')
             return false
           }
         })
+      },
+      clearFields () {
+        this.registerForm.email = ''
+        this.registerForm.password = ''
+        this.registerForm.passwordRepeat = ''
       }
     }
   }
