@@ -3,7 +3,7 @@
     <el-tabs>
       <el-tab-pane>
         <span slot="label"><i class="el-icon-info"></i>My details</span>
-        <edit-profile ></edit-profile></el-tab-pane>
+        <edit-profile></edit-profile></el-tab-pane>
       <el-tab-pane>
         <span slot="label"><icon name="lock"></icon>Password</span>
         <change-password></change-password>
@@ -31,11 +31,6 @@
       'change-password': ChangePassword,
       'address-book': AddressBook,
       'order-history': OrderHistory
-    },
-    data () {
-      return {
-        loading: false
-      }
     }
   }
 </script>

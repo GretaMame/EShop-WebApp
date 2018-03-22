@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <h2>Change password</h2>
-    <el-form :model="user" :rules="rules" ref="changePasswordForm" size="medium">
+    <el-form :model="user" :rules="rules" ref="changePasswordForm" size="medium" label-position="top" align="left">
       <el-form-item label="Current password">
         <el-input type="password" :autofocus="true" v-model="user.currentPassword" placeholder="Enter your current password"></el-input>
       </el-form-item>

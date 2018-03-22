@@ -1,14 +1,14 @@
 <template>
-  <el-card class="box-card wrapper">
+  <el-card class="box-card wrapper" v-loading="loading">
     <h2>Address book</h2>
     <el-card class="box-card gd-address-card" align="start">
       <el-button icon="el-icon-plus" v-if="!editMode" @click="enterAddNewAddressMode()">Add new address</el-button>
-      <el-form v-if="editMode" label-position="left" ref="editForm" :model="newAddress">
-        <div v-if="newAddressMode">
+      <el-form v-if="editMode" ref="editForm" :model="newAddress" label-width="80px">
+        <div class="gd-description" v-if="newAddressMode">
           <h3>Add new address</h3>
           <p>Please enter an address you would like to save and deliver your items to.</p>
         </div>
-        <div v-if="!newAddressMode">
+        <div class="gd-description" v-if="!newAddressMode">
           <h3>Edit address</h3>
           <p>Please update your address details and save the changes.</p>
         </div>
@@ -30,9 +30,11 @@
         <el-form-item label="Country" prop="country">
           <el-input v-model="newAddress.newCountry"></el-input>
         </el-form-item>
-        <el-button v-if="newAddressMode" type="primary" @click="addNewAddress()">Save address</el-button>
-        <el-button v-if="!newAddressMode" type="primary" @click="saveAddressChanges(editIndex)">Save changes</el-button>
-        <el-button @click="exitEditMode()">Cancel</el-button>
+        <el-form-item align="center">
+          <el-button v-if="newAddressMode" type="primary" @click="addNewAddress()">Save address</el-button>
+          <el-button v-if="!newAddressMode" type="primary" @click="saveAddressChanges(editIndex)">Save changes</el-button>
+          <el-button @click="exitEditMode()">Cancel</el-button>
+        </el-form-item>
       </el-form>
     </el-card>
     <el-card class="box-card gd-address-card" v-for="(address, index) in user.addresses" :key="address.city">
@@ -96,6 +98,7 @@ export default {
       editMode: false,
       editIndex: '',
       formName: 'editForm',
+      loading: false,
       rules: {
         name: [
           {
@@ -232,13 +235,15 @@ export default {
   }
   .gd-address-wrapper {
     text-align: left;
-    margin-right: 15px;
   }
   .gd-address-buttons {
     text-align: right;
   }
   h3 {
     font-size: 1.5em;
+  }
+  .gd-description {
+    margin:10px 20px 30px 20px;
   }
 </style>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="gd-nav">
-    <el-menu :default-active="activeIndex" :mode="displayMode" :router="true" background-color="#333333" text-color="#fff">
+    <el-menu :default-active="activeIndex" :mode="displayMode" :router="true" background-color="#333333" text-color="#fff" active-text-color="#DF3A01">
       <el-menu-item index="1" route="/home">
         <template slot="title">Goal Diggers</template>
       </el-menu-item>

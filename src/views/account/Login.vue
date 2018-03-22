@@ -36,8 +36,8 @@
         loading: false,
         windowName: '',
         loginForm: {
-          email: 'admin@admin.ad',
-          password: 'Admin+123'
+          email: 'gretuka27@gmail.com',
+          password: 'K0ldunai!'
         },
         rules: {
           email: [{

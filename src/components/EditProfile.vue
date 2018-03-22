@@ -1,29 +1,31 @@
 <template>
-  <el-card class="box-card" v-loading="loading" :model="form">
+  <el-card class="box-card" v-loading="loading">
      <h2>My details</h2>
-      <el-form size="medium" label-position="left" align="left" label-width="120px">
-        <el-row>
-        <el-form-item label="Name:">
-          <span v-if="!editMode">{{form.name}}</span>
-          <el-input v-if="editMode" v-model="form.name" placeholder="Enter your surname"></el-input>
+      <el-form :model="form" ref="form" size="medium" align="left">
+        <el-form-item prop="name">
+          <span class="gd-label">Name:</span>
+          <span v-if="!editMode">{{initialUserData.name}}</span>
+          <el-input v-if="editMode" v-model="form.name" class="gd-input" placeholder="Enter your surname"></el-input>
         </el-form-item>
-        </el-row>
-        <el-form-item label="Surname:">
-          <span v-if="!editMode">{{form.surname}}</span>
-          <el-input v-if="editMode" v-model="form.surname" placeholder="Enter your surname"></el-input>
+        <el-form-item prop="surname">
+          <span class="gd-label">Surname:</span>
+          <span v-if="!editMode">{{initialUserData.surname}}</span>
+          <el-input v-if="editMode" v-model="form.surname" class="gd-input" placeholder="Enter your surname"></el-input>
         </el-form-item>
-        <el-form-item label="Email:">
-          <span v-if="!editMode">{{form.email}}</span>
-          <el-input v-if="editMode" v-model="form.email" placeholder="Enter your email"></el-input>
+        <el-form-item prop="email">
+          <span class="gd-label">Email:</span>
+          <span v-if="!editMode">{{initialUserData.email}}</span>
+          <el-input v-if="editMode" v-model="form.email" class="gd-input" placeholder="Enter your email"></el-input>
         </el-form-item>
-        <el-form-item label="Phone number:">
-          <span v-if="!editMode">{{form.phone}}</span>
-          <el-input v-if="editMode" v-model="form.phone" placeholder="Enter your phone number"></el-input>
+        <el-form-item prop="phone">
+          <span class="gd-label">Phone number:</span>
+          <span v-if="!editMode">{{initialUserData.phone}}</span>
+          <el-input v-if="editMode" v-model="form.phone" class="gd-input" placeholder="Enter your phone number"></el-input>
         </el-form-item>
-        <el-form-item >
-          <el-button class="gd-buttons" v-if="!editMode" type="primary" @click="enterEditMode()">Edit info</el-button>
-          <el-button class="gd-buttons" v-if="editMode" type="primary" @click="exitEditMode()">Save changes</el-button>
-          <el-button class="gd-buttons" v-if="editMode" @click="exitEditMode()">Cancel</el-button>
+        <el-form-item align="center">
+          <el-button v-if="!editMode" type="primary" @click="enterEditMode()">Edit info</el-button>
+          <el-button v-if="editMode" type="primary" @click="saveChanges()">Save changes</el-button>
+          <el-button v-if="editMode" @click="cancelChanges()">Cancel</el-button>
         </el-form-item>
       </el-form>
   </el-card>
@@ -34,67 +36,124 @@
     data () {
       return {
         form: {
-          email: 'laiswoOroDirektoriuz@laikinas.com',
-          name: 'Verslas',
-          surname: 'NuoNulio',
-          phone: '86xxxxxxx'
+          name: '',
+          surname: '',
+          phone: '',
+          email: ''
         },
+        rules: {
+          name: [
+            {
+              pattern: '^[A-Z]*[a-z]+$',
+              message: 'Please enter a name',
+              trigger: 'blur'
+            }
+          ],
+          surname: [
+            {
+              pattern: '^[A-Z]*[a-z]+$',
+              message: 'Please enter a name',
+              trigger: 'blur'
+            }
+          ],
+          email: [
+            {
+              required: true,
+              message: 'Please enter an email',
+              trigger: 'blur'
+            },
+            {
+              type: 'email',
+              message: 'Please enter a valid email',
+              trigger: 'blur'
+            }
+          ],
+          phone: [
+            {
+              pattern: '^[0-9]+$',
+              message: 'Please enter a valid phone number',
+              trigger: 'blur'
+            }
+          ]
+        },
+        initialUserData: {},
         show: true,
-        initialData: {},
-        loading: false,
+        loading: '',
         editMode: false
       }
     },
     methods: {
-      onSubmit (evt) {
-        evt.preventDefault()
-        alert(JSON.stringify(this.form))
+      cancelChanges () {
+        this.exitEditMode()
       },
-      onReset (evt) {
-        evt.preventDefault()
-        /* Reset our form values */
-        this.form.email = ''
-        this.form.firstname = ''
-        this.form.lastname = ''
-        /* Trick to reset/clear native browser form validation state */
-        /* this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        }) */
+      saveChanges () {
+        this.axios.put('account/update', this.form)
+          .then(response => {
+            console.log('Success')
+            console.log(response)
+            this.loadUserInfo()
+            this.exitEditMode()
+            this.$notify.success({
+              title: 'Success!',
+              message: 'Profile successfuly updated'
+            })
+          })
+          .catch(err => {
+            console.log(err)
+            this.$notify.err({
+              title: 'Error!',
+              message: 'Profile could not be updated'
+            })
+          })
       },
       enterEditMode () {
         this.editMode = true
+        this.form.name = this.initialUserData.name
+        this.form.surname = this.initialUserData.surname
+        this.form.email = this.initialUserData.email
+        this.form.phone = this.initialUserData.phone
       },
       exitEditMode () {
         this.editMode = false
+        this.form.name = ''
+        this.form.surname = ''
+        this.form.email = ''
+        this.form.phone = ''
+      },
+      loadUserInfo () {
+        this.loading = true
+        this.axios.get('account/profile')
+          .then(response => {
+            console.log(response)
+            this.initialUserData = response.data
+            this.loading = false
+          })
+          .catch(err => {
+            console.log(err)
+            this.$notify.error({
+              title: 'Error',
+              message: 'Ups! Something bad happened.'
+            })
+            this.loading = false
+          })
+      },
+      checkIfChangesHaveBeenMade () {
+        /* detect if any changes have been made at all */
+        /* we can use watchers */
+      },
+      stringifyForm () {
+        return JSON.stringify(this.form)
+      },
+      checkIfValidInputs () {
+        this.$refs['form'].validate((valid) => {
+          if (valid) return true
+          else return false
+        })
       }
     },
     mounted () {
-      loadData()
-        /* .then(response => {
-          this.initialData = response
-          this.form.email = response.email
-          this.form.firstname = response.firstname
-          this.form.lastname = response.lastname
-          this.loading = false
-        })
-        .catch(error => {
-          console.log(error)
-          this.loading = false
-        }) */
+      this.loadUserInfo()
     }
-  }
-  function loadData () {
-    /* return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({
-          email: 'lalala@lalala.com',
-          firstname: 'Larry',
-          lastname: 'Biord'
-        })
-      }, 5000)
-    }) */
-
   }
 
 </script>
@@ -110,14 +169,12 @@
     margin: 10px;
     margin-top: 30px;
   }
-  .el-form-item {
-    margin-bottom: 12px;
-  }
-  .el-form-item__label {
+  .gd-label {
     font-weight: bold;
+    min-width: 120px;
+    float: left;
   }
-  .el-form-item__content {
-    margin-left: 0px;
-    align-self: center;
+  .gd-input {
+    width: 75%;
   }
 </style>
