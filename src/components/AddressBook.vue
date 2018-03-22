@@ -214,7 +214,27 @@ export default {
         console.log('error submit!!')
         return false
       })
+    },
+    loadUserInfo () {
+        this.loading = true
+        this.axios.get('account/profile')
+          .then(response => {
+            console.log(response)
+            this.user = response.data
+            this.loading = false
+          })
+          .catch(err => {
+            console.log(err)
+            this.$notify.error({
+              title: 'Error',
+              message: 'Ups! Something bad happened.'
+            })
+            this.loading = false
+          })
     }
+  },
+  mounted () {
+    this.loadUserInfo()
   }
 }
 </script>
