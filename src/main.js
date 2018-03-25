@@ -19,8 +19,9 @@ import interceptor from '@/helpers/httpInterceptor.js'
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 
-Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
+// Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 // Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
+Vue.axios.defaults.baseURL = 'http://eshop-qa-api.azurewebsites.net/api'
 Vue.axios.defaults.withCredentials = true
 Vue.use(BootstrapVue)
 Vue.use(ElementUI)
