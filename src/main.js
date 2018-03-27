@@ -15,9 +15,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import interceptor from '@/helpers/httpInterceptor.js'
+import VueCookie from 'vue-cookie'
 
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
+Vue.use(VueCookie)
 
 Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 // Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
