@@ -3,14 +3,21 @@
     <el-tabs>
       <el-tab-pane>
         <span slot="label"><i class="el-icon-info"></i>My details</span>
-        <edit-profile></edit-profile></el-tab-pane>
+        <edit-profile
+          :initialUserData="initialUserData"
+          :loading="loading"
+          v-on:dataUpdated="loadUserInfo()">
+        </edit-profile></el-tab-pane>
       <el-tab-pane>
         <span slot="label"><icon name="lock"></icon>Password</span>
         <change-password></change-password>
       </el-tab-pane>
       <el-tab-pane>
         <span slot="label"><icon name="home"></icon>Address book</span>
-        <address-book></address-book>
+        <address-book
+          :initialUserData="initialUserData"
+          :loading="loading">
+        </address-book>
       </el-tab-pane>
       <el-tab-pane>
         <span slot="label"><i class="el-icon-tickets"></i>My orders</span>
@@ -21,16 +28,44 @@
 </template>
 
 <script>
-  import EditProfile from '@/components/EditProfile.vue'
-  import ChangePassword from '@/components/ChangePassword.vue'
-  import AddressBook from '@/components/AddressBook.vue'
-  import OrderHistory from '@/components/OrderHistory.vue'
+  import EditProfile from '@/components/ProfileComponents/EditProfile.vue'
+  import ChangePassword from '@/components/ProfileComponents/ChangePassword.vue'
+  import AddressBook from '@/components/ProfileComponents/AddressBook.vue'
+  import OrderHistory from '@/components/ProfileComponents/OrderHistory.vue'
   export default {
     components: {
       'edit-profile': EditProfile,
       'change-password': ChangePassword,
       'address-book': AddressBook,
       'order-history': OrderHistory
+    },
+    data () {
+      return {
+        initialUserData: {},
+        loading: ''
+      }
+    },
+    mounted () {
+      this.loadUserInfo()
+    },
+    methods: {
+      loadUserInfo () {
+        this.loading = true
+        this.axios.get('account/profile')
+          .then(response => {
+            console.log(response)
+            this.initialUserData = response.data
+            this.loading = false
+          })
+          .catch(err => {
+            console.log(err)
+            this.$notify.error({
+              title: 'Error',
+              message: 'Ups! Something bad happened.'
+            })
+            this.loading = false
+          })
+      }
     }
   }
 </script>

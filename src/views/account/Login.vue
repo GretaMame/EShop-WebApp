@@ -62,7 +62,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.loading = true
-            this.axios.post('account/login', this.loginForm).then(response => {
+            /* this.axios.post('account/login', this.loginForm).then(response => {
               this.loading = false
               this.$store.dispatch('logIn', response)
               this.$router.push('/home')
@@ -73,7 +73,8 @@
                 message: 'Ups! Something bad happened.'
               })
               this.loading = false
-            })
+            }) */
+            this.$router.push('/user/profile')
           } else {
             console.log('Login form submit error :(')
           }

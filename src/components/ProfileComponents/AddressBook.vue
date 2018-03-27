@@ -1,9 +1,18 @@
 <template>
-  <el-card class="box-card wrapper" v-loading="loading">
+  <el-card class="box-card wrapper" :v-loading="loading">
     <h2>Address book</h2>
     <el-card class="box-card gd-address-card" align="start">
-      <el-button icon="el-icon-plus" v-if="!editMode" @click="enterAddNewAddressMode()">Add new address</el-button>
-      <el-form v-if="editMode" ref="editForm" :model="newAddress" label-width="80px">
+      <el-button
+        icon="el-icon-plus"
+        v-if="!editMode"
+        @click="enterAddNewAddressMode()">
+        Add new address
+      </el-button>
+      <el-form
+        v-if="editMode"
+        ref="editForm"
+        :model="newAddress"
+        label-width="80px">
         <div class="gd-description" v-if="newAddressMode">
           <h3>Add new address</h3>
           <p>Please enter an address you would like to save and deliver your items to.</p>
@@ -37,7 +46,8 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card class="box-card gd-address-card" v-for="(address, index) in user.addresses" :key="address.city">
+    <!-- key is city for now -->
+    <el-card class="box-card gd-address-card" v-for="(address, index) in initialUserData.addresses" :key="address.city">
       <el-row>
         <el-col :span="18">
           <div class="gd-address-wrapper">
@@ -60,6 +70,10 @@
 
 <script>
 export default {
+  props: {
+    initialUserData: {type: Object},
+    loading: {type: Boolean}
+  },
   data () {
     return {
       user: {
@@ -98,7 +112,6 @@ export default {
       editMode: false,
       editIndex: '',
       formName: 'editForm',
-      loading: false,
       rules: {
         name: [
           {
@@ -214,27 +227,7 @@ export default {
         console.log('error submit!!')
         return false
       })
-    },
-    loadUserInfo () {
-        this.loading = true
-        this.axios.get('account/profile')
-          .then(response => {
-            console.log(response)
-            this.user = response.data
-            this.loading = false
-          })
-          .catch(err => {
-            console.log(err)
-            this.$notify.error({
-              title: 'Error',
-              message: 'Ups! Something bad happened.'
-            })
-            this.loading = false
-          })
     }
-  },
-  mounted () {
-    this.loadUserInfo()
   }
 }
 </script>
