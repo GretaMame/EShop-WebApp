@@ -1,12 +1,12 @@
 <template>
-  <el-card class="box-card wrapper" :v-loading="loading">
+  <el-card class="box-card gd_wrapper" :v-loading="loading">
     <h2>Address book</h2>
     <el-card class="box-card gd-address-card" align="start">
       <el-button
         icon="el-icon-plus"
         v-if="!editMode"
         @click="enterAddNewAddressMode()">
-        Add new address
+         Add new address
       </el-button>
       <el-form
         v-if="editMode"
@@ -235,16 +235,6 @@ export default {
 <style scoped>
   .gd-address-card {
     margin: 20px;
-  }
-  .wrapper {
-    margin: auto;
-    max-width: 800px;
-    margin-top: 40px;
-    padding: 10px 50px;
-  }
-  h2 {
-    margin: 20px;
-    margin-bottom: 30px;
   }
   .gd-address-wrapper {
     text-align: left;

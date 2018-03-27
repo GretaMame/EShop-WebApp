@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" :v-loading="loading">
+  <el-card class="box-card gd_wrapper" :v-loading="loading">
      <h2>My details</h2>
       <el-form
         :model="form"
@@ -171,15 +171,9 @@
 </script>
 
 <style scoped>
-  .box-card {
-    margin: auto;
-    max-width: 800px;
-    margin-top: 40px;
-    padding: 40px 60px 0px 60px;
-  }
   form {
     margin: 10px;
-    margin-top: 30px;
+    padding: 0px 60px;
   }
   .gd-label {
     font-weight: bold;

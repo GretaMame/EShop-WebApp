@@ -70,13 +70,23 @@
   }
 </script>
 
-<style scoped>
+<style>
   i {
     margin-right: 5px;
   }
   .fa-icon {
     margin-right: 5px;
     vertical-align: text-bottom;
+  }
+  .gd_wrapper {
+    margin: auto;
+    max-width: 800px;
+    margin-top: 40px;
+    padding: 10px 50px;
+  }
+  h2 {
+    margin: 20px;
+    margin-bottom: 40px;
   }
 </style>
 
