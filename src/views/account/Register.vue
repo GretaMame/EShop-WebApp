@@ -60,7 +60,22 @@
             {
               min: 6,
               message: 'Password must be at least 6 characters',
-              trigger: 'blur'
+              trigger: 'change, blur'
+            },
+            {
+              pattern: '[A-Z]+',
+              message: 'Password must contain at least one upper case letter',
+              trigger: 'blur, change'
+            },
+            {
+              pattern: '[0-9]+',
+              message: 'Password must contain at least one digit',
+              trigger: 'blur, change'
+            },
+            {
+              pattern: '[!@#$%^&*]',
+              message: 'Password must contain at least one speacial character',
+              trigger: 'blur, change'
             }
           ],
           confirmPassword: [{
