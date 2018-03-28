@@ -1,6 +1,5 @@
 <template>
   <div class="users-table">
-    <br>
     <el-container v-loading="loading">
       <el-header>
         <el-input placeholder="Search" v-model="searchText">
@@ -103,9 +102,11 @@ export default{
         this.axios.post('/api/users/changerole', {
           Role: role,
           Email: user.Email
-        }).then(() => this.fetchData())
+        })
+        .then(() => this.fetchData())
         .catch((err) => {
           console.log(err)
+          this.$notify.error({title: 'Error', message: 'Error encountered while changing role: ' + err})
           this.fetchData()
         })
       })
