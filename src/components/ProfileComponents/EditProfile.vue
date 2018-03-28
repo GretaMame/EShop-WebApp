@@ -3,7 +3,7 @@
      <h2>My details</h2>
       <el-form
         :model="form"
-        ref="form"
+        ref="editUserForm"
         :rules="rules"
         size="medium"
         align="left">
@@ -64,6 +64,7 @@
     },
     data () {
       return {
+        formName: 'editUserForm',
         form: {
           name: '',
           surname: '',
@@ -73,14 +74,14 @@
         rules: {
           name: [
             {
-              pattern: '^[A-Z]*[a-z]+$',
+              pattern: '^[A-Za-z]+$',
               message: 'Please enter a name',
               trigger: 'blur'
             }
           ],
           surname: [
             {
-              pattern: '^[A-Z]*[a-z]+$',
+              pattern: '^[A-Za-z]+$',
               message: 'Please enter a name',
               trigger: 'blur'
             }
@@ -105,7 +106,8 @@
             }
           ]
         },
-        editMode: false
+        editMode: false,
+        inputsValid: undefined
       }
     },
     methods: {
@@ -113,28 +115,33 @@
         this.exitEditMode()
       },
       saveChanges () {
-       /* if (this.checkIfValidInputs() && this.checkIfChangesHaveBeenMade) { */
-          this.axios.put('account/update', this.form)
-            .then(response => {
-              console.log('Success')
-              console.log(response)
-              this.exitEditMode()
-              this.$emit('dataUpdated')
-              this.$notify.success({
-                title: 'Success!',
-                message: 'Profile successfuly updated'
-              })
-            })
-            .catch(err => {
-              console.log(err)
-              this.$notify.error({
-                title: 'Error!',
-                message: 'Profile could not be updated'
-              })
-            })
-        /* } else {
-          console.log('inputs not')
-        } */
+        this.checkIfValidInputs()
+        if (this.inputsValid) {
+          if (this.checkIfChangesHaveBeenMade()) {
+              this.axios.put('account/update', this.form)
+                .then(response => {
+                  console.log('Success')
+                  console.log(response)
+                  this.exitEditMode()
+                  this.$emit('dataUpdated')
+                  this.$notify.success({
+                    title: 'Success!',
+                    message: 'Profile successfuly updated'
+                  })
+                })
+                .catch(err => {
+                  console.log(err)
+                  this.$notify.error({
+                    title: 'Error!',
+                    message: 'Profile could not be updated'
+                  })
+                })
+          } else {
+            this.exitEditMode()
+          }
+        } else {
+          console.log('Inputs not valid')
+        }
       },
       enterEditMode () {
         this.editMode = true
@@ -152,22 +159,25 @@
       },
       /* ment to prevent useless request sends */
       checkIfChangesHaveBeenMade () {
-        /* detect if any changes have been made at all */
-        if (this.initialUserData === this.stringifyForm()) return false
-        else return true
-      },
-      stringifyForm () {
-        return JSON.stringify(this.form)
+        if (this.form.name !== this.initialUserData.name) return true
+        if (this.form.surname !== this.initialUserData.surname) return true
+        if (this.form.email !== this.initialUserData.email) return true
+        if (this.form.phone !== this.initialUserData.phone) return true
+        return false
       },
       checkIfValidInputs () {
-        this.$refs['form'].validate((valid) => {
-          if (valid) return true
-          else return false
+        this.$refs[this.formName].validate((valid) => {
+          if (valid) {
+            console.log('inputs valid in validator')
+            this.inputsValid = true
+          } else {
+            console.log('inputs invalid in validator')
+            this.inputsValid = false
+          }
         })
       }
     }
   }
-
 </script>
 
 <style scoped>

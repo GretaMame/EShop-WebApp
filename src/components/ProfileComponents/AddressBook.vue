@@ -47,7 +47,7 @@
       </el-form>
     </el-card>
     <!-- key is city for now -->
-    <el-card class="box-card gd-address-card" v-for="(address, index) in initialUserData.addresses" :key="address.city">
+    <el-card class="box-card gd-address-card" v-for="(address, index) in user.addresses" :key="address.city">
       <el-row>
         <el-col :span="18">
           <div class="gd-address-wrapper">
@@ -100,6 +100,7 @@ export default {
           }
         ]
       },
+      form: {},
       newAddress: {
         newName: '',
         newSurname: '',
@@ -190,9 +191,32 @@ export default {
           postcode: this.newAddress.newPostcode,
           country: this.newAddress.newCountry
       })
+      /* check if form inputs valid */
+      /* axios PUT */
+      /* reikia is geto pasiimt useri kuriam updatinsim ir tada jo adresu stik siusti,
+      o gal ir nereikia nes kontekstas yra */
+      this.axios.put('account/update', this.form)
+            .then(response => {
+              console.log('Success')
+              console.log(response)
+              this.exitEditMode()
+              this.$emit('dataUpdated')
+              this.$notify.success({
+                title: 'Success!',
+                message: 'Address successfuly updated'
+              })
+            })
+            .catch(err => {
+              console.log(err)
+              this.$notify.error({
+                title: 'Error!',
+                message: 'Address could not be updated'
+              })
+            })
       this.exitEditMode()
     },
     addNewAddress () {
+      /* axios POST or UPDATE??? */
       /* if (this.checkFormFields()) { */
         this.user.addresses.push({
           name: this.newAddress.newName,
@@ -207,6 +231,7 @@ export default {
     /* } */
     },
     deleteAddress (index) {
+      /* AXIOS UPDATE OR DELETE */
       this.user.addresses.splice(index, 1)
     },
     clearEditFields () {
@@ -220,11 +245,8 @@ export default {
     checkFormFields () {
       this.$refs[this.formName].validate((valid) => {
         if (valid) {
-          /* cia reikes padaryt ta notificationa */
-          alert('submit!')
           return true
         }
-        console.log('error submit!!')
         return false
       })
     }

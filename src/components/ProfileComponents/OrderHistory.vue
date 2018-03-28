@@ -50,5 +50,15 @@ export default {
     padding: 10px;
     margin: 20px;
   }
+  .gd_wrapper {
+    margin: auto;
+    max-width: 800px;
+    margin-top: 40px;
+    padding: 10px 50px;
+  }
+  h2 {
+    margin: 20px;
+    margin-bottom: 40px;
+  }
 </style>
 

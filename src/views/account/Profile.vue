@@ -16,7 +16,8 @@
         <span slot="label"><icon name="home"></icon>Address book</span>
         <address-book
           :initialUserData="initialUserData"
-          :loading="loading">
+          :loading="loading"
+          v-on:dataUpdated="loadUserInfo()">
         </address-book>
       </el-tab-pane>
       <el-tab-pane>
