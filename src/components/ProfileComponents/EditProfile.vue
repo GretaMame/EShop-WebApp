@@ -93,7 +93,7 @@
       saveChanges () {
         if (this.checkIfValidInputs) {
           if (this.checkIfChangesHaveBeenMade()) {
-              this.axios.put('user/update', this.form)
+              this.axios.put('user/updateUser', this.form)
                 .then(response => {
                   this.$emit('dataUpdated', this.form)
                   this.$notify.success({

@@ -72,8 +72,13 @@
         this.initialUserData.surname = form.surname
         this.initialUserData.phone = form.phone
       },
-      updateUserAddresses (form) {
-        this.initialUserData.addresses = form.addresses
+      updateUserAddresses (address) {
+        this.loading = true
+        var addresses = this.initialUserData.addresses.filter(a => a.Id === address.Id)
+        console.log(addresses)
+        addresses[0] = address
+        console.log(addresses)
+        this.loading = false
       }
     }
   }
