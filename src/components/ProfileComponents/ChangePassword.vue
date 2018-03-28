@@ -75,7 +75,7 @@
   form {
     margin: 10px;
     margin-top: 30px;
-    padding: 0px 80px;
+    padding: 0px 60px;
   }
   .el-button {
     margin-top: 30px;

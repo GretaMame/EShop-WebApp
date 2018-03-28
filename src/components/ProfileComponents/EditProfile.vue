@@ -27,16 +27,6 @@
             placeholder="Enter your surname">
           </el-input>
         </el-form-item>
-        <el-form-item prop="email">
-          <span class="gd-label">Email:</span>
-          <span v-if="!editMode">{{initialUserData.email}}</span>
-          <el-input
-            v-if="editMode"
-            v-model="form.email"
-            class="gd-input"
-            placeholder="Enter your email">
-          </el-input>
-        </el-form-item>
         <el-form-item prop="phone">
           <span class="gd-label">Phone number:</span>
           <span v-if="!editMode">{{initialUserData.phone}}</span>
@@ -47,7 +37,7 @@
             placeholder="Enter your phone number">
           </el-input>
         </el-form-item>
-        <el-form-item align="center">
+        <el-form-item align="center" class="gd_buttons">
           <el-button v-if="!editMode" type="primary" @click="enterEditMode()">Edit info</el-button>
           <el-button v-if="editMode" type="primary" @click="saveChanges()">Save changes</el-button>
           <el-button v-if="editMode" @click="cancelChanges()">Cancel</el-button>
@@ -64,12 +54,10 @@
     },
     data () {
       return {
-        formName: 'editUserForm',
         form: {
           name: '',
           surname: '',
-          phone: '',
-          email: ''
+          phone: ''
         },
         rules: {
           name: [
@@ -86,18 +74,6 @@
               trigger: 'blur'
             }
           ],
-          email: [
-            {
-              required: true,
-              message: 'Please enter an email',
-              trigger: 'blur'
-            },
-            {
-              type: 'email',
-              message: 'Please enter a valid email',
-              trigger: 'blur'
-            }
-          ],
           phone: [
             {
               pattern: '^[0-9]+$',
@@ -106,28 +82,25 @@
             }
           ]
         },
-        editMode: false,
-        inputsValid: undefined
+        editMode: false
       }
     },
     methods: {
       cancelChanges () {
+        /* dar reikia kad validatoriaus zinutes panaikintu */
         this.exitEditMode()
       },
       saveChanges () {
-        this.checkIfValidInputs()
-        if (this.inputsValid) {
+        if (this.checkIfValidInputs) {
           if (this.checkIfChangesHaveBeenMade()) {
-              this.axios.put('account/update', this.form)
+              this.axios.put('user/update', this.form)
                 .then(response => {
-                  console.log('Success')
-                  console.log(response)
-                  this.exitEditMode()
-                  this.$emit('dataUpdated')
+                  this.$emit('dataUpdated', this.form)
                   this.$notify.success({
                     title: 'Success!',
                     message: 'Profile successfuly updated'
                   })
+                  this.exitEditMode()
                 })
                 .catch(err => {
                   console.log(err)
@@ -139,42 +112,37 @@
           } else {
             this.exitEditMode()
           }
-        } else {
-          console.log('Inputs not valid')
         }
       },
       enterEditMode () {
         this.editMode = true
         this.form.name = this.initialUserData.name
         this.form.surname = this.initialUserData.surname
-        this.form.email = this.initialUserData.email
         this.form.phone = this.initialUserData.phone
       },
       exitEditMode () {
         this.editMode = false
         this.form.name = ''
         this.form.surname = ''
-        this.form.email = ''
         this.form.phone = ''
       },
-      /* ment to prevent useless request sends */
+      /* to prevent useless requests to server */
       checkIfChangesHaveBeenMade () {
         if (this.form.name !== this.initialUserData.name) return true
         if (this.form.surname !== this.initialUserData.surname) return true
-        if (this.form.email !== this.initialUserData.email) return true
         if (this.form.phone !== this.initialUserData.phone) return true
         return false
       },
       checkIfValidInputs () {
-        this.$refs[this.formName].validate((valid) => {
+        var inputsValid
+        this.$refs['editUserForm'].validate((valid) => {
           if (valid) {
-            console.log('inputs valid in validator')
-            this.inputsValid = true
+            inputsValid = true
           } else {
-            console.log('inputs invalid in validator')
-            this.inputsValid = false
+            inputsValid = false
           }
         })
+        return inputsValid
       }
     }
   }
@@ -190,7 +158,7 @@
     min-width: 120px;
     float: left;
   }
-  .gd-input {
-    width: 75%;
+  .gd_buttons {
+    margin-top: 20px;
   }
 </style>

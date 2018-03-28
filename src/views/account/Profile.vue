@@ -6,7 +6,7 @@
         <edit-profile
           :initialUserData="initialUserData"
           :loading="loading"
-          v-on:dataUpdated="loadUserInfo()">
+          v-on:dataUpdated="updateUserPersonalInfo">
         </edit-profile></el-tab-pane>
       <el-tab-pane>
         <span slot="label"><icon name="lock"></icon>Password</span>
@@ -17,7 +17,7 @@
         <address-book
           :initialUserData="initialUserData"
           :loading="loading"
-          v-on:dataUpdated="loadUserInfo()">
+          v-on:dataUpdated="updateUserAddresses">
         </address-book>
       </el-tab-pane>
       <el-tab-pane>
@@ -52,7 +52,7 @@
     methods: {
       loadUserInfo () {
         this.loading = true
-        this.axios.get('account/profile')
+        this.axios.get('user/profile')
           .then(response => {
             console.log(response)
             this.initialUserData = response.data
@@ -66,6 +66,14 @@
             })
             this.loading = false
           })
+      },
+      updateUserPersonalInfo (form) {
+        this.initialUserData.name = form.name
+        this.initialUserData.surname = form.surname
+        this.initialUserData.phone = form.phone
+      },
+      updateUserAddresses (form) {
+        this.initialUserData.addresses = form.addresses
       }
     }
   }
@@ -81,7 +89,7 @@
   }
   .gd_wrapper {
     margin: auto;
-    max-width: 800px;
+    max-width: 700px;
     margin-top: 40px;
     padding: 10px 50px;
   }

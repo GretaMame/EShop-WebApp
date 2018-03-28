@@ -2,17 +2,21 @@
   <el-card class="box-card gd_wrapper" :v-loading="loading">
     <h2>Address book</h2>
     <el-card class="box-card gd-address-card" align="start">
+      <!-- if we are not in edit mode display button -->
       <el-button
-        icon="el-icon-plus"
         v-if="!editMode"
+        icon="el-icon-plus"
         @click="enterAddNewAddressMode()">
          Add new address
       </el-button>
+      <!-- if we enter edit mode display form -->
       <el-form
         v-if="editMode"
         ref="editForm"
         :model="newAddress"
+        :rules="rules"
         label-width="80px">
+        <!-- show different description for adding new address and editing existing eddress -->
         <div class="gd-description" v-if="newAddressMode">
           <h3>Add new address</h3>
           <p>Please enter an address you would like to save and deliver your items to.</p>
@@ -47,7 +51,7 @@
       </el-form>
     </el-card>
     <!-- key is city for now -->
-    <el-card class="box-card gd-address-card" v-for="(address, index) in user.addresses" :key="address.city">
+    <el-card class="box-card gd-address-card" v-for="(address, index) in initialUserData.addresses" :key="address.city">
       <el-row>
         <el-col :span="18">
           <div class="gd-address-wrapper">
@@ -160,13 +164,12 @@ export default {
     }
   },
   methods: {
+    enterEditMode () {
+      this.editMode = true
+    },
     exitEditMode () {
       this.clearEditFields()
       this.editMode = false
-      this.newAddressMode = false
-    },
-    enterEditMode () {
-      this.editMode = true
     },
     enterAddNewAddressMode () {
       this.newAddressMode = true
@@ -180,6 +183,7 @@ export default {
       this.newAddress.newCity = address.city
       this.newAddress.newPostcode = address.postcode
       this.newAddress.newCountry = address.country
+      this.newAddressMode = false
       this.enterEditMode()
     },
     saveAddressChanges (index) {
@@ -216,8 +220,8 @@ export default {
       this.exitEditMode()
     },
     addNewAddress () {
-      /* axios POST or UPDATE??? */
-      /* if (this.checkFormFields()) { */
+      /* axios POST */
+      if (this.checkIfValidFields()) {
         this.user.addresses.push({
           name: this.newAddress.newName,
           surname: this.newAddress.newSurname,
@@ -228,10 +232,10 @@ export default {
         })
         this.clearEditFields()
         this.exitEditMode()
-    /* } */
+      }
     },
     deleteAddress (index) {
-      /* AXIOS UPDATE OR DELETE */
+      /* AXIOS DELETE */
       this.user.addresses.splice(index, 1)
     },
     clearEditFields () {
@@ -242,13 +246,15 @@ export default {
       this.newAddress.newPostcode = ''
       this.newAddress.newCountry = ''
     },
-    checkFormFields () {
+    checkIfValidFields () {
+      var inputsValid
       this.$refs[this.formName].validate((valid) => {
         if (valid) {
-          return true
+          inputsValid = true
         }
-        return false
+        inputsValid = false
       })
+      return inputsValid
     }
   }
 }
