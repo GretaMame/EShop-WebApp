@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-card class="box-card">
+    <el-card v-loading="loading" class="box-card">
       <h2>Log in to store</h2>
       <el-form ref="loginForm" :rules='rules' :model="loginForm" size="medium">
         <el-form-item prop="email" label="Email">
@@ -23,47 +23,68 @@
   </el-row>
 </template>
 <script>
-export default {
-  data () {
-    var checkIfEmptyField = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Field can\'t be empty'))
-      } else {
-        callback()
+  export default {
+    data () {
+      var checkIfEmptyField = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('Field can\'t be empty'))
+        } else {
+          callback()
+        }
       }
-    }
-    return {
-      windowName: '',
-      loginForm: {
-        email: '',
-        password: ''
-      },
-      rules: {
-        email: [
-        { type: 'email', message: 'Please input correct email address', trigger: 'blur,change' },
-        { validator: checkIfEmptyField, trigger: 'blur' }
-        ],
-        password: [
-          { validator: checkIfEmptyField, trigger: 'blur' }
-        ]
+      return {
+        loading: false,
+        windowName: '',
+        loginForm: {
+          email: 'admin@admin.ad',
+          password: 'Admin+123'
+        },
+        rules: {
+          email: [{
+              type: 'email',
+              message: 'Please input correct email address',
+              trigger: 'blur,change'
+            },
+            {
+              validator: checkIfEmptyField,
+              trigger: 'blur'
+            }
+          ],
+          password: [{
+            validator: checkIfEmptyField,
+            trigger: 'blur'
+          }]
+        }
       }
-    }
-  },
-  methods: {
-    onSubmit (formName) {
+    },
+    methods: {
+      onSubmit (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('Please check your email to reset your password!')
+            this.loading = true
+            this.axios.post('account/login', this.loginForm).then(response => {
+              this.loading = false
+              this.$store.dispatch('logIn', response)
+              this.$router.push('/home')
+            }).catch(err => {
+              console.log(err)
+              this.$notify.error({
+                title: 'Error',
+                message: 'Ups! Something bad happened.'
+              })
+              this.loading = false
+            })
           } else {
             console.log('Forgot password form submit error :(')
           }
         })
-    },
-    redirect (windowName) {
-      this.$router.push(windowName)
+      },
+      redirect (windowName) {
+        this.$router.push(windowName)
+      }
     }
   }
-}
+
 </script>
 <style scoped>
   .box-card {
@@ -72,17 +93,22 @@ export default {
     margin-top: 40px;
     padding: 40px 60px 20px 60px;
   }
+
   form {
     margin: 10px;
     margin-top: 30px;
   }
+
   #forgotPasswordLinkItem {
     text-align: end;
   }
+
   div#passwordItem {
     margin-bottom: 0px;
   }
+
   button {
     min-width: 120px;
   }
+
 </style>

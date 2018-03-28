@@ -17,6 +17,15 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-dialog
+      title="Your registration was successful!"
+      :visible.sync="dialogVisible"
+      width="35%">
+      <span>Please check your email to validate your account.</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible=false">Ok</el-button>
+      </span>
+    </el-dialog>
   </el-row>
 </template>
 
@@ -31,6 +40,7 @@
         }
       }
       return {
+        dialogVisible: false,
         registerForm: {
         email: '',
         password: '',
@@ -57,7 +67,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             console.log('Sign up successful')
-            alert('Your registration was successful! Please check your email to validate your account.')
+            this.dialogVisible = true
           } else {
             console.log('Sign up error :(')
             return false
