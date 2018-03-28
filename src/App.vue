@@ -12,11 +12,8 @@ import AdminNavigation from './components/AdminNavigation'
 export default {
   name: 'app',
   components: {
-<<<<<<< HEAD
     Navigation,
     AdminNavigation
-=======
-    Navigation
   },
   mounted () {
     if (!this.$cookie.get('CSRF-TOKEN')) {
@@ -26,7 +23,6 @@ export default {
         console.log(error)
       })
     }
->>>>>>> master
   }
 }
 </script>
