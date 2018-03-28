@@ -6,6 +6,7 @@ import Login from '@/views/account/Login'
 import Register from '@/views/account/Register'
 import ForgotPassword from '@/views/account/ForgotPassword'
 import Cart from '@/views/Cart'
+import ResetPassword from '@/views/account/ResetPassword'
 Vue.use(Router)
 
 export default new Router({
@@ -40,6 +41,11 @@ export default new Router({
       path: '/cart',
       name: 'cart',
       component: Cart
+    },
+    {
+      path: '/resetpassword',
+      name: 'resetpassword',
+      component: ResetPassword
     }
   ]
 })
