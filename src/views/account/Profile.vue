@@ -74,10 +74,15 @@
       },
       updateUserAddresses (address) {
         this.loading = true
-        var addresses = this.initialUserData.addresses.filter(a => a.Id === address.Id)
-        console.log(addresses)
-        addresses[0] = address
-        console.log(addresses)
+        console.log(this.initialUserData.addresses)
+        this.initialUserData.addresses.forEach((entry, index) => {
+          console.log(entry.Id)
+          if (entry.Id === address.Id) {
+            console.log('Address found')
+            this.set(this.initialUserData.addresses, index, address)
+          }
+        })
+        console.log(this.initialUserData.addresses)
         this.loading = false
       }
     }

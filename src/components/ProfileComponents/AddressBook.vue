@@ -114,7 +114,6 @@ export default {
       },
       newAddressMode: false,
       editMode: false,
-      updatedAddresses: [],
       rules: {
         name: [
           {
@@ -162,16 +161,14 @@ export default {
     }
   },
   methods: {
-    enterEditMode () {
-      this.editMode = true
-    },
     exitEditMode () {
       this.clearEditFields()
       this.editMode = false
     },
     enterAddNewAddressMode () {
+      this.newAddress.Id = 1
       this.newAddressMode = true
-      this.enterEditMode()
+      this.editMode = true
     },
     editAddress (address) {
       this.newAddress.Id = address.id
@@ -182,15 +179,15 @@ export default {
       this.newAddress.Postcode = address.postcode
       this.newAddress.Country = address.country
       this.newAddressMode = false
-      this.enterEditMode()
+      this.editMode = true
     },
     saveAddressChanges () {
       /* check if form inputs valid */
       /* axios PUT */
      /* if (this.checkIfValidFields()) { */
-     console.log(this.newAddress)
         this.axios.put('user/updateAddress', this.newAddress)
               .then(response => {
+                console.log(this.newAddress)
                 console.log('Success')
                 console.log(response)
                 this.$emit('dataUpdated', this.newAddress)
@@ -212,8 +209,24 @@ export default {
     },
     addNewAddress () {
       /* axios POST */
-      if (this.checkIfValidFields()) {
-        this.user.addresses.push({
+      /* if (this.checkIfValidFields()) { */
+        this.axios.post('user/addAddress', this.newAddress)
+          .then(response => {
+            console.log('Success')
+            console.log(response)
+            this.$notify.success({
+              title: 'Success!',
+              message: 'Address successfuly updated'
+            })
+          })
+          .catch(err => {
+            console.log(err)
+                this.$notify.error({
+                  title: 'Error!',
+                  message: 'Address could not be added'
+            })
+          })
+        /* this.user.addresses.push({
           name: this.newAddress.newName,
           surname: this.newAddress.newSurname,
           street: this.newAddress.newStreet,
@@ -222,8 +235,7 @@ export default {
           country: this.newAddress.newCountry
         })
         this.clearEditFields()
-        this.exitEditMode()
-      }
+        this.exitEditMode() */
     },
     deleteAddress (index) {
       /* AXIOS DELETE */
