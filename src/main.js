@@ -27,7 +27,6 @@ Vue.axios.defaults.baseURL = 'https://eshop-qa-api.azurewebsites.net/api'
 Vue.axios.defaults.withCredentials = true
 Vue.axios.defaults.xsrfCookieName = 'CSRF-TOKEN'
 Vue.axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN'
-Vue.axios.defaults.headers['credentials'] = 'include'
 Vue.use(BootstrapVue)
 Vue.use(ElementUI, {locale})
 Vue.config.productionTip = false
