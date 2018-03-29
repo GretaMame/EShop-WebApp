@@ -21,9 +21,9 @@ import VueCookie from 'vue-cookie'
 Vue.component('icon', Icon)
 Vue.use(VueAxios, axios)
 Vue.use(VueCookie)
-Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
+// Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 // Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
-// Vue.axios.defaults.baseURL = 'https://eshop-qa-api.azurewebsites.net/api/'
+Vue.axios.defaults.baseURL = 'https://eshop-qa-api.azurewebsites.net/api/'
 Vue.axios.defaults.withCredentials = true
 Vue.axios.defaults.xsrfCookieName = 'CSRF-TOKEN'
 Vue.axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN'
