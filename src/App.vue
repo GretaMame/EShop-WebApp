@@ -14,15 +14,6 @@ export default {
   components: {
     Navigation,
     AdminNavigation
-  },
-  mounted () {
-    if (!this.$cookie.get('CSRF-TOKEN')) {
-      this.axios.get('account/testconnection').then(response => {
-      }).catch(error => {
-        // if this request doesn't go through any other request won't work
-        console.log(error)
-      })
-    }
   }
 }
 </script>
