@@ -66,6 +66,10 @@
           this.$router.push('/home')
         }).catch(err => {
           console.log('error: ', err)
+          if (err.autoLogout) {
+            this.$notify.info('You were logged out')
+            return
+          }
           this.$notify.error({
             title: 'Error',
             message: 'Unable to log out.'

@@ -13,7 +13,7 @@ export default function execute () {
         if (err.response.status === 401) {
             Store.dispatch('logOut')
             Router.push('/login')
-            return
+            err.autoLogout = true
         }
         return Promise.reject(err)
     })
