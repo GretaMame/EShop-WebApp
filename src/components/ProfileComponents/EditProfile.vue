@@ -87,7 +87,7 @@
     },
     methods: {
       cancelChanges () {
-        /* dar reikia kad validatoriaus zinutes panaikintu */
+        this.$refs['form'].resetFields()
         this.exitEditMode()
       },
       saveChanges () {

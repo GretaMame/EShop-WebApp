@@ -63,7 +63,7 @@
         <el-col :span="6">
           <div class="gd-address-buttons">
             <el-button icon="el-icon-edit" @click="editAddress(address)"></el-button>
-            <el-button icon="el-icon-delete" @click="deleteAddress(index)"></el-button>
+            <el-button icon="el-icon-delete" @click="deleteAddress(address.id)"></el-button>
           </div>
         </el-col>
       </el-row>
@@ -208,16 +208,18 @@ export default {
       /* } */
     },
     addNewAddress () {
-      /* axios POST */
       /* if (this.checkIfValidFields()) { */
         this.axios.post('user/addAddress', this.newAddress)
           .then(response => {
             console.log('Success')
             console.log(response)
+            /* still need to emit event to parent */
             this.$notify.success({
               title: 'Success!',
               message: 'Address successfuly updated'
             })
+            this.exitEditMode()
+            this.clearEditFields()
           })
           .catch(err => {
             console.log(err)
@@ -225,6 +227,8 @@ export default {
                   title: 'Error!',
                   message: 'Address could not be added'
             })
+            this.clearEditFields()
+            this.exitEditMode()
           })
         /* this.user.addresses.push({
           name: this.newAddress.newName,
@@ -237,9 +241,27 @@ export default {
         this.clearEditFields()
         this.exitEditMode() */
     },
-    deleteAddress (index) {
+    deleteAddress (id) {
       /* AXIOS DELETE */
-      this.user.addresses.splice(index, 1)
+      /* ask if sure */
+      console.log(id)
+      this.axios.delete('user/deleteAddress/' + id)
+        .then(response => {
+          console.log('Success')
+          console.log(response)
+          /* still need to emit event to parent */
+          this.$notify.success({
+            title: 'Success!',
+            message: 'Address deleted'
+          })
+        })
+        .catch(err => {
+          console.log(err)
+                this.$notify.error({
+                  title: 'Error!',
+                  message: 'Address could not be deleted'
+            })
+        })
     },
     clearEditFields () {
       this.newAddress.Name = ''
