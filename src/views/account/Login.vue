@@ -40,7 +40,8 @@
           password: 'K0ldunai!'
         },
         rules: {
-          email: [{
+          email: [
+            {
               type: 'email',
               message: 'Please input correct email address',
               trigger: 'blur,change'
@@ -50,10 +51,12 @@
               trigger: 'blur'
             }
           ],
-          password: [{
-            validator: checkIfEmptyField,
-            trigger: 'blur'
-          }]
+          password: [
+            {
+              validator: checkIfEmptyField,
+              trigger: 'blur'
+            }
+          ]
         }
       }
     },

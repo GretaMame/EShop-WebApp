@@ -6,7 +6,8 @@
         <edit-profile
           :initialUserData="initialUserData"
           :loading="loading"
-          v-on:dataUpdated="updateUserPersonalInfo">
+          v-on:dataUpdated="updateUserPersonalInfo"
+          v-on:changeLoading="changeLoading">
         </edit-profile></el-tab-pane>
       <el-tab-pane>
         <span slot="label"><icon name="lock"></icon>Password</span>
@@ -17,7 +18,10 @@
         <address-book
           :initialUserData="initialUserData"
           :loading="loading"
-          v-on:dataUpdated="updateUserAddresses">
+          v-on:dataUpdated="updateUserAddresses"
+          v-on:changeLoading="changeLoading"
+          v-on:addressAdded="loadUserInfo"
+          v-on:addressDeleted="removeAddress">
         </address-book>
       </el-tab-pane>
       <el-tab-pane>
@@ -84,6 +88,12 @@
         })
         console.log(this.initialUserData.addresses)
         this.loading = false
+      },
+      removeAddress (id) {
+        this.initialUserData.addresses.splice()
+      },
+      changeLoading (bool) {
+        this.loading = bool
       }
     }
   }

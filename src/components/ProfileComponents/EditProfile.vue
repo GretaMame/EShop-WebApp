@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card gd_wrapper" :v-loading="loading">
+  <el-card class="box-card gd_wrapper" v-loading="loading">
      <h2>My details</h2>
       <el-form
         :model="form"
@@ -40,7 +40,7 @@
         <el-form-item align="center" class="gd_buttons">
           <el-button v-if="!editMode" type="primary" @click="enterEditMode()">Edit info</el-button>
           <el-button v-if="editMode" type="primary" @click="saveChanges()">Save changes</el-button>
-          <el-button v-if="editMode" @click="cancelChanges()">Cancel</el-button>
+          <el-button v-if="editMode" @click="exitEditMode()">Cancel</el-button>
         </el-form-item>
       </el-form>
   </el-card>
@@ -86,13 +86,10 @@
       }
     },
     methods: {
-      cancelChanges () {
-        this.$refs['form'].resetFields()
-        this.exitEditMode()
-      },
       saveChanges () {
         if (this.checkIfValidInputs) {
           if (this.checkIfChangesHaveBeenMade()) {
+              this.$emit('changeLoading', true)
               this.axios.put('user/updateUser', this.form)
                 .then(response => {
                   this.$emit('dataUpdated', this.form)
@@ -101,6 +98,7 @@
                     message: 'Profile successfuly updated'
                   })
                   this.exitEditMode()
+                  this.$emit('changeLoading', false)
                 })
                 .catch(err => {
                   console.log(err)
@@ -108,6 +106,7 @@
                     title: 'Error!',
                     message: 'Profile could not be updated'
                   })
+                  this.$emit('changeLoading', false)
                 })
           } else {
             this.exitEditMode()
@@ -122,11 +121,8 @@
       },
       exitEditMode () {
         this.editMode = false
-        this.form.name = ''
-        this.form.surname = ''
-        this.form.phone = ''
+        this.$refs['editUserForm'].resetFields()
       },
-      /* to prevent useless requests to server */
       checkIfChangesHaveBeenMade () {
         if (this.form.name !== this.initialUserData.name) return true
         if (this.form.surname !== this.initialUserData.surname) return true
