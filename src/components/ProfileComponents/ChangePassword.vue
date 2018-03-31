@@ -80,4 +80,14 @@
   .el-button {
     margin-top: 30px;
   }
+  .gd_wrapper {
+    margin: auto;
+    max-width: 700px;
+    margin-top: 40px;
+    padding: 10px 50px;
+  }
+  h2 {
+    margin: 20px;
+    margin-bottom: 40px;
+  }
 </style>
