@@ -12,6 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/element-#DF3A01/index.css'
 import 'element-ui/lib/element-#DF3A01/display.css'
 import interceptor from '@/helpers/httpInterceptor.js'
@@ -23,9 +24,12 @@ Vue.use(VueCookie)
 
 Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 // Vue.axios.defaults.baseURL = 'http://localhost:5000/api/'
+// Vue.axios.defaults.baseURL = 'https://eshop-qa-api.azurewebsites.net/api/'
 Vue.axios.defaults.withCredentials = true
+Vue.axios.defaults.xsrfCookieName = 'CSRF-TOKEN'
+Vue.axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN'
 Vue.use(BootstrapVue)
-Vue.use(ElementUI)
+Vue.use(ElementUI, {locale})
 Vue.config.productionTip = false
 
 interceptor()

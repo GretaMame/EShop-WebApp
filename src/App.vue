@@ -1,23 +1,19 @@
 <template>
   <div id="app">
-    <Navigation></Navigation>
+    <AdminNavigation v-if="this.$route.path.indexOf('admin') !== -1"></AdminNavigation>
+    <Navigation v-else></Navigation>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Navigation from './components/Navigation'
+import AdminNavigation from './components/AdminNavigation'
 export default {
   name: 'app',
   components: {
-    Navigation
-  },
-  mounted () {
-    this.axios.get('account/testconnection').then(response => {
-    }).catch(error => {
-      // if this request doesn't go through any other request won't work
-      console.log(error)
-    })
+    Navigation,
+    AdminNavigation
   }
 }
 </script>
