@@ -1,30 +1,42 @@
 <template>
-  <div class="eshop-container-wrapper">
-    <b-tabs>
-      <b-tab title="Edit profile" active>
-        <br>
-        <profile-editing></profile-editing>
-      </b-tab>
-      <b-tab title="Change password">
-        <br>Change password
-      </b-tab>
-    </b-tabs>
-  </div>
+  <el-card class="box-card">
+    <el-tabs>
+      <el-tab-pane>
+        <span slot="label"><i class="el-icon-info"></i>My details</span>
+        <edit-profile></edit-profile>
+      </el-tab-pane>
+      <el-tab-pane>
+        <span slot="label"><icon name="lock"></icon>Password</span>
+        <change-password></change-password>
+      </el-tab-pane>
+      <el-tab-pane>
+        <span slot="label"><i class="el-icon-tickets"></i>My orders</span>
+        <order-history></order-history>
+      </el-tab-pane>
+    </el-tabs>
+  </el-card>
 </template>
+
 <script>
-  import ProfileEditing from '@/components/ProfileEditing.vue'
+  import EditProfile from '@/components/ProfileComponents/EditProfile.vue'
+  import ChangePassword from '@/components/ProfileComponents/ChangePassword.vue'
+  import OrderHistory from '@/components/ProfileComponents/OrderHistory.vue'
   export default {
     components: {
-      'profile-editing': ProfileEditing
+      'edit-profile': EditProfile,
+      'change-password': ChangePassword,
+      'order-history': OrderHistory
     }
   }
-
 </script>
-<style>
-  .eshop-container-wrapper {
-    margin-top: 15px;
-    margin-left: 32px;
-    margin-right: 32px;
-  }
 
+<style>
+  i {
+    margin-right: 5px;
+  }
+  .fa-icon {
+    margin-right: 5px;
+    vertical-align: text-bottom;
+  }
 </style>
+
