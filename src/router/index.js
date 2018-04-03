@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import Login from '@/views/account/Login'
 import Register from '@/views/account/Register'
 import ForgotPassword from '@/views/account/ForgotPassword'
+import AdminUsers from '@/views/AdminUsers'
 import Cart from '@/views/Cart'
 import ResetPassword from '@/views/account/ResetPassword'
 Vue.use(Router)
@@ -36,6 +37,15 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/admin',
+      redirect: {name: 'adminUsers'}
+    },
+    {
+      path: '/admin/users',
+      name: 'adminUsers',
+      component: AdminUsers
     },
     {
       path: '/cart',

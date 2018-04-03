@@ -9,7 +9,7 @@
         <el-form-item id="passwordItem" prop="password" label="Password">
           <el-input type="password" v-model="loginForm.password" placeholder="Enter your password"></el-input>
         </el-form-item>
-        <el-row justify="end">
+        <el-row>
           <el-form-item id="forgotPasswordLinkItem" size="mini">
             <el-button type="text" @click="redirect('login/forgotPassword')">Forgot password?</el-button>
           </el-form-item>
@@ -36,11 +36,12 @@
         loading: false,
         windowName: '',
         loginForm: {
-          email: 'admin@admin.ad',
-          password: 'Admin+123'
+          email: 'gretuka27@gmail.com',
+          password: 'K0ldunai!'
         },
         rules: {
-          email: [{
+          email: [
+            {
               type: 'email',
               message: 'Please input correct email address',
               trigger: 'blur,change'
@@ -50,10 +51,12 @@
               trigger: 'blur'
             }
           ],
-          password: [{
-            validator: checkIfEmptyField,
-            trigger: 'blur'
-          }]
+          password: [
+            {
+              validator: checkIfEmptyField,
+              trigger: 'blur'
+            }
+          ]
         }
       }
     },
@@ -75,7 +78,7 @@
               this.loading = false
             })
           } else {
-            console.log('Forgot password form submit error :(')
+            console.log('Inputs not valid')
           }
         })
       },

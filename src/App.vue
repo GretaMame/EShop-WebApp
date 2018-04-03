@@ -1,6 +1,7 @@
 <template>
   <el-container id="app">
-    <el-header class="gd-nav-header">
+      <AdminNavigation v-if="this.$route.path.indexOf('admin') !== -1"></AdminNavigation>
+    <el-header v-else> class="gd-nav-header">
       <Navigation></Navigation>
     </el-header>
     <router-view class="gd-body"></router-view>
@@ -8,20 +9,13 @@
 </template>
 
 <script>
-import Navigation from '@/components/Navigation'
+import Navigation from './components/Navigation'
+import AdminNavigation from './components/AdminNavigation'
 export default {
   name: 'app',
   components: {
-    Navigation
-  },
-  mounted () {
-    if (!this.$cookie.get('CSRF-TOKEN')) {
-      this.axios.get('account/testconnection').then(response => {
-      }).catch(error => {
-        // if this request doesn't go through any other request won't work
-        console.log(error)
-      })
-    }
+    Navigation,
+    AdminNavigation
   }
 }
 </script>

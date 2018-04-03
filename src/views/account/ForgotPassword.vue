@@ -32,16 +32,11 @@
         },
         rules: {
           email: [{
-              required: true,
-              message: 'Please enter your email address',
-              trigger: 'blur'
-            },
-            {
-              type: 'email',
-              message: 'Please input correct email address',
-              trigger: 'blur,change'
-            }
-          ]
+            required: true,
+            type: 'email',
+            message: 'Please enter your email address',
+            trigger: 'blur'
+          }]
         }
       }
     },
