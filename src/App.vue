@@ -1,12 +1,14 @@
 <template>
-  <div id="app">
-    <Navigation></Navigation>
-    <router-view></router-view>
-  </div>
+  <el-container id="app">
+    <el-header class="gd-nav-header">
+      <Navigation></Navigation>
+    </el-header>
+    <router-view class="gd-body"></router-view>
+  </el-container>
 </template>
 
 <script>
-import Navigation from './components/Navigation'
+import Navigation from '@/components/Navigation'
 export default {
   name: 'app',
   components: {
@@ -25,11 +27,17 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
+  .gd-nav-header{
+    padding: 0;
+  }
+  .gd-body{
+    height: calc(100vh - 60px);
+  }
 </style>

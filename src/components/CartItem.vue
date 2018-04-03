@@ -5,40 +5,40 @@
       <time class="create-time">{{item.CreateDate}}</time>
     </div>
     <el-row>
-        <el-col :xs="24" :sm="7" :md="7" :lg="6">
+        <el-col :xs="24" :sm="24" :md="7" :lg="6">
           <el-row>
-            <el-col :xs="21">
+            <el-col :xs="21" :sm="21">
               <img :src="item.Image" class="image">
             </el-col>
-            <el-col :xs="3">
-              <el-button class="hidden-sm-and-up" type="primary" size="small" icon="el-icon-delete"></el-button>
+            <el-col :xs="3" :sm="3">
+              <el-button class="hidden-sm-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>
         </el-col>
-        <el-col :xs="24" :sm="16" :md="16" :lg="18">
+        <el-col :xs="24" :sm="24" :md="16" :lg="18">
           <el-row>
-            <el-col :xs="24" :sm="18" :md="20" :lg="17" class="item-padding-align">
+            <el-col :xs="24" :sm="24" :md="20" :lg="17" class="item-padding-align">
               <el-row class="item-padding-bottom item-name">
                 {{item.Name}}
-                <el-col class="item-price hidden-sm-and-up" :sm="24" :md="24" :lg="24">
+                <el-col class="item-price hidden-sm-and-up" :md="24" :lg="24">
                       <span>{{item.Price}} €</span>
                 </el-col>
               </el-row>
               <el-row class="item-attributes">
-                <el-col v-if="item.Attributes" :xs="12" :sm="13" :md="13" :lg="16">
+                <el-col v-if="item.Attributes" :xs="12" :sm="12" :md="13" :lg="16">
                   <div v-for="attribute in item.Attributes" :key="attribute.Name" :attribute="attribute">
                     <el-col class="item-attribute-name" :xs="6" :sm="6" :md="6" :lg="5">
                       <span>{{attribute.Name}}: </span>
                     </el-col>
-                    <el-col class="item-attribute-value" :xs="16" :sm="18" :md="18" :lg="19">
+                    <el-col class="item-attribute-value" :xs="16" :sm="16" :md="18" :lg="19">
                       <span>{{attribute.Value}}</span>
                     </el-col>
                   </div>
                 </el-col>
-                <el-col v-else :xs="12" :sm="13" :md="13" :lg="16">
+                <el-col v-else :xs="12" :sm="12" :md="13" :lg="16">
                   &nbsp;
                 </el-col>
-                <el-col class="item-attributes quantity" :xs="12" :sm="11" :md="11" :lg="8">
+                <el-col class="item-attributes quantity" :xs="12" :sm="12" :md="11" :lg="8">
                   <el-row>
                     <span>Quantity: </span>
                       <el-input class="input-number-size"
@@ -51,9 +51,9 @@
                 </el-col>
               </el-row>
             </el-col>
-            <el-col :xs="24" :sm="6" :md="4" :lg="7">
+            <el-col :xs="24" :sm="24" :md="4" :lg="7">
               <el-row align="bottom">
-                <el-col class="item-price hidden-xs-only" :sm="24" :md="24" :lg="24">
+                <el-col class="item-price hidden-xs-only" :md="24" :lg="24">
                   <span>{{item.Price}} €</span>
                 </el-col>
               </el-row>
@@ -61,7 +61,7 @@
           </el-row>
           <el-row>
             <el-col class="item-delete hidden-xs-only" :xs="24" :sm="24" :md="24" :lg="24">
-              <el-button type="primary" icon="el-icon-delete"></el-button>
+              <el-button type="danger" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>
         </el-col>
@@ -80,6 +80,8 @@ export default {
     padding: 0px !important;
     background-color:#F5F5F5;
   }
+</style>
+<style scoped>
   .create-time {
     font-size: 13px;
     color: #999;

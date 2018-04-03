@@ -19,7 +19,7 @@
         <el-menu-item index="6-1" route="/user/profile">My profile</el-menu-item>
         <el-menu-item index="6-1" v-on:click="signOut">Sign out</el-menu-item>
       </el-submenu>
-      <el-menu-item class="gd_right" index="5" route="#">
+      <el-menu-item class="gd_right" index="5" route="/cart">
         <i class="el-icon-goods"></i>
         {{(goodsInCart)}}
       </el-menu-item>
@@ -81,5 +81,4 @@
   .gd_right {
     float: right;
   }
-
 </style>
