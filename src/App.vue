@@ -1,7 +1,7 @@
 <template>
   <el-container id="app">
       <AdminNavigation v-if="this.$route.path.indexOf('admin') !== -1"></AdminNavigation>
-    <el-header v-else> class="gd-nav-header">
+    <el-header v-else class="gd-nav-header">
       <Navigation></Navigation>
     </el-header>
     <router-view class="gd-body"></router-view>
