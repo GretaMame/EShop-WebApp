@@ -1,6 +1,6 @@
 <template>
-  <el-card class="card" :body-style="{ padding: '0px' }">
-    <img :src="item.img" class="image">
+  <el-card class="gd-card" :body-style="{ padding: '0px' }">
+    <img :src="item.image" class="image">
     <div class="itemCardPrice">
       <span>{{item.price}} €</span>
     </div>
@@ -20,13 +20,10 @@
     Kadangi pozymiu gali ir nebuti / buti vienas / buti du, tai darant ideti v-if salyga.
     Card'o dydis neturetu kisti => line-height: 1.2em; height: 2.4em;-->
     <div class="itemCardAttributes">
-      <div>
-        <span>Spalva: </span>
-        <span>ruda</span>
-      </div>
-      <div>
-        <span>Dydis: </span>
-        <span>gigantiškas</span>
+      <div v-if="item.attributes" v-for="attribute in item.attributes" :key="attribute.Name" >
+        <el-row>
+            {{attribute.name}}:   {{attribute.value}}
+        </el-row>
       </div>
     </div>
   </el-card>
@@ -45,6 +42,7 @@ export default {
   }
   .image {
     width: 100%;
+    height: 200px;
     display: block;
   }
   .itemCardAttributes{
@@ -65,7 +63,7 @@ export default {
     line-height: 1.2em;
     height: 2.4em;
     text-align: center;
-    font-size: 12pt;
+    font-size: 10pt;
     margin: 2%;
   }
   .line-clamp {
@@ -80,5 +78,7 @@ export default {
     text-align: left;
     padding-left: 10%;
     padding-top: 2%;
+  }
+  .gd-card{
   }
 </style>
