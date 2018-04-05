@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-card class="box-card">
+    <el-card class="box-card" v-loading="loading">
       <div v-if="!dialogVisible">
         <h2>Create new account</h2>
         <el-form :model="registerForm" :rules="rules" ref="registerForm" size="medium">
@@ -40,6 +40,7 @@
       }
       return {
         dialogVisible: false,
+        loading: false,
         registerForm: {
           username: '',
           password: '',
@@ -102,10 +103,13 @@
         })
       },
       register () {
+        this.loading = true
         this.errorOccured = false
         this.axios.post('account/register', this.registerForm).then(response => {
+          this.loading = false
           this.dialogVisible = true
         }).catch(err => {
+          this.loading = false
           this.errorOccured = true
           this.errorMessage = err.response.data[0]
         })
