@@ -8,6 +8,7 @@ import ForgotPassword from '@/views/account/ForgotPassword'
 import AdminUsers from '@/views/AdminUsers'
 import Cart from '@/views/Cart'
 import ResetPassword from '@/views/account/ResetPassword'
+import ConfirmAccount from '@/views/account/ConfirmAccount'
 Vue.use(Router)
 
 export default new Router({
@@ -56,6 +57,11 @@ export default new Router({
       path: '/resetpassword',
       name: 'resetpassword',
       component: ResetPassword
+    },
+    {
+      path: '/confirmaccount',
+      name: 'confirmaccount',
+      component: ConfirmAccount
     }
   ]
 })
