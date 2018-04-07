@@ -3,7 +3,7 @@
     <el-card class="box-card" v-loading="loading">
       <h2>Reset your password</h2>
       <p>Please enter the email address registered on your account.</p>
-      <el-form ref="forgotPasswordForm" :rules="rules" :inline="true" :model="forgotPasswordForm" size="medium">
+      <el-form ref="forgotPasswordForm" :rules="rules" :model="forgotPasswordForm" size="medium">
         <el-form-item prop="email">
           <el-input :autofocus="true" v-model="forgotPasswordForm.email" placeholder="Enter your email"></el-input>
         </el-form-item>
@@ -88,5 +88,7 @@
     margin: 10px;
     margin-top: 50px;
   }
-
+  button {
+    margin-top: 10px;
+  }
 </style>
