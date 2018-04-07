@@ -1,47 +1,34 @@
 <template>
   <el-container>
     <el-main>
-      <el-col :lg="18" :md="18" :sm="16" :xs="24">
-        <el-row>
-          <el-card>
-            <p>My shopping bag</p>
-            <CartItem class="gd-cart-item-card" v-for="item in items" :key="item.SKU" :item="item"></CartItem>
-            <el-card class="gd-cart-total-card hidden-sm-and-up">
+      <el-row>
+        <el-col :lg="18" :md="18" :sm="16" :xs="24">
+          <el-row>
+            <el-card class="gd-cart-card">
+              <p>My shopping bag</p>
+              <CartItem class="gd-cart-item-card" v-for="item in items" v-bind:key="item.SKU" v-bind:item="item"></CartItem>
+            </el-card>
+          </el-row>
+        </el-col>
+        <el-col class="gd-summary-card" :lg="6" :md="6" :sm="8" :xs="16" :push="8">
+          <div>
+            <el-card class="gd-cart-total-card">
               <el-row>
-                <el-row>
-                  <el-col class="gd-total-price-label" :xs="14">
-                    <p>Total: </p>
-                  </el-col>
-                  <el-col class="gd-item-price" :xs="10">
-                    <p>10000.12 €</p>
-                  </el-col>
-                </el-row>
+                <p>SUMMARY</p>
+                  <el-row>
+                    <el-col class="gd-total-price-label" :lg="12" :md="10" :sm="9" :xs="14">
+                      <p>Total: </p>
+                    </el-col>
+                    <el-col class="gd-item-price" :lg="12" :md="14" :sm="15" :xs="8">
+                      <p>10000.12 €</p>
+                    </el-col>
+                  </el-row>
                 <el-button class="gd-checkout-button" type="primary">Checkout</el-button>
               </el-row>
             </el-card>
-          </el-card>
-        </el-row>
-      </el-col>
-      <el-col class="hidden-xs-only" :lg="6" :md="6" :sm="8">
-        <div class="gd-summary-card">
-          <el-card class="gd-cart-total-card">
-            <el-row>
-              <p>SUMMARY</p>
-              <el-row>
-                <el-row>
-                  <el-col class="gd-total-price-label" :lg="12" :md="10" :sm="9">
-                    <p>Total: </p>
-                  </el-col>
-                  <el-col class="gd-item-price" :lg="12" :md="14" :sm="15" >
-                    <p>10000.12 €</p>
-                  </el-col>
-                </el-row>
-              </el-row>
-              <el-button class="gd-checkout-button" type="primary">Checkout</el-button>
-            </el-row>
-          </el-card>
-        </div>
-      </el-col>
+          </div>
+        </el-col>
+      </el-row>
     </el-main>
   </el-container>
 </template>
@@ -96,17 +83,21 @@ export default {
 </script>
 
 <style scoped>
+  .gd-cart-card{
+    margin-right: 10px;
+    margin-bottom: 16px;
+  }
    .gd-cart-item-card {
     margin-bottom: 20px;
   }
   .gd-cart-total-card{
     background-color: #F5F5F5;
     margin-bottom: 20px;
+    margin-right: 8px;
   }
   .gd-summary-card{
-    position : fixed; 
-    width: inherit;
-    padding-left: 16px;
+    position: sticky;
+    top: 0;
   }
   .cart-total-price-font{
     font-size: 16pt;
