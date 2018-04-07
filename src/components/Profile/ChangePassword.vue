@@ -1,15 +1,44 @@
 <template>
-  <el-card class="box-card gd_wrapper">
+  <el-card class="box-card gd_wrapper" :v-loading="loading">
     <h2>Change password</h2>
-    <el-form :model="user" :rules="rules" ref="changePasswordForm" size="medium" label-position="top" align="left">
-      <el-form-item label="Current password">
-        <el-input type="password" :autofocus="true" v-model="user.currentPassword" placeholder="Enter your current password"></el-input>
+    <el-form
+      :model="user"
+      :rules="rules"
+      ref="changePasswordForm"
+      size="medium"
+      label-position="top"
+      align="left">
+      <el-form-item id="passwordItem" prop="currentPassword" label="Current password">
+        <el-input
+          type="password"
+          :autofocus="true"
+          v-model="user.currentPassword"
+          placeholder="Enter your current password">
+        </el-input>
       </el-form-item>
+      <el-row>
+        <el-form-item id="forgotPasswordLinkItem" size="mini">
+            <el-button
+              class="gd_link"
+              type="text"
+              @click="redirect('forgotPassword')">
+              Forgot password?
+            </el-button>
+          </el-form-item>
+        </el-row>
       <el-form-item prop="newPassword" label="New password">
-        <el-input type="password" v-model="user.newPassword" placeholder="Enter your new password"></el-input>
+        <el-input
+          type="password"
+          v-model="user.newPassword"
+          placeholder="Enter your new password">
+        </el-input>
       </el-form-item>
       <el-form-item align="center">
-        <el-button type="primary" @click="submitForm('changePasswordForm')">Change password</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm('changePasswordForm')">
+          Change password
+        </el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -19,12 +48,19 @@
   export default {
     data () {
       return {
+        loading: '',
         user: {
-          email: '',
           currentPassword: '',
           newPassword: ''
         },
         rules: {
+          currentPassword: [
+            {
+              required: true,
+              message: 'Please enter your current password',
+              trigger: 'blur'
+            }
+          ],
           newPassword: [
             {
               required: true,
@@ -59,19 +95,40 @@
       submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true
+          this.axios.put('account/changePassword', this.user)
+          .then(response => {
           console.log('Password change successful')
-          this.dialogVisible = true
-        } else {
-          console.log('Password change error :(')
-          return false
+            this.$notify.success({
+              title: 'Success!',
+              message: 'Password changed'
+            })
+            this.loading = false
+            this.$refs['changePasswordForm'].resetFields()
+          })
+          .catch(err => {
+            this.$notify.error({
+              title: 'Error!',
+              message: 'Password couldn\'t be changed'
+            })
+          this.$refs['changePasswordForm'].resetFields()
+          this.loading = false
+          console.log(err)
+          })
         }
       })
-    }
+    },
+    redirect (windowName) {
+        this.$router.push({name: windowName})
+      }
   }
 }
 </script>
 
 <style scoped>
+  label {
+    margin: 0px;
+  }
   form {
     margin: 10px;
     margin-top: 30px;
@@ -89,5 +146,14 @@
   h2 {
     margin: 20px;
     margin-bottom: 40px;
+  }
+  #forgotPasswordLinkItem {
+    text-align: end;
+  }
+  div#passwordItem {
+    margin-bottom: 0px;
+  }
+  .gd_link {
+    margin-top: 0px;
   }
 </style>
