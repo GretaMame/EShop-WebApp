@@ -33,6 +33,13 @@
           placeholder="Enter your new password">
         </el-input>
       </el-form-item>
+      <el-form-item prop="repeatNewPassword" label="Repeat new password">
+        <el-input
+          type="password"
+          v-model="user.repeatNewPassword"
+          placeholder="Repeat your new password">
+        </el-input>
+      </el-form-item>
       <el-form-item align="center">
         <el-button
           type="primary"
@@ -47,12 +54,28 @@
 <script>
   export default {
     data () {
+      var validatePasswordRepeat = (rule, value, callback) => {
+        if (value !== this.user.newPassword) {
+          callback(new Error('Passwords don\'t match!'))
+        } else {
+          callback()
+        }
+      }
+      var checkIfNewPasswordIsDifferent = (rule, value, callback) => {
+        if (value === this.user.currentPassword) {
+          callback(new Error('New password can\'t match current password!'))
+        } else {
+          callback()
+        }
+      }
       return {
         loading: '',
         user: {
           currentPassword: '',
-          newPassword: ''
+          newPassword: '',
+          repeatNewPassword: ''
         },
+        errorMessage: '',
         rules: {
           currentPassword: [
             {
@@ -86,6 +109,21 @@
               pattern: '[!@#$%^&*]',
               message: 'Password must contain at least one speacial character',
               trigger: 'blur, change'
+            },
+            {
+              validator: checkIfNewPasswordIsDifferent,
+              trigger: 'blur'
+            }
+          ],
+          repeatNewPassword: [
+            {
+              required: true,
+              message: 'Please repeat your new password',
+              trigger: 'blur'
+            },
+            {
+              validator: validatePasswordRepeat,
+              trigger: 'blur'
             }
           ]
         }
@@ -109,11 +147,10 @@
           .catch(err => {
             this.$notify.error({
               title: 'Error!',
-              message: 'Password couldn\'t be changed'
+              message: err.response.data[0]
             })
           this.$refs['changePasswordForm'].resetFields()
           this.loading = false
-          console.log(err)
           })
         }
       })
