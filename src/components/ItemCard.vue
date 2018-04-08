@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="never" :body-style="{ padding: '0px' }">
+  <el-card :body-style="{ padding: '0px' }">
     <img :src="item.MainPicture" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
