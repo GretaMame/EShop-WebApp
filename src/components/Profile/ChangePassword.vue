@@ -141,8 +141,8 @@
               title: 'Success!',
               message: 'Password changed'
             })
-            this.loading = false
-            this.$refs['changePasswordForm'].resetFields()
+            this.$store.dispatch('logOut')
+            this.redirect('login')
           })
           .catch(err => {
             this.$notify.error({
