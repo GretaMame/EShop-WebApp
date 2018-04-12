@@ -23,7 +23,12 @@
                       <p>10000.12 €</p>
                     </el-col>
                   </el-row>
-                <el-button class="gd-checkout-button" type="primary">Checkout</el-button>
+                <el-button
+                  class="gd-checkout-button"
+                  type="primary"
+                  @click="redirect('checkout')">
+                  Checkout
+                </el-button>
               </el-row>
             </el-card>
           </div>
@@ -71,6 +76,11 @@ export default {
   },
   components: {
     CartItem
+  },
+  methods: {
+    redirect (windowName) {
+      this.$router.push(windowName)
+    }
   }
   // mounted () {
     // this.axios.get('api/items').then(response => {
