@@ -9,6 +9,7 @@ import AdminUsers from '@/views/AdminUsers'
 import Cart from '@/views/Cart'
 import ResetPassword from '@/views/account/ResetPassword'
 import ConfirmAccount from '@/views/account/ConfirmAccount'
+import Checkout from '@/views/Checkout'
 Vue.use(Router)
 
 export default new Router({
@@ -62,6 +63,11 @@ export default new Router({
       path: '/confirmaccount',
       name: 'confirmaccount',
       component: ConfirmAccount
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout
     }
   ]
 })
