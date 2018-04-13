@@ -79,11 +79,12 @@ export default {
   },
   methods: {
     goToCheckout () {
-      if (this.$store.getters.isAuthenticated) {
-        this.$router.push('/checkout')
-      } else {
-        this.$router.push({name: 'login', query: {redirect: '/checkout'}})
-      }
+      this.$router.push('/checkout')
+      // if (this.$store.getters.isAuthenticated) {
+      //   this.$router.push('/checkout')
+      // } else {
+      //   this.$router.push({name: 'login', query: {redirect: '/checkout'}})
+      // }
     }
   }
   // mounted () {
