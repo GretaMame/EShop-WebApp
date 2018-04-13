@@ -2,7 +2,7 @@
   <el-card>
     <el-steps :active="activeIndex" finish-status="success" align-center>
       <el-step title="View cart"></el-step>
-      <el-step title="Shipping"></el-step>
+      <el-step title="Delivery"></el-step>
       <el-step title="Payment"></el-step>
       <el-step title="Review and place order"></el-step>
     </el-steps>

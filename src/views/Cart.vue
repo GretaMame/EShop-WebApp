@@ -80,15 +80,10 @@ export default {
   methods: {
     goToCheckout () {
       if (this.$store.getters.isAuthenticated) {
-        this.redirect('chekcout')
+        this.$router.push('/checkout')
       } else {
-        // maybe better idea to implement an interceptor that redirects to
-        // login before proceeding to checkout
-        this.redirect('login')
+        this.$router.push({name: 'login', query: {redirect: '/checkout'}})
       }
-    },
-    redirect (windowName) {
-      this.$router.push(windowName)
     }
   }
   // mounted () {

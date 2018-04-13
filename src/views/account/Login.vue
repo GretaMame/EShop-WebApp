@@ -68,7 +68,7 @@
             this.axios.post('account/login', this.loginForm).then(response => {
               this.loading = false
               this.$store.dispatch('logIn', response)
-              this.$router.push('/home')
+              this.$router.push(this.$route.query.redirect || '/home')
             }).catch(err => {
               console.log(err)
               this.$notify.error({
