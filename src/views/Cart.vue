@@ -26,7 +26,7 @@
                 <el-button
                   class="gd-checkout-button"
                   type="primary"
-                  @click="redirect('checkout')">
+                  @click="goToCheckout('checkout')">
                   Checkout
                 </el-button>
               </el-row>
@@ -78,6 +78,15 @@ export default {
     CartItem
   },
   methods: {
+    goToCheckout () {
+      if (this.$store.getters.isAuthenticated) {
+        this.redirect('chekcout')
+      } else {
+        // maybe better idea to implement an interceptor that redirects to
+        // login before proceeding to checkout
+        this.redirect('login')
+      }
+    },
     redirect (windowName) {
       this.$router.push(windowName)
     }
