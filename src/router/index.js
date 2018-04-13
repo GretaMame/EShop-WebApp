@@ -17,7 +17,8 @@ const isAuthenticated = (to, from, next) => {
   if (Store.getters.isAuthenticated) {
     next()
   } else {
-    next({name: 'login', query: {redirect: to}})
+    console.log(to)
+    next({name: 'login', query: {redirect: to.path}})
   }
 }
 

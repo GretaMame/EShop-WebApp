@@ -26,7 +26,7 @@
                 <el-button
                   class="gd-checkout-button"
                   type="primary"
-                  @click="goToCheckout('checkout')">
+                  @click="redirect('checkout')">
                   Checkout
                 </el-button>
               </el-row>
@@ -78,13 +78,8 @@ export default {
     CartItem
   },
   methods: {
-    goToCheckout () {
+    redirect () {
       this.$router.push('/checkout')
-      // if (this.$store.getters.isAuthenticated) {
-      //   this.$router.push('/checkout')
-      // } else {
-      //   this.$router.push({name: 'login', query: {redirect: '/checkout'}})
-      // }
     }
   }
   // mounted () {
