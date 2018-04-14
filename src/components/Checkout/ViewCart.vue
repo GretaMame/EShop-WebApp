@@ -1,6 +1,13 @@
 <template>
   <el-card class="gd_step_body" v-loading="loading">
-    <cart-item class="gd_cart_item" v-for="item in items" :key="item.SKU" :item="item"></cart-item>
+    <cart-item
+      class="gd_cart_item"
+      v-for="item in items"
+      :key="item.SKU"
+      :item="item"
+      v-on:updated="calculateSubtotal">
+    </cart-item>
+    <h3><b>Subtotal:</b> {{(subtotal)}}</h3>
   </el-card>
 </template>
 
@@ -16,13 +23,21 @@ export default {
   },
   data () {
     return {
+      subtotal: 0
     }
   },
   mounted () {
-    console.log(this.items)
+    this.calculateSubtotal()
   },
   methods: {
-
+    calculateSubtotal () {
+      var arrayLength = this.items.length
+      this.subtotal = 0
+      for (var i = 0; i < arrayLength; i++) {
+        this.subtotal += this.items[i].Price * this.items[i].Count
+      }
+      this.subtotal = this.subtotal.toFixed(2)
+    }
   }
 }
 </script>

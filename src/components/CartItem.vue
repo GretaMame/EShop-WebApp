@@ -11,7 +11,8 @@
               <img :src="item.Image" class="image">
             </el-col>
             <el-col :xs="3" :sm="3">
-              <el-button class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
+              <!-- cia kai jau apsirasysi metoda, kuris handlintu delete, tai eilute $emit('updated') butinai idek -->
+              <el-button @click="$emit('updated')" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>
         </el-col>
@@ -44,7 +45,7 @@
                       <span>Quantity: </span>
                     </el-col>
                     <el-col :xs="24" :sm="18" :md="24" :lg="20">
-                      <el-input-number size="mini" :min="1" v-model="item.Count"/>
+                      <el-input-number @change="$emit('updated')" size="mini" :min="1" v-model="item.Count"/>
                     </el-col>
                   </el-row>
                 </el-col>
