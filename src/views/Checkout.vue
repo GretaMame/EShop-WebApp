@@ -10,7 +10,11 @@
       <el-step title="Payment"></el-step>
       <el-step title="Review and place order"></el-step>
     </el-steps>
-    <view-cart v-if="activeIndex === 0" ></view-cart>
+    <view-cart
+      v-if="activeIndex === 0"
+      :items="items"
+      :loading="loading">
+    </view-cart>
     <delivery
       v-if="activeIndex === 1"
       :address="deliveryAddress"
@@ -46,10 +50,12 @@ export default {
       deliveryAddress: {},
       order: {
         address: {}
-      }
+      },
+      items: []
     }
   },
   mounted () {
+    this.loadItems()
     this.loadAddress()
   },
   methods: {
@@ -68,6 +74,37 @@ export default {
         console.log(error)
         this.loading = false
       })
+    },
+    loadItems () {
+      // for now hardcoded data
+      this.items.push(
+            {SKU: '12134123',
+            Name: 'Men\'s jacket Rahfa',
+            Image: 'https://style24.lt/image/cache/data/products/82/vyriskas-megztinis-rahfa-39052-750x750.jpg',
+            Price: 37.95,
+            Count: 1,
+            CreateDate: '2018-03-17 15:00',
+            Attributes: [{Name: 'Color', Value: 'blue'}, {Name: 'Style', Value: 'casual'}]},
+            {SKU: '12144123',
+            Name: 'Mountainskin Thicken Fleece Winter Jackets Men\'s Coats 5XL Cotton Fur Collar Men\'s Jackets Military Casual Male Outerwear SA351',
+            Image: 'https://ae01.alicdn.com/kf/HTB1Tzy9SpXXXXaKXpXXq6xXFXXXX/Mountainskin-Thicken-Fleece-Winter-Jackets-Men-s-Coats-5XL-Cotton-Fur-Collar-Men-s-Jackets-Military.jpg_640x640.jpg',
+            Price: 31.89,
+            Count: 3,
+            CreateDate: '2018-03-17 14:45',
+            Attributes: [{Name: 'Color', Value: 'black'}, {Name: 'Size', Value: 'XXL'}]},
+            {SKU: '12144122223',
+            Name: 'New Version Jumper EZbook 3 Pro Dual Band AC Wifi laptop with M.2 SATA SSD Slot Apollo Lake N3450 13.3" IPS 6GB DDR3 ultrabook',
+            Image: 'https://ae01.alicdn.com/kf/HTB1WgwNQVXXXXXrXFXXq6xXFXXXP/New-Version-Jumper-EZbook-3-Pro-Dual-Band-AC-Wifi-laptop-with-M-2-SATA-SSD.jpg_640x640.jpg',
+            Price: 322.83,
+            Count: 1,
+            CreateDate: '2018-03-17 13:10',
+            Attributes: [{Name: 'Color', Value: 'white'}]},
+            {SKU: '2323122223',
+            Name: '50pcs T5577 EM4305 Copy Rewritable Writable Rewrite Duplicate RFID Tag Can Copy EM4100 125khz card Proximity Token Keyfobs',
+            Image: 'https://ae01.alicdn.com/kf/HTB1SQEUPFXXXXalXpXXq6xXFXXXI/50pcs-T5577-EM4305-Copy-Rewritable-Writable-Rewrite-Duplicate-RFID-Tag-Can-Copy-EM4100-125khz-card-Proximity.jpg_640x640.jpg',
+            Price: 15.49,
+            Count: 4,
+            CreateDate: '2018-03-16 23:20'})
     },
     changeAddress (newAddress) {
       this.setFields(newAddress, this.deliveryAddress)
@@ -100,5 +137,11 @@ export default {
   }
   .gd_buttons_wrapper {
     margin-top: 20px;
+  }
+  .gd_step_body {
+    padding-left: 40px;
+    padding-right: 40px;
+    max-width: 900px;
+    margin: 0 auto;
   }
 </style>

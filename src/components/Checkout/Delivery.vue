@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-card v-if="!changeAddressMode" v-loading="loading">
+  <el-card class="gd_step_body">
+    <div v-if="!changeAddressMode" v-loading="loading">
       <div class="gd_address_wrapper">
         <h2>Delivery address</h2>
         <p class="gd_address_line">{{address.name}} {{address.surname}}</p>
@@ -9,8 +9,8 @@
         <p class="gd_address_line">{{address.country}} {{address.postcode}}</p>
       </div>
       <el-button class="gd_buttons" @click="enterChangeAddressMode">Change delivery address</el-button>
-    </el-card>
-    <el-card v-if="changeAddressMode" align="center">
+    </div>
+    <div v-if="changeAddressMode" align="center">
       <h2>Change delivery address</h2>
       <el-form :model="form" :rules="rules" ref="changeAddressForm">
         <el-form-item>
@@ -49,8 +49,8 @@
             <el-button @click="clearForm()">Clear fields</el-button>
           </el-form-item>
       </el-form>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -161,12 +161,6 @@ export default {
   h2 {
     margin-top: 20px;
     margin-bottom: 50px;
-  }
-  .el-card {
-    padding-left: 40px;
-    padding-right: 40px;
-    max-width: 900px;
-    margin: 0 auto;
   }
   form {
     max-width: 500px;
