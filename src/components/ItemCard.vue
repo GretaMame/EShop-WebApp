@@ -1,6 +1,7 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <img :src="item.MainPicture" class="gd-item-image">
+    <img v-if="item.MainPicture" :src="item.MainPicture" class="gd-item-image">
+    <img v-else src="http://www.wellesleysocietyofartists.org/wp-content/uploads/2015/11/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
         <span>{{item.Price}} €</span>
