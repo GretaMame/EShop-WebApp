@@ -6,7 +6,7 @@
         background-color="#333333" 
         text-color="#fff" 
         active-text-color="#DF3A01">
-			<el-submenu index="1">
+			<el-submenu index="menu">
 				<template slot="title">
 					<icon name="bars"/> 
 				</template>
@@ -23,6 +23,16 @@
 							</el-col>
 							<el-col :xs="20">
 								Log in
+							</el-col>
+						</el-row>
+					</el-menu-item>
+					<el-menu-item index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
+						<el-row>
+							<el-col :xs="4">
+								<icon name="user-plus"/>
+							</el-col>
+							<el-col :xs="20">
+								Sign up
 							</el-col>
 						</el-row>
 					</el-menu-item>
@@ -54,7 +64,7 @@
 							</el-col>
 						</el-row>
 					</el-menu-item>
-					<el-submenu index="2">
+					<el-submenu index="Goods">
 						<template slot="title">
 							<el-row>
 								<el-col :xs="4">
@@ -81,7 +91,7 @@
 					</el-menu-item>
 				</el-menu>
     	</el-submenu>
-			<el-menu-item class="gd-search">
+			<el-menu-item index="search" class="gd-search">
 				<el-input
 					placeholder="I'm shopping for"
 					size="small"
