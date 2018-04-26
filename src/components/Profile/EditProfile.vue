@@ -207,7 +207,6 @@
         this.loading = true
         this.axios.get('user/profile')
           .then(response => {
-            console.log(response)
             this.initialUserData = response.data
             this.loading = false
           })
