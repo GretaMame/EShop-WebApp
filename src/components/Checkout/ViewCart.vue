@@ -7,7 +7,7 @@
       :item="item"
       v-on:updated="calculateSubtotal">
     </cart-item>
-    <h3><b>Subtotal:</b> {{(subtotal)}}</h3>
+    <h3><b>Subtotal:</b> {{(subtotal.toFixed(2))}} €</h3>
   </el-card>
 </template>
 
@@ -16,27 +16,15 @@ import CartItem from '@/components/CartItem.vue'
 export default {
   props: {
     loading: { type: Boolean },
-    items: { type: Array }
+    items: { type: Array },
+    subtotal: { type: Number }
   },
   components: {
     'cart-item': CartItem
   },
-  data () {
-    return {
-      subtotal: 0
-    }
-  },
-  mounted () {
-    this.calculateSubtotal()
-  },
   methods: {
     calculateSubtotal () {
-      var arrayLength = this.items.length
-      this.subtotal = 0
-      for (var i = 0; i < arrayLength; i++) {
-        this.subtotal += this.items[i].Price * this.items[i].Count
-      }
-      this.subtotal = this.subtotal.toFixed(2)
+      this.$emit('updateSubtotal')
     }
   }
 }

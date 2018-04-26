@@ -45,7 +45,7 @@
                       <span>Quantity: </span>
                     </el-col>
                     <el-col :xs="24" :sm="18" :md="24" :lg="20">
-                      <el-input-number @change="$emit('updated')" size="mini" :min="1" v-model="item.Count"/>
+                      <el-input-number @change="$emit('updated')" size="mini" :min="1" :step="1" v-model="item.Count"/>
                     </el-col>
                   </el-row>
                 </el-col>

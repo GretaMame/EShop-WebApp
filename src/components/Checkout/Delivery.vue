@@ -2,7 +2,7 @@
   <el-card class="gd_step_body">
     <div v-if="!changeAddressMode" v-loading="loading">
       <div class="gd_address_wrapper">
-        <h2>Delivery address</h2>
+        <h3>{{addressTitle}}</h3>
         <p class="gd_address_line">{{address.name}} {{address.surname}}</p>
         <p class="gd_address_line">{{address.street}}</p>
         <p class="gd_address_line">{{address.city}}</p>
@@ -11,7 +11,7 @@
       <el-button class="gd_buttons" @click="enterChangeAddressMode">Change delivery address</el-button>
     </div>
     <div v-if="changeAddressMode" align="center">
-      <h2>Change delivery address</h2>
+      <h3>{{changeAddressTitle}}</h3>
       <el-form :model="form" :rules="rules" ref="changeAddressForm">
         <el-form-item>
           <el-col :span="11">
@@ -62,6 +62,8 @@ export default {
   data () {
     return {
       changeAddressMode: false,
+      addressTitle: 'Delivery Address',
+      changeAddressTitle: 'Change delivery address',
       form: {},
       rules: {
         name: [
@@ -144,7 +146,7 @@ export default {
       this.changeAddressMode = false
     },
     clearForm () {
-      this.form = {}
+      this.$refs['changeAddressForm"'].resetFields()
     }
   }
 }
@@ -156,11 +158,11 @@ export default {
   }
   .gd_address_wrapper {
     margin: 0px auto;
-    max-width: 240px;
+    max-width: 250px;
   }
-  h2 {
+  h3 {
     margin-top: 20px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
   form {
     max-width: 500px;

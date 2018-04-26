@@ -13,7 +13,9 @@
     <view-cart
       v-if="activeIndex === 0"
       :items="items"
-      :loading="loading">
+      :subtotal="subtotal"
+      :loading="loading"
+      v-on:updateSubtotal="calculateSubtotal">
     </view-cart>
     <delivery
       v-if="activeIndex === 1"
@@ -21,11 +23,28 @@
       :loading="loading"
       v-on:updateAddress="changeAddress">
     </delivery>
-    <payment v-if="activeIndex === 2"></payment>
-    <order-summary v-if="activeIndex === 3"></order-summary>
-    <div class="gd_buttons_wrapper">
+    <payment
+      v-if="activeIndex === 2"
+      :cardDetails="cardDetails"
+      :loading="loading"
+      v-on:updatePaymentDetails="changePaymentDetails">
+    </payment>
+    <order-summary
+      v-if="activeIndex === 3"
+      :cardDetails="cardDetails"
+      :address="deliveryAddress"
+      :items="items"
+      :subtotal="subtotal"
+      :loading="loading">
+    </order-summary>
+    <el-card v-if="activeIndex === numberOfSteps">
+      <div class="gd_order_placed_text">
+      <h2>Thank you for your order!</h2>
+      </div>
+    </el-card>
+    <div v-if="activeIndex !== numberOfSteps" class="gd_buttons_wrapper">
       <el-button @click="previousStep">Previous</el-button>
-      <el-button @click="nextStep" type="primary">Next</el-button>
+      <el-button @click="nextStep" type="primary">{{buttonTitle}}</el-button>
     </div>
   </el-card>
 </template>
@@ -44,19 +63,23 @@ export default {
   },
   data () {
     return {
+      subtotal: 0,
       numberOfSteps: 4,
+      buttonTitle: 'Next',
       activeIndex: 0,
       loading: '',
       deliveryAddress: {},
       order: {
         address: {}
       },
-      items: []
+      items: [],
+      cardDetails: {}
     }
   },
   mounted () {
     this.loadItems()
     this.loadAddress()
+    this.calculateSubtotal()
   },
   methods: {
     loadAddress () {
@@ -107,21 +130,42 @@ export default {
             CreateDate: '2018-03-16 23:20'})
     },
     changeAddress (newAddress) {
-      this.setFields(newAddress, this.deliveryAddress)
+      this.setAddressFields(newAddress, this.deliveryAddress)
+    },
+    changePaymentDetails (newDetails) {
+      this.setCardDetails(newDetails, this.cardDetails)
     },
     nextStep () {
       if (++this.activeIndex > this.numberOfSteps) this.activeIndex = this.numberOfSteps
+      if (this.activeIndex === this.numberOfSteps - 1) this.buttonTitle = 'Place order'
     },
     previousStep () {
       if (--this.activeIndex < 0) this.activeIndex = 0
+      this.buttonTitle = 'Next'
     },
-    setFields (from, to) {
+    setAddressFields (from, to) {
       to.name = from.name
       to.surname = from.surname
       to.street = from.street
       to.city = from.city
       to.country = from.country
       to.postcode = from.postcode
+    },
+    setCardDetails (from, to) {
+      to.number = from.number
+      to.holder = from.holder
+      to.exp_year = from.exp_year
+      to.exp_month = from.exp_month
+      to.cvv = from.cvv
+    },
+    calculateSubtotal () {
+      this.$nextTick(() => {
+        var arrayLength = this.items.length
+        this.subtotal = 0
+        for (var i = 0; i < arrayLength; i++) {
+          this.subtotal += this.items[i].Price * this.items[i].Count
+        }
+      })
     }
   }
 }
@@ -143,5 +187,14 @@ export default {
     padding-right: 40px;
     max-width: 900px;
     margin: 0 auto;
+  }
+  .gd_order_placed_text {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gd_order_placed_text h2{
+    margin: 0;
   }
 </style>

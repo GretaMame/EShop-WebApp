@@ -1,13 +1,150 @@
 <template>
-
+  <el-card class="gd_step_body" v-loading="loading">
+    <el-row>
+    <el-card>
+      <h3>Order summary</h3>
+      <el-card class="gd_cart_item" v-for="item in items" :key="item.SKU" :item="item">
+        <el-row :gutter="20">
+        <el-col :span="8">
+          <el-row>
+          <img class="gd_image" :src="item.Image">
+          </el-row>
+          <el-row>
+            <div align="left">
+            </div>
+          </el-row>
+        </el-col>
+        <el-col :span="16">
+          <div class="gd_item_wrapper" align="left">
+          <span class="gd_short_label">SKU:</span>
+          <span class="gd_line">{{item.SKU}}</span><br>
+          <span class="gd_line">{{item.Name}}</span><br>
+          <span class="gd_short_label">Unit price:</span>
+          <span class="gd_line">{{item.Price}}</span><br>
+          <span class="gd_short_label">Quantity:</span>
+          <span class="gd_line">{{item.Count}}</span><br>
+          <div
+            v-if="item.Attributes"
+            v-for="attribute in item.Attributes"
+            :key="attribute.Name"
+            :attribute="attribute">
+              <span class="gd_attribute gd_short_label">{{attribute.Name}}:</span>
+              <span class="gd_attribute gd_line"> {{attribute.Value}}</span><br>
+          </div>
+          </div>
+        </el-col>
+        </el-row>
+      </el-card>
+    </el-card>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="12">
+    <el-card>
+    <div class="gd_wrapper" align="center">
+      <h3>Payment details</h3>
+      <div align="left">
+        <span class="gd_label">Card number: </span>
+        <span class="gd_line">{{cardDetails.number}}</span><br>
+        <span class="gd_label">Card holder: </span>
+        <span class="gd_line">{{cardDetails.holder}}</span><br>
+        <span class="gd_label">Expiration date: </span>
+        <span class="gd_line">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</span><br>
+        <span class="gd_label">CVV: </span>
+        <span class="gd_line">{{cardDetails.cvv}}</span>
+      </div>
+    </div>
+    </el-card>
+      </el-col>
+      <el-col :span="12">
+    <el-card>
+      <div class="gd_wrapper">
+        <h3>Delivery Address</h3>
+        <div align="left">
+        <span class="gd_line">{{address.name}} {{address.surname}}</span><br>
+        <span class="gd_line">{{address.street}}</span><br>
+        <span class="gd_line">{{address.city}}</span><br>
+        <span class="gd_line">{{address.country}} {{address.postcode}}</span>
+        </div>
+      </div>
+    </el-card>
+      </el-col>
+    </el-row>
+  <el-card>
+    <div class="gd_item_wrapper" align="right">
+      <div class="gd_subtotals">
+    <h5><span class="gd_label">Subtotal:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h5>
+    <h5><span class="gd_label">Shipping:</span><span class="gd_price">{{(shippingCost)}} €</span></h5>
+      </div>
+    <h4><span class="gd_label">Total:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h4>
+    </div>
+  </el-card>
+  </el-card>
 </template>
 
 <script>
 export default {
-
+  props: {
+    cardDetails: { type: Object },
+    address: { type: Object },
+    items: {type: Array},
+    loading: { type: Boolean },
+    subtotal: { type: Number }
+  },
+  data () {
+    return {
+      shippingCost: 0
+    }
+  }
 }
 </script>
 
-<style>
-
+<style scoped>
+  .el-row {
+    margin-bottom: 20px;
+  }
+  .gd_line {
+    margin: 5px 0;
+    text-align: left;
+    display: inline-block;
+  }
+  .gd_label {
+    font-weight: bold;
+    min-width: 130px;
+    margin: 5px 0;
+    display: inline-block;
+  }
+  .gd_short_label {
+    font-weight: bold;
+    min-width: 90px;
+    margin: 5px 0;
+    display: inline-block;
+  }
+  .gd_wrapper {
+    margin: 0px auto;
+    max-width: 300px;
+    min-height: 220px;
+  }
+  .gd_item_wrapper {
+    margin: 0 auto;
+    max-width: 300px;
+  }
+  h3 {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+  .gd_image {
+    max-width: 140px;
+    max-height: 140px;
+  }
+  .gd_cart_item {
+    margin-bottom: 20px;
+  }
+  .gd_attribute {
+    color: gray;
+  }
+  .gd_price {
+    min-width: 150px;
+    text-align: right;
+    display: inline-block;
+  }
 </style>
