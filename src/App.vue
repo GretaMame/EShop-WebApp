@@ -9,7 +9,9 @@
         <Navigation/>
       </el-row>
     </el-header>
-    <router-view class="gd-body"></router-view>
+    <el-main class="gd-body">
+      <router-view ></router-view>
+    </el-main>
   </el-container>
 </template>
 
