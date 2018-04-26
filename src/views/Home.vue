@@ -71,11 +71,10 @@ export default {
         this.loading = false
       })
     },
-    methods: {
-      onItemClicked (item) {
-        console.log('clicky clicky')
-        this.$router.push(`/itemdetails/${item.id}`)
-      }
+
+    onItemClicked (item) {
+      console.log('clicky clicky')
+      this.$router.push(`/itemdetails/${item.ID}`)
     }
   }
 }
