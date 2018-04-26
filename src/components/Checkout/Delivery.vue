@@ -146,7 +146,7 @@ export default {
       this.changeAddressMode = false
     },
     clearForm () {
-      this.$refs['changeAddressForm"'].resetFields()
+      /* this.$refs['changeAddressForm"'].resetFields() */
     }
   }
 }
