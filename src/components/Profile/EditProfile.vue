@@ -207,7 +207,7 @@
         this.loading = true
         this.axios.get('user/profile')
           .then(response => {
-            this.initialUserData = response.data
+            this.setValues(response.data, this.initialUserData)
             this.loading = false
           })
           .catch(err => {
@@ -265,10 +265,12 @@
         this.form.postcode = this.initialUserData.address.postcode
       },
       setValues (fromObject, toObject) {
-        toObject.name = fromObject.name
-        toObject.surname = fromObject.surname
-        toObject.phone = fromObject.phone
-        toObject.address = fromObject.address
+        toObject.email = fromObject.email
+        toObject.name = fromObject.name !== null ? fromObject.name : ''
+        toObject.surname = fromObject.surname !== null ? fromObject.surname : ''
+        toObject.phone = fromObject.phone !== null ? fromObject.phone : ''
+        toObject.address = fromObject.address !== null ? fromObject.address : {}
+
       },
       prepareUserToUpdate () {
         this.updatedUser.address.id = this.initialUserData.address.id

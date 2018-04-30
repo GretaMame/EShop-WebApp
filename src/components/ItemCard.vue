@@ -1,16 +1,17 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <img :src="item.MainPicture" class="gd-item-image">
+    <img v-if="item.MainPicture" :src="item.MainPicture" class="gd-item-image">
+    <img v-else src="http://www.wellesleysocietyofartists.org/wp-content/uploads/2015/11/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
         <span>{{item.Price}} €</span>
       </el-col>
     </el-row>
     <el-row class="gd-item-card-main">
-      <el-popover class="gd-module" 
-        width="300" 
-        :open-delay="300" 
-        placement="bottom" 
+      <el-popover class="gd-module"
+        width="300"
+        :open-delay="300"
+        placement="bottom"
         trigger="hover">
         <div slot="reference" class="gd-item-tooltip">{{item.Name}}</div>
         <span>{{item.Name}}</span>
@@ -47,8 +48,8 @@
     padding: 10px;
   }
   .gd-item-tooltip{
-  width: 100%; 
-  word-wrap: break-word; 
+  width: 100%;
+  word-wrap: break-word;
   text-align: justify;
   }
   .gd-add-to-card{
@@ -79,7 +80,7 @@
     font-size: 10pt;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
   }
   .gd-item-price{
     color:midnightblue;

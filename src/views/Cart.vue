@@ -1,6 +1,4 @@
 <template>
-  <el-container>
-    <el-main>
       <el-row>
         <el-col :lg="18" :md="18" :sm="16" :xs="24">
           <el-row>
@@ -34,8 +32,6 @@
           </div>
         </el-col>
       </el-row>
-    </el-main>
-  </el-container>
 </template>
 
 <script>

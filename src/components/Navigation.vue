@@ -2,7 +2,11 @@
   <div class="gd-nav">
     <el-menu :default-active="$route.path" :mode="displayMode" :router="true" background-color="#333333" text-color="#fff" active-text-color="#DF3A01">
       <el-menu-item index="/home" route="/home">
-        <template slot="title">Goal Diggers</template>
+        <template slot="title">
+          <span class="gd-logo">
+            Goal Diggers
+          </span>
+        </template>
       </el-menu-item>
       <el-submenu index="/categories">
         <template slot="title">Goods</template>
@@ -92,6 +96,10 @@
 </script>
 
 <style scoped>
+	.gd-logo {
+		font: italic bold 20px Georgia, serif;
+		color:peru;
+	}
   .gd_right {
     float: right !important;
   }
