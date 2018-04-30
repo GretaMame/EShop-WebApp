@@ -5,7 +5,11 @@
       <p>Please enter the email address registered on your account.</p>
       <el-form ref="forgotPasswordForm" :rules="rules" :model="forgotPasswordForm" size="medium">
         <el-form-item prop="email">
-          <el-input :autofocus="true" v-model="forgotPasswordForm.email" placeholder="Enter your email"></el-input>
+          <el-input
+            :autofocus="true"
+            v-model="forgotPasswordForm.email"
+            placeholder="Enter your email"
+            @keyup.enter.native="submitForm('forgotPasswordForm')"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('forgotPasswordForm')">Reset password</el-button>

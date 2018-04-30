@@ -62,7 +62,11 @@
         <el-form-item>
           <el-col :span="4">
             <el-form-item prop="cvv">
-              <el-input v-model="form.cvv" placeholder="CVV" :maxlength="3"></el-input>
+              <el-input
+                v-model="form.cvv"
+                placeholder="CVV"
+                :maxlength="3"
+                @keyup.enter.native="submitCard()"></el-input>
             </el-form-item>
           </el-col>
         </el-form-item>

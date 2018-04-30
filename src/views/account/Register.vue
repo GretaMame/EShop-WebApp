@@ -11,7 +11,12 @@
             <el-input type="password" v-model="registerForm.password" placeholder="Enter your password"></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword" label="Repeat password">
-            <el-input type="password" v-model="registerForm.confirmPassword" placeholder="Repeat your password"></el-input>
+            <el-input
+              type="password"
+              v-model="registerForm.confirmPassword"
+              placeholder="Repeat your password"
+              @keyup.enter.native="submitForm('registerForm')">
+            </el-input>
           </el-form-item>
           <div class="error-msg" v-if="errorOccured">
             {{errorMessage}}

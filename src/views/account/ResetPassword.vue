@@ -11,7 +11,11 @@
             </el-form-item>
             <el-form-item prop="confirmPassword">
               <div class="header">Confirm new password:</div>
-              <el-input v-model="resetPasswordForm.confirmPassword" type="password" placeholder="********"></el-input>
+              <el-input
+                v-model="resetPasswordForm.confirmPassword"
+                type="password"
+                placeholder="********"
+                @keyup.enter.native="submitForm('resetPasswordForm')"></el-input>
             </el-form-item>
             <div v-if="showErr" class="gd-err-msg">UserId or Token was not found.</div>
             <el-form-item>

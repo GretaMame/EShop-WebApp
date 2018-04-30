@@ -41,7 +41,11 @@
            </el-col>
           </el-form-item>
           <el-form-item prop="country">
-            <el-input v-model="form.country" placeholder="Country"></el-input>
+            <el-input
+              v-model="form.country"
+              placeholder="Country"
+              @keyup.enter.native="saveChanges()">
+            </el-input>
           </el-form-item>
           <el-form-item class="gd_buttons">
             <el-button @click="cancelChanges()">Cancel</el-button>

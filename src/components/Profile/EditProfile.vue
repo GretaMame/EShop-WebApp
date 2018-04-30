@@ -72,7 +72,7 @@
             <el-input v-model="form.postcode"></el-input>
           </el-form-item>
           <el-form-item label="Country" prop="country">
-            <el-input v-model="form.country"></el-input>
+            <el-input v-model="form.country" @keyup.enter.native="saveChanges()"></el-input>
           </el-form-item>
         </el-card>
       </el-form>

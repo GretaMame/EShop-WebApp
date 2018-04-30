@@ -7,7 +7,12 @@
           <el-input :autofocus="true" v-model="loginForm.email" placeholder="Enter your email"></el-input>
         </el-form-item>
         <el-form-item id="passwordItem" prop="password" label="Password">
-          <el-input type="password" v-model="loginForm.password" placeholder="Enter your password"></el-input>
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            placeholder="Enter your password"
+            @keyup.enter.native="onSubmit('loginForm')">
+          </el-input>
         </el-form-item>
         <el-row>
           <el-form-item id="forgotPasswordLinkItem" size="mini">
