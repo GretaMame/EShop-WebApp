@@ -2,7 +2,7 @@
   <el-main v-loading="loading" style="padding: 15px;">
     <el-card>
       <el-row v-if="items">
-        <el-col class="gd-home-item-card" v-for="item in items" :key="item.SKU" :xs="12" :sm="8" :md="6" :lg="4">
+        <el-col class="gd-home-item-card" v-for="item in items" :key="item.SKU" :xs="12" :sm="8" :md="6" :lg="6">
           <ItemCard :item="item"></ItemCard>
         </el-col>
       </el-row>

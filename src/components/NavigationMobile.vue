@@ -91,17 +91,14 @@
 					</el-menu-item>
 				</el-menu>
     	</el-submenu>
-			<el-menu-item index="search" class="gd-search">
-				<el-input
-					placeholder="I'm shopping for"
-					size="small"
-					resize="horizontal">
-					<el-button slot="append" style="padding: 0;">
-						<icon name="search"/> 
-					</el-button>
-				</el-input>
+			<el-menu-item index="search">
+				<template slot="title">
+          <span class="gd-logo">
+            Goal Diggers
+          </span>
+        </template>
 			</el-menu-item>
-			<el-menu-item class="gd_right" index="/cart" route="/cart">
+			<el-menu-item class="gd-float-right" index="/cart" route="/cart">
 				<i class="el-icon-goods"></i>
 				{{(itemsInCart)}}
 			</el-menu-item>	
@@ -154,17 +151,3 @@
     }
   }
 </script>
-
-<style scoped>
-	.gd-logo {
-		font: italic bold 20px Georgia, serif;
-		color:peru;
-	}
-  .gd_right {
-    float: right;
-  }
-	.gd-search{
-		width: calc(100% - 155px); 
-		padding: 0;
-	}
-</style>

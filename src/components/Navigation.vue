@@ -14,13 +14,13 @@
           {{category.name}}
         </el-menu-item>
       </el-submenu>
-      <el-menu-item class="gd_right" index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
+      <el-menu-item class="gd-float-right" index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
         Sign up
       </el-menu-item>
-      <el-menu-item class="gd_right" index="/login" v-if="!this.$store.getters.isAuthenticated" route="/login">
+      <el-menu-item class="gd-float-right" index="/login" v-if="!this.$store.getters.isAuthenticated" route="/login">
         Log in
       </el-menu-item>
-      <el-submenu class="gd_right" index="/user" v-if="this.$store.getters.isAuthenticated">
+      <el-submenu class="gd-float-right" index="/user" v-if="this.$store.getters.isAuthenticated">
         <template slot="title">
           <icon name="user-o"></icon>
         </template>
@@ -34,7 +34,7 @@
           Sign out
         </el-menu-item>
       </el-submenu>
-      <el-menu-item class="gd_right" index="/cart" route="/cart">
+      <el-menu-item class="gd-float-right" index="/cart" route="/cart">
         <i class="el-icon-goods"></i>
         {{(itemsInCart)}}
       </el-menu-item>
@@ -94,13 +94,3 @@
   }
 
 </script>
-
-<style scoped>
-	.gd-logo {
-		font: italic bold 20px Georgia, serif;
-		color:peru;
-	}
-  .gd_right {
-    float: right;
-  }
-</style>
