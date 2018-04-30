@@ -270,7 +270,6 @@
         toObject.surname = fromObject.surname !== null ? fromObject.surname : ''
         toObject.phone = fromObject.phone !== null ? fromObject.phone : ''
         toObject.address = fromObject.address !== null ? fromObject.address : {}
-
       },
       prepareUserToUpdate () {
         this.updatedUser.address.id = this.initialUserData.address.id

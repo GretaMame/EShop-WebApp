@@ -9,7 +9,7 @@
         <Navigation/>
       </el-row>
     </el-header>
-     <el-main class="gd-body">
+    <el-main class="gd-body">
       <router-view ></router-view>
     </el-main>
   </el-container>
@@ -17,7 +17,7 @@
 
 <script>
 import Navigation from './components/Navigation'
-import NavigationMobile from './components/NavigationMobile.vue'
+import NavigationMobile from './components/NavigationMobile'
 import AdminNavigation from './components/AdminNavigation'
 export default {
   name: 'app',
