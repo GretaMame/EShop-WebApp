@@ -1,7 +1,6 @@
 <template>
   <el-card class="gd_step_body" v-loading="loading">
     <el-row>
-    <el-card>
       <h3>Order summary</h3>
       <el-card class="gd_cart_item" v-for="item in items" :key="item.SKU" :item="item">
         <el-row :gutter="20">
@@ -35,49 +34,52 @@
         </el-col>
         </el-row>
       </el-card>
-    </el-card>
     </el-row>
-    <el-row :gutter="20">
-      <el-col :span="12">
-    <el-card>
-    <div class="gd_wrapper" align="center">
-      <h3>Payment details</h3>
-      <div align="left">
-        <span class="gd_label">Card number: </span>
-        <span class="gd_line">{{cardDetails.number}}</span><br>
-        <span class="gd_label">Card holder: </span>
-        <span class="gd_line">{{cardDetails.holder}}</span><br>
-        <span class="gd_label">Expiration date: </span>
-        <span class="gd_line">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</span><br>
-        <span class="gd_label">CVV: </span>
-        <span class="gd_line">{{cardDetails.cvv}}</span>
-      </div>
-    </div>
-    </el-card>
-      </el-col>
-      <el-col :span="12">
-    <el-card>
-      <div class="gd_wrapper">
-        <h3>Delivery Address</h3>
-        <div align="left">
-        <span class="gd_line">{{address.name}} {{address.surname}}</span><br>
-        <span class="gd_line">{{address.street}}</span><br>
-        <span class="gd_line">{{address.city}}</span><br>
-        <span class="gd_line">{{address.country}} {{address.postcode}}</span>
+    <el-row>
+      <el-card class="gd_cart_item">
+        <div class="gd_wrapper" align="center">
+          <h3>Payment details</h3>
+          <div align="left">
+            <span class="gd_label">Card number: </span>
+            <span class="gd_line">**** **** **** {{cardDetails.number.substr(15)}}</span><br>
+            <span class="gd_label">Card holder: </span>
+            <span class="gd_line">{{cardDetails.holder}}</span><br>
+            <span class="gd_label">Expiration date: </span>
+            <span class="gd_line">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</span><br>
+            <span class="gd_label">CVV: </span>
+            <span class="gd_line">***</span>
+          </div>
         </div>
-      </div>
-    </el-card>
-      </el-col>
+      </el-card>
     </el-row>
-  <el-card>
-    <div class="gd_item_wrapper" align="right">
-      <div class="gd_subtotals">
-    <h5><span class="gd_label">Subtotal:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h5>
-    <h5><span class="gd_label">Shipping:</span><span class="gd_price">{{(shippingCost)}} €</span></h5>
-      </div>
-    <h4><span class="gd_label">Total:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h4>
+    <el-row>
+      <el-card class="gd_cart_item">
+        <div class="gd_item_wrapper" align="center">
+          <h3>Delivery Address</h3>
+          <div class="gd_address_wrapper" align="left">
+          <span class="gd_line">{{address.name}} {{address.surname}}</span><br>
+          <span class="gd_line">{{address.street}}</span><br>
+          <span class="gd_line">{{address.city}}</span><br>
+          <span class="gd_line">{{address.country}} {{address.postcode}}</span>
+          </div>
+        </div>
+      </el-card>
+    </el-row>
+    <el-row>
+      <el-card>
+        <div class="gd_item_wrapper" align="right">
+          <div class="gd_subtotals">
+        <h5><span class="gd_label">Subtotal:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h5>
+        <h5><span class="gd_label">Shipping:</span><span class="gd_price">{{(shippingCost)}} €</span></h5>
+          </div>
+        <h4><span class="gd_label">Total:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h4>
+        </div>
+      </el-card>
+    </el-row>
+        <div class="gd_step_buttons">
+            <el-button @click="$emit('previousStep')">Previous</el-button>
+            <el-button type="primary" @click="$emit('nextStep')">Place order</el-button>
     </div>
-  </el-card>
   </el-card>
 </template>
 
@@ -127,6 +129,10 @@ export default {
   .gd_item_wrapper {
     margin: 0 auto;
     max-width: 300px;
+  }
+  .gd_address_wrapper {
+    margin: 0 auto;
+    max-width: 120px;
   }
   h3 {
     margin-top: 20px;

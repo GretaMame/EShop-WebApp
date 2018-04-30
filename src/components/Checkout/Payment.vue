@@ -12,11 +12,11 @@
         <span class="gd_label">CVV: </span>
         <span class="gd_payment_details_data">{{cardDetails.cvv}}<br></span>
       </div>
-        <el-button class="gd_buttons" @click="editPaymentDetails()">Edit</el-button>
+        <el-button class="gd_buttons" @click="editPaymentDetails()">Change card details</el-button>
     </div>
     <div class="gd_form_wrapper" v-if="editMode" align="center">
-      <el-form :model="form" :ref="formName">
-        <el-form-item prop="cardNumber">
+      <el-form :model="form" :rules="rules" :ref="formName">
+        <el-form-item prop="number">
           <el-input
             v-model="form.number"
             placeholder="Card number"
@@ -24,7 +24,7 @@
             :maxlength="19">
           </el-input>
         </el-form-item>
-        <el-form-item prop="cardHolder">
+        <el-form-item prop="holder">
           <el-input v-model="form.holder" placeholder="Name on card"></el-input>
         </el-form-item>
         <div align="left"><label>Expiration date:</label></div>
@@ -68,11 +68,14 @@
         </el-form-item>
         <div class="gd_buttons" align="center">
           <el-form-item>
-            <el-button type="primary" @click="submitCard()">Save</el-button>
-            <el-button  @click="clearFields()">Clear fields</el-button>
+            <el-button  @click="clearForm()">Clear fields</el-button>
           </el-form-item>
         </div>
       </el-form>
+    </div>
+    <div class="gd_step_buttons">
+            <el-button @click="$emit('previousStep')">Previous</el-button>
+            <el-button type="primary" @click="submitCard()">Next</el-button>
     </div>
   </el-card>
 </template>
@@ -87,6 +90,7 @@ export default {
     return {
       editMode: true,
       formName: 'CardDetailsForm',
+      cardDetailsProvided: false,
       form: {
         number: '',
         holder: '',
@@ -95,7 +99,7 @@ export default {
         cvv: ''
       },
       rules: {
-        cardNumber: [
+        number: [
           {
             required: true,
             message: 'Please enter your card number',
@@ -108,15 +112,21 @@ export default {
             trigger: 'blur'
           }
         ],
-        cardHolder: [
+        holder: [
           {
             required: true,
             message: 'Please enter the name on card',
             trigger: 'blur'
           },
           {
-            pattern: '[a-zA-Z ]',
+            pattern: '^[a-zA-Z ]*$',
             message: 'Name can only contain letters',
+            trigger: 'blur'
+          },
+          {
+            min: 2,
+            max: 32,
+            message: 'Length should be 2 to 32 characters',
             trigger: 'blur'
           }
         ],
@@ -132,7 +142,7 @@ export default {
           {
             required: true,
             message: 'Please select expiration month',
-            trigger: 'blur'
+            trigger: 'change'
           }
         ],
         exp_year: [
@@ -145,7 +155,7 @@ export default {
       },
       pickerOptions: {
           disabledDate (time) {
-            return time.getTime() <= Date.now()
+            return time.getTime() <= 1970
           }
       }
     }
@@ -157,8 +167,10 @@ export default {
     fetchCardDetails () {
       if (!this.cardDetails.number) {
         this.editMode = true
+        this.cardDetailsProvided = false
       } else {
         this.editMode = false
+        this.cardDetailsProvided = true
       }
     },
     formatCardInput () {
@@ -175,11 +187,22 @@ export default {
       this.setFields(this.cardDetails, this.form)
     },
     submitCard () {
-      this.editMode = false
-      this.$emit('updatePaymentDetails', this.form)
+      if (!this.editMode) {
+        this.$emit('nextStep')
+      } else {
+        this.$refs[this.formName].validate((valid) => {
+          if (valid) {
+            this.editMode = false
+            this.cardDetailsProvided = true
+            this.$emit('updatePaymentDetails', this.form)
+            this.$emit('nextStep')
+          }
+        })
+      }
     },
-    clearFields () {
+    clearForm () {
       this.$refs[this.formName].resetFields()
+      this.form = {}
     },
     setFields (from, to) {
       to.number = from.number

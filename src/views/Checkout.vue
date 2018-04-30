@@ -15,19 +15,25 @@
       :items="items"
       :subtotal="subtotal"
       :loading="loading"
-      v-on:updateSubtotal="calculateSubtotal">
+      v-on:updateSubtotal="calculateSubtotal"
+      v-on:nextStep="nextStep"
+      v-on:previousStep="previousStep">
     </view-cart>
     <delivery
       v-if="activeIndex === 1"
       :address="deliveryAddress"
       :loading="loading"
+      v-on:nextStep="nextStep"
+      v-on:previousStep="previousStep"
       v-on:updateAddress="changeAddress">
     </delivery>
     <payment
       v-if="activeIndex === 2"
       :cardDetails="cardDetails"
       :loading="loading"
-      v-on:updatePaymentDetails="changePaymentDetails">
+      v-on:updatePaymentDetails="changePaymentDetails"
+      v-on:nextStep="nextStep"
+      v-on:previousStep="previousStep">
     </payment>
     <order-summary
       v-if="activeIndex === 3"
@@ -35,17 +41,15 @@
       :address="deliveryAddress"
       :items="items"
       :subtotal="subtotal"
-      :loading="loading">
+      :loading="loading"
+      v-on:nextStep="nextStep"
+      v-on:previousStep="previousStep">
     </order-summary>
     <el-card v-if="activeIndex === numberOfSteps">
       <div class="gd_order_placed_text">
       <h2>Thank you for your order!</h2>
       </div>
     </el-card>
-    <div v-if="activeIndex !== numberOfSteps" class="gd_buttons_wrapper">
-      <el-button @click="previousStep">Previous</el-button>
-      <el-button @click="nextStep" type="primary">{{buttonTitle}}</el-button>
-    </div>
   </el-card>
 </template>
 
@@ -65,13 +69,9 @@ export default {
     return {
       subtotal: 0,
       numberOfSteps: 4,
-      buttonTitle: 'Next',
       activeIndex: 0,
       loading: '',
       deliveryAddress: {},
-      order: {
-        address: {}
-      },
       items: [],
       cardDetails: {}
     }
@@ -86,7 +86,7 @@ export default {
       this.loading = true
       this.axios.get('user/profile')
       .then(response => {
-        this.deliveryAddress = response.data.address
+        this.setAddressFields(response.data.address, this.deliveryAddress)
         this.loading = false
       })
       .catch(error => {
@@ -135,13 +135,14 @@ export default {
     changePaymentDetails (newDetails) {
       this.setCardDetails(newDetails, this.cardDetails)
     },
+    controlNextStepButton (value) {
+      this.buttonDisabled = value
+    },
     nextStep () {
       if (++this.activeIndex > this.numberOfSteps) this.activeIndex = this.numberOfSteps
-      if (this.activeIndex === this.numberOfSteps - 1) this.buttonTitle = 'Place order'
     },
     previousStep () {
       if (--this.activeIndex < 0) this.activeIndex = 0
-      this.buttonTitle = 'Next'
     },
     setAddressFields (from, to) {
       to.name = from.name
@@ -196,5 +197,8 @@ export default {
   }
   .gd_order_placed_text h2{
     margin: 0;
+  }
+  .gd_step_buttons {
+    margin: 20px;
   }
 </style>

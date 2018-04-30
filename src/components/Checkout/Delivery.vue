@@ -12,7 +12,7 @@
     </div>
     <div v-if="changeAddressMode" align="center">
       <h3>{{changeAddressTitle}}</h3>
-      <el-form :model="form" :rules="rules" ref="changeAddressForm">
+      <el-form :model="form" :rules="rules" :ref="formName">
         <el-form-item>
           <el-col :span="11">
             <el-form-item prop="name">
@@ -44,11 +44,14 @@
             <el-input v-model="form.country" placeholder="Country"></el-input>
           </el-form-item>
           <el-form-item class="gd_buttons">
-            <el-button type="primary" @click="saveChanges()">Save</el-button>
             <el-button @click="cancelChanges()">Cancel</el-button>
             <el-button @click="clearForm()">Clear fields</el-button>
           </el-form-item>
       </el-form>
+    </div>
+        <div class="gd_step_buttons">
+            <el-button @click="$emit('previousStep')">Previous</el-button>
+            <el-button type="primary" @click="saveChanges()" :disabled="!addressProvided">Next</el-button>
     </div>
   </el-card>
 </template>
@@ -62,8 +65,10 @@ export default {
   data () {
     return {
       changeAddressMode: false,
+      formName: 'ChangeAddressForm',
       addressTitle: 'Delivery Address',
       changeAddressTitle: 'Change delivery address',
+      addressProvided: false,
       form: {},
       rules: {
         name: [
@@ -121,7 +126,19 @@ export default {
       }
     }
   },
+  mounted () {
+    this.checkIfEmptyAddress()
+  },
   methods: {
+    checkIfEmptyAddress () {
+      if (!this.address.name) {
+        this.enterChangeAddressMode
+        this.addressProvided = false
+      } else {
+        this.changeAddressMode = false
+        this.addressProvided = true
+      }
+    },
     enterChangeAddressMode () {
       this.changeAddressMode = true
       this.setFields(this.address, this.form)
@@ -135,18 +152,26 @@ export default {
       to.postcode = from.postcode
     },
     saveChanges () {
-      this.$refs['changeAddressForm'].validate((valid) => {
-        if (valid) {
-          this.changeAddressMode = false
-          this.$emit('updateAddress', this.form)
-        }
-      })
+      if (!this.changeAddressMode) {
+        this.$emit('nextStep')
+      } else {
+        this.$refs[this.formName].validate((valid) => {
+          if (valid) {
+            this.changeAddressMode = false
+            this.addressProvided = true
+            this.$emit('updateAddress', this.form)
+            this.$emit('addressProvided')
+            this.$emit('nextStep')
+          }
+        })
+      }
     },
     cancelChanges () {
       this.changeAddressMode = false
     },
     clearForm () {
-      /* this.$refs['changeAddressForm"'].resetFields() */
+      this.$refs[this.formName].resetFields()
+      this.form = {}
     }
   }
 }
