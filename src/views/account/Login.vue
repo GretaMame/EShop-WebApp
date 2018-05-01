@@ -101,12 +101,11 @@
     margin-top: 40px;
     padding: 40px 60px 20px 60px;
   }
-
   form {
-    margin: 10px;
+    margin: 0 auto;
+    max-width: 450px;
     margin-top: 30px;
   }
-
   #forgotPasswordLinkItem {
     text-align: end;
   }

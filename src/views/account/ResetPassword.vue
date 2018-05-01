@@ -1,7 +1,7 @@
 <template>
   <el-row class="gd-row">
     <el-card class="gd-card" v-loading="loading">
-      <div v-if="!successfulPasswordReset">
+      <div v-if="!successfulPasswordReset" class="gd-wrapper">
         <h3>Create new password</h3>
         <div class="gd-form-container">
           <el-form :model="resetPasswordForm" :rules="resetPasswordFormRules" ref="resetPasswordForm">
@@ -19,14 +19,19 @@
             </el-form-item>
             <div v-if="showErr" class="gd-err-msg">UserId or Token was not found.</div>
             <el-form-item>
-              <el-button :disabled="showErr" @click="submitForm('resetPasswordForm')">Change password</el-button>
+              <el-button
+                :disabled="showErr"
+                @click="submitForm('resetPasswordForm')"
+                class="gd-btn">
+                  Change password
+                </el-button>
             </el-form-item>
           </el-form>
         </div>
       </div>
-      <div v-else>
+      <div v-else class="gd-wrapper">
         <h5>Your password was successfully changed.</h5>
-        <el-button class="gd-jmp-btn" @click="$router.push('/login')">Jump to login</el-button>
+        <el-button class="gd-btn" @click="$router.push('/login')">Jump to login</el-button>
       </div>
     </el-card>
   </el-row>
@@ -107,8 +112,12 @@
   .gd-card {
     margin-top: 20px;
     width: 100%;
-    max-width: 500px;
-    padding: 10px;
+    max-width: 700px;
+  }
+
+  .gd-wrapper {
+    max-width: 450px;
+    margin: 20px auto;
   }
 
   .header {
@@ -124,8 +133,8 @@
     margin-bottom: 10px;
   }
 
-  .gd-jmp-btn {
-    margin-top: 10px;
+  .gd-btn {
+    margin-top: 20px;
   }
 
 </style>

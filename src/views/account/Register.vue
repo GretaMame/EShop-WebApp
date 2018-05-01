@@ -133,7 +133,8 @@
   }
 
   form {
-    margin: 10px;
+    margin: 0 auto;
+    max-width: 450px;
     margin-top: 30px;
   }
 
