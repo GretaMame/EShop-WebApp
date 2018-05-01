@@ -40,8 +40,7 @@
           password: 'K0ldunai!'
         },
         rules: {
-          email: [
-            {
+          email: [{
               type: 'email',
               message: 'Please input correct email address',
               trigger: 'blur,change'
@@ -51,12 +50,10 @@
               trigger: 'blur'
             }
           ],
-          password: [
-            {
-              validator: checkIfEmptyField,
-              trigger: 'blur'
-            }
-          ]
+          password: [{
+            validator: checkIfEmptyField,
+            trigger: 'blur'
+          }]
         }
       }
     },
@@ -70,10 +67,9 @@
               this.$store.dispatch('logIn', response)
               this.$router.push('/home')
             }).catch(err => {
-              console.log(err)
               this.$notify.error({
                 title: 'Error',
-                message: 'Ups! Something bad happened.'
+                message: err.response.data.message
               })
               this.loading = false
             })

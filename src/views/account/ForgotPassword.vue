@@ -54,12 +54,11 @@
           this.loading = false
           this.dialogVisible = true
         }).catch(err => {
-          console.log(err)
           this.dialogVisible = false
           this.loading = false
           this.$notify.error({
             title: 'Error',
-            message: 'Can not reset password at this moment.'
+            message: err.response.data.message
           })
         })
       }

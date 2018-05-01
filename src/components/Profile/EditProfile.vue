@@ -211,10 +211,9 @@
             this.loading = false
           })
           .catch(err => {
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'Ups! Something bad happened.'
+              message: err.response.data.message
             })
             this.loading = false
           })
