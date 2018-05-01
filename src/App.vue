@@ -37,13 +37,6 @@ export default {
     text-align: center;
     color: #2c3e50;
   }
-  .gd-category{
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    max-width: 300px; 
-    display: inline-block;
-  }
   .gd-pr-30px{
     padding-right: 30px;
   }
@@ -51,7 +44,7 @@ export default {
     padding: 0;
   }
   .gd-body {
-    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
   }
   .gd-logo {
 		font: italic bold 20px Georgia, serif;

@@ -1,17 +1,17 @@
 <template>
   <div class="gd-nav">
-    <el-menu :default-active="$route.path" 
-        :router="true" 
+    <el-menu :default-active="$route.path"
+        :router="true"
 				mode="horizontal"
-        background-color="#333333" 
-        text-color="#fff" 
+        background-color="#333333"
+        text-color="#fff"
         active-text-color="#DF3A01">
 			<el-submenu index="menu">
 				<template slot="title">
-					<icon name="bars"/> 
+					<icon name="bars"/>
 				</template>
-				<el-menu :default-active="$route.path" 
-					:router="true" 
+				<el-menu :default-active="$route.path"
+					:router="true"
 					mode="vertical"
 					background-color="#333333" 
 					text-color="#fff" 
@@ -69,7 +69,7 @@
 						<template slot="title">
 							<el-row>
 								<el-col :xs="4">
-									<icon name="archive"/> 
+									<icon name="archive"/>
 								</el-col>
 								<el-col :push="1" :xs="20">
 									Goods
@@ -99,7 +99,7 @@
 					</el-menu-item>
 				</el-menu>
     	</el-submenu>
-			<el-menu-item index="search">
+			<el-menu-item index="home">
 				<template slot="title">
           <span class="gd-logo">
             Goal Diggers
@@ -109,7 +109,7 @@
 			<el-menu-item class="gd-float-right" index="/cart" route="/cart">
 				<i class="el-icon-goods"></i>
 				{{(itemsInCart)}}
-			</el-menu-item>	
+			</el-menu-item>
     </el-menu>
   </div>
 </template>
