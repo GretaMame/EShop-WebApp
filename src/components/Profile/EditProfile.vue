@@ -1,6 +1,6 @@
 <template>
-  <el-card class="box-card gd_wrapper" v-loading="loading">
-    <div v-if="!editMode">
+  <el-card class="gd_wrapper" v-loading="loading">
+    <div v-if="!editMode" class ="gd_card_content_wrapper">
       <h2>My details</h2>
       <el-card class="box-card gd_info_card" align="left">
         <div slot="header">
@@ -13,7 +13,7 @@
         <span class="gd_label">Phone:</span>
         <span> {{initialUserData.phone}}<br></span>
       </el-card>
-      <el-card class="box-card gd_info_card" align="left">
+      <el-card class="gd_info_card" align="left">
         <div slot="header">
           <span class="gd_title">Delivery address</span>
         </div>
@@ -28,7 +28,7 @@
         <el-button type="primary" @click="enterEditMode()">Edit info</el-button>
       </div>
     </div>
-    <div v-if="editMode">
+    <div v-if="editMode" class="gd_card_content_wrapper">
       <div>
         <h2>Edit profile</h2>
         <p>Please update your personal details and save the changes.</p>
@@ -72,7 +72,7 @@
             <el-input v-model="form.postcode"></el-input>
           </el-form-item>
           <el-form-item label="Country" prop="country">
-            <el-input v-model="form.country"></el-input>
+            <el-input v-model="form.country" @keyup.enter.native="saveChanges()"></el-input>
           </el-form-item>
         </el-card>
       </el-form>
@@ -326,11 +326,17 @@
   .gd_buttons {
     margin-top: 20px;
   }
+  button {
+    margin: 5px;
+  }
   .gd_wrapper {
     margin: auto;
     max-width: 700px;
     margin-top: 40px;
-    padding: 10px 50px;
+  }
+  .gd_card_content_wrapper {
+    margin: 0 auto;
+    max-width: 500px;
   }
   h2 {
     margin: 20px;

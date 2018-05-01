@@ -41,6 +41,6 @@ export default {
     padding: 0;
   }
   .gd-body{
-    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
   }
 </style>

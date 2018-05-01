@@ -8,10 +8,10 @@
       </el-col>
     </el-row>
     <el-row class="gd-item-card-main">
-      <el-popover class="gd-module" 
-        width="300" 
-        :open-delay="300" 
-        placement="bottom" 
+      <el-popover class="gd-module"
+        width="300"
+        :open-delay="300"
+        placement="bottom"
         trigger="hover">
         <div slot="reference" class="gd-item-tooltip">{{item.Name}}</div>
         <span>{{item.Name}}</span>
@@ -48,8 +48,8 @@
     padding: 10px;
   }
   .gd-item-tooltip{
-  width: 100%; 
-  word-wrap: break-word; 
+  width: 100%;
+  word-wrap: break-word;
   text-align: justify;
   }
   .gd-add-to-card{
@@ -80,7 +80,7 @@
     font-size: 10pt;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;  
+    -webkit-box-orient: vertical;
   }
   .gd-item-price{
     color:midnightblue;

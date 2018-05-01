@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card gd_wrapper" :v-loading="loading">
+  <el-card class="gd_wrapper" :v-loading="loading">
     <h2>Change password</h2>
     <el-form
       :model="user"
@@ -7,7 +7,8 @@
       ref="changePasswordForm"
       size="medium"
       label-position="top"
-      align="left">
+      align="left"
+      class="gd_form_wrapper">
       <el-form-item id="passwordItem" prop="currentPassword" label="Current password">
         <el-input
           type="password"
@@ -37,7 +38,8 @@
         <el-input
           type="password"
           v-model="user.repeatNewPassword"
-          placeholder="Repeat your new password">
+          placeholder="Repeat your new password"
+          @keyup.enter.native="submitForm('changePasswordForm')">
         </el-input>
       </el-form-item>
       <el-form-item align="center">
@@ -178,7 +180,11 @@
     margin: auto;
     max-width: 700px;
     margin-top: 40px;
-    padding: 10px 50px;
+  }
+  .gd_form_wrapper {
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 0;
   }
   h2 {
     margin: 20px;
@@ -192,5 +198,16 @@
   }
   .gd_link {
     margin-top: 0px;
+  }
+  @media screen and (max-width: 600px) {
+    .gd_wrapper {
+      margin: auto;
+      margin-top: 40px;
+      padding: 10px 10px;
+    }
+    form {
+    margin: 10px;
+    margin-top: 30px;
+  }
   }
 </style>
