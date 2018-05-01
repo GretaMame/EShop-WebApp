@@ -9,7 +9,9 @@
         <Navigation/>
       </el-row>
     </el-header>
-    <router-view class="gd-body"></router-view>
+    <el-main class="gd-body">
+      <router-view ></router-view>
+    </el-main>
   </el-container>
 </template>
 
@@ -39,6 +41,6 @@ export default {
     padding: 0;
   }
   .gd-body{
-    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
   }
 </style>

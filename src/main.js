@@ -3,12 +3,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
 import store from '@/store'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import ElementUI from 'element-ui'
@@ -28,8 +25,7 @@ Vue.axios.defaults.baseURL = 'http://localhost:60014/api/'
 Vue.axios.defaults.withCredentials = true
 Vue.axios.defaults.xsrfCookieName = 'CSRF-TOKEN'
 Vue.axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN'
-Vue.use(BootstrapVue)
-Vue.use(ElementUI, {locale})
+Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 
 interceptor()

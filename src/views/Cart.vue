@@ -1,6 +1,4 @@
 <template>
-  <el-container>
-    <el-main>
       <el-row>
         <el-col :lg="18" :md="18" :sm="16" :xs="24">
           <el-row>
@@ -23,14 +21,17 @@
                       <p>10000.12 €</p>
                     </el-col>
                   </el-row>
-                <el-button class="gd-checkout-button" type="primary">Checkout</el-button>
+                <el-button
+                  class="gd-checkout-button"
+                  type="primary"
+                  @click="redirect('checkout')">
+                  Checkout
+                </el-button>
               </el-row>
             </el-card>
           </div>
         </el-col>
       </el-row>
-    </el-main>
-  </el-container>
 </template>
 
 <script>
@@ -71,6 +72,11 @@ export default {
   },
   components: {
     CartItem
+  },
+  methods: {
+    redirect () {
+      this.$router.push('/checkout')
+    }
   }
   // mounted () {
     // this.axios.get('api/items').then(response => {

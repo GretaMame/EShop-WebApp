@@ -1,20 +1,20 @@
 <template>
   <div class="gd-nav">
-    <el-menu :default-active="$route.path" 
-        :router="true" 
+    <el-menu :default-active="$route.path"
+        :router="true"
 				mode="horizontal"
-        background-color="#333333" 
-        text-color="#fff" 
+        background-color="#333333"
+        text-color="#fff"
         active-text-color="#DF3A01">
 			<el-submenu index="menu">
 				<template slot="title">
-					<icon name="bars"/> 
+					<icon name="bars"/>
 				</template>
-				<el-menu :default-active="$route.path" 
-					:router="true" 
+				<el-menu :default-active="$route.path"
+					:router="true"
 					mode="vertical"
-					background-color="#333333" 
-					text-color="#fff" 
+					background-color="#333333"
+					text-color="#fff"
 					active-text-color="#DF3A01">
 					<el-menu-item index="/login" v-if="!this.$store.getters.isAuthenticated" route="/login">
 						<el-row>
@@ -68,7 +68,7 @@
 						<template slot="title">
 							<el-row>
 								<el-col :xs="4">
-									<icon name="archive"/> 
+									<icon name="archive"/>
 								</el-col>
 								<el-col :xs="20">
 									Goods
@@ -97,14 +97,14 @@
 					size="small"
 					resize="horizontal">
 					<el-button slot="append" style="padding: 0;">
-						<icon name="search"/> 
+						<icon name="search"/>
 					</el-button>
 				</el-input>
 			</el-menu-item>
 			<el-menu-item class="gd_right" index="/cart" route="/cart">
 				<i class="el-icon-goods"></i>
 				{{(itemsInCart)}}
-			</el-menu-item>	
+			</el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -164,7 +164,7 @@
     float: right;
   }
 	.gd-search{
-		width: calc(100% - 155px); 
+		width: calc(100% - 155px);
 		padding: 0;
 	}
 </style>

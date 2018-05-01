@@ -101,6 +101,6 @@
 		color:peru;
 	}
   .gd_right {
-    float: right;
+    float: right !important;
   }
 </style>
