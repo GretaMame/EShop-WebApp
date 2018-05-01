@@ -2,7 +2,7 @@
   <el-card>
     <div slot="header" class="clearfix">
       <span class="item-padding-align">SKU: {{item.SKU}}</span>
-      <time class="create-time">{{item.CreateDate}}</time>
+      <time class="create-time gd-float-right">{{item.CreateDate}}</time>
     </div>
     <el-row>
         <el-col :xs="24" :sm="24" :md="7" :lg="6">
@@ -82,10 +82,17 @@ export default {
   }
 </style>
 <style scoped>
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
   .create-time {
     font-size: 13px;
     color: #999;
-    float: right;
     padding-right: 10px;
   }
   .item-padding-align{

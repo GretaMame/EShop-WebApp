@@ -10,17 +10,31 @@
       </el-menu-item>
       <el-submenu index="/categories">
         <template slot="title">Goods</template>
-        <el-menu-item index="2-1" v-for="category in categories" :key="category.name">
-          {{category.name}}
-        </el-menu-item>
+        <el-submenu v-for="Category in Categories" :key="Category.Name" :index="Category.Name">
+          <template slot="title">
+            <span class="gd-category gd-pr-30px">
+              {{Category.Name}}
+            </span>
+          </template>
+          <el-menu-item v-if="Category.Subcategories" 
+          v-for="Subcategory in Category.Subcategories" 
+          :key="Subcategory.Name" 
+          :index="Subcategory.Name">
+            <template slot="title">
+              <span class="gd-category">
+                {{Subcategory.Name}}
+              </span>
+            </template>
+          </el-menu-item>
+        </el-submenu>
       </el-submenu>
-      <el-menu-item class="gd_right" index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
+      <el-menu-item class="gd-float-right" index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
         Sign up
       </el-menu-item>
-      <el-menu-item class="gd_right" index="/login" v-if="!this.$store.getters.isAuthenticated" route="/login">
+      <el-menu-item class="gd-float-right" index="/login" v-if="!this.$store.getters.isAuthenticated" route="/login">
         Log in
       </el-menu-item>
-      <el-submenu class="gd_right" index="/user" v-if="this.$store.getters.isAuthenticated">
+      <el-submenu class="gd-float-right" index="/user" v-if="this.$store.getters.isAuthenticated">
         <template slot="title">
           <icon name="user-o"></icon>
         </template>
@@ -34,7 +48,7 @@
           Sign out
         </el-menu-item>
       </el-submenu>
-      <el-menu-item class="gd_right" index="/cart" route="/cart">
+      <el-menu-item class="gd-float-right" index="/cart" route="/cart">
         <i class="el-icon-goods"></i>
         {{(itemsInCart)}}
       </el-menu-item>
@@ -49,23 +63,17 @@
         activeIndex: '1',
         itemsInCart: 0,
         displayMode: 'horizontal',
-        categories: [{
-            name: 'Category 0',
-            subcategories: [
-
-            ]
+        Categories: [{
+            Name: 'Category 0 z-a22324',
+            Subcategories: [{ Name: 'SubCategory 0-0' }, { Name: 'SubCategory 0-1' }]
           },
           {
-            name: 'Category 1',
-            subcategories: [
-
-            ]
+            Name: 'Clothes',
+            Subcategories: [{ Name: 'SubCategory 1-0' }, { Name: 'SubCategory 1-1' }, { Name: 'SubCategory 1-2' }, { Name: 'SubCategory 1-3' }]
           },
           {
-            name: 'Category 2',
-            subcategories: [
-
-            ]
+            Name: 'Mobile smarthones',
+            Subcategories: [{ Name: 'SubCategory 2-0' }]
           }
         ]
       }
@@ -96,11 +104,11 @@
 </script>
 
 <style scoped>
-	.gd-logo {
-		font: italic bold 20px Georgia, serif;
-		color:peru;
-	}
-  .gd_right {
-    float: right !important;
+  .gd-category{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 300px; 
+    display: inline-block;
   }
 </style>

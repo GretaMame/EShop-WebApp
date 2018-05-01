@@ -1,5 +1,5 @@
 <template>
-  <el-container id="app">
+  <el-container>
       <AdminNavigation v-if="this.$route.path.indexOf('admin') !== -1"></AdminNavigation>
     <el-header v-else class="gd-nav-header">
       <el-row class="hidden-sm-and-up">
@@ -30,17 +30,36 @@ export default {
 </script>
 
 <style>
-  #app {
+  .gd-app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
   }
-  .gd-nav-header{
+  .gd-pr-30px{
+    padding-right: 30px;
+  }
+  .gd-nav-header {
     padding: 0;
   }
-  .gd-body{
+  .gd-body {
     min-height: calc(100vh - 60px);
+  }
+  .gd-logo {
+		font: italic bold 20px Georgia, serif;
+		color:peru;
+	}
+  .gd-float-right {
+    float: right !important;
+  }
+  .gd-float-left {
+    float: left !important;
+  }
+  .gd-no-margin{
+    margin: 0;
+  }
+  .gd-text-align-left{
+    text-align: left;
   }
 </style>
