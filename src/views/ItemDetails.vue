@@ -24,7 +24,7 @@
             </el-row>
             <el-row class="gd-addToCard">
               <el-input-number size="medium" :min="1" v-model="count"/>
-              <el-button type="primary">Add to cart</el-button>
+              <el-button type="primary" @click="addToCart()">Add to cart</el-button>
             </el-row>
         </el-col>
       </el-row>
@@ -68,6 +68,41 @@ export default {
           message: 'Ups! Something bad happened.'
         })
       })
+    },
+    addToCart () {
+      var newItem = {
+        ItemID: this.id,
+        Count: this.count
+      }
+      var addPromise = null
+      if (this.$store.getters.isAuthenticated) {
+        addPromise = this.addToCartRemote(newItem)
+      } else {
+        addPromise = this.addToCartLocal(newItem)
+      }
+
+      addPromise.then(() => {
+        this.$notify.success({
+          title: 'Success',
+          message: 'Item was added to cart.'
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        this.$notify.error({
+          title: 'Error',
+          message: 'Ups! Something bad happened.'
+        })
+      })
+    },
+    addToCartLocal (item) {
+      return new Promise((resolve) => {
+        this.$store.dispatch('addItemToCart', item)
+        resolve()
+      })
+    },
+    addToCartRemote (item) {
+      return this.axios.put(`cart`, item)
     }
   }
 }
@@ -82,9 +117,10 @@ export default {
   }
 
   .carouselImage {
-    height: 600px;
+    height: 500px;
     width: auto;
-    max-width: 600px;
+    max-width: 500px;
+    margin-top: 50px;
   }
 
   .gd-itemName {
@@ -110,6 +146,10 @@ export default {
   .gd-addToCard {
     margin:20px;
   }
+
+    .gd-addToCard > .el-input-number {
+      margin-right: 10px;
+    }
 
   .gd-description {
     margin-top: 16px;

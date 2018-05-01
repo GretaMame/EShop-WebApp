@@ -73,7 +73,6 @@ export default {
     },
 
     onItemClicked (item) {
-      console.log('clicky clicky')
       this.$router.push(`/itemdetails/${item.ID}`)
     }
   }
