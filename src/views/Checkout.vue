@@ -184,8 +184,6 @@ export default {
     margin-top: 20px;
   }
   .gd_step_body {
-    padding-left: 40px;
-    padding-right: 40px;
     max-width: 900px;
     margin: 0 auto;
   }
