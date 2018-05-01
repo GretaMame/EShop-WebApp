@@ -149,7 +149,7 @@
           .catch(err => {
             this.$notify.error({
               title: 'Error!',
-              message: err.response.data[0]
+              message: err.response.data.message
             })
           this.$refs['changePasswordForm'].resetFields()
           this.loading = false

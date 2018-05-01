@@ -83,7 +83,7 @@
         }).catch(err => {
           this.$notify.error({
             title: 'Error',
-            message: 'Failed to reset your password.'
+            message: err.response.data.message
           })
           console.log(err)
           this.loading = false
