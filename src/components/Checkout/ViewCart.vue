@@ -9,7 +9,7 @@
     </cart-item>
     <h3><b>Subtotal:</b> {{(subtotal.toFixed(2))}} €</h3>
     <div class="gd_step_buttons">
-            <el-button type="primary" @click="$emit('nextStep')">Next</el-button>
+      <el-button type="primary" @click="$emit('nextStep')">Next</el-button>
     </div>
   </el-card>
 </template>

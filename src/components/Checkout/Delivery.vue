@@ -53,9 +53,9 @@
           </el-form-item>
       </el-form>
     </div>
-        <div class="gd_step_buttons">
-            <el-button @click="$emit('previousStep')">Previous</el-button>
-            <el-button type="primary" @click="saveChanges()" :disabled="!addressProvided">Next</el-button>
+      <div class="gd_step_buttons">
+        <el-button @click="$emit('previousStep')">Previous</el-button>
+        <el-button type="primary" @click="saveChanges()" :disabled="!addressProvided">Next</el-button>
     </div>
   </el-card>
 </template>
@@ -164,7 +164,6 @@ export default {
             this.changeAddressMode = false
             this.addressProvided = true
             this.$emit('updateAddress', this.form)
-            this.$emit('addressProvided')
             this.$emit('nextStep')
           }
         })

@@ -76,9 +76,9 @@
         </div>
       </el-card>
     </el-row>
-        <div class="gd_step_buttons">
-            <el-button @click="$emit('previousStep')">Previous</el-button>
-            <el-button type="primary" @click="$emit('nextStep')">Place order</el-button>
+      <div class="gd_step_buttons">
+        <el-button @click="$emit('previousStep')">Previous</el-button>
+        <el-button type="primary" @click="$emit('nextStep')">Place order</el-button>
     </div>
   </el-card>
 </template>

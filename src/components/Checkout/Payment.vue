@@ -78,8 +78,8 @@
       </el-form>
     </div>
     <div class="gd_step_buttons">
-            <el-button @click="$emit('previousStep')">Previous</el-button>
-            <el-button type="primary" @click="submitCard()">Next</el-button>
+      <el-button @click="$emit('previousStep')">Previous</el-button>
+      <el-button type="primary" @click="submitCard()">Next</el-button>
     </div>
   </el-card>
 </template>
