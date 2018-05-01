@@ -88,6 +88,11 @@ export default {
         })
       })
       .catch(err => {
+        // try again if cookie expired, so items will be added to local storage cart
+        if (err.cookieExpired) {
+          this.addToCart()
+          return
+        }
         console.log(err)
         this.$notify.error({
           title: 'Error',
