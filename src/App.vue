@@ -37,6 +37,16 @@ export default {
     text-align: center;
     color: #2c3e50;
   }
+  .gd-category{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 300px; 
+    display: inline-block;
+  }
+  .gd-pr-30px{
+    padding-right: 30px;
+  }
   .gd-nav-header {
     padding: 0;
   }
@@ -55,5 +65,8 @@ export default {
   }
   .gd-no-margin{
     margin: 0;
+  }
+  .gd-text-align-left{
+    text-align: left;
   }
 </style>

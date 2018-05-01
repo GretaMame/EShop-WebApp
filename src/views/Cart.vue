@@ -3,7 +3,7 @@
     <el-col :lg="18" :md="18" :sm="16" :xs="24">
       <el-row>
         <el-card class="gd-cart-card">
-          <p>My shopping bag</p>
+          <h2>My shopping bag</h2>
           <CartItem class="gd-cart-item-card" v-for="item in items" v-bind:key="item.SKU" v-bind:item="item"></CartItem>
         </el-card>
       </el-row>
@@ -12,7 +12,7 @@
       <div>
         <el-card class="gd-cart-total-card">
           <el-row>
-            <p>SUMMARY</p>
+            <h4>SUMMARY</h4>
               <el-row>
                 <el-col class="gd-total-price-label" :lg="12" :md="10" :sm="9" :xs="14">
                   <p>Total: </p>
