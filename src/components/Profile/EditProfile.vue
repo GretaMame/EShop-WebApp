@@ -211,6 +211,10 @@
             this.loading = false
           })
           .catch(err => {
+            if (err.cookieExpired) {
+              this.$emit('cookieExpired')
+            }
+
             this.$notify.error({
               title: 'Error',
               message: err.response.data.message

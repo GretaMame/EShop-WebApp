@@ -2,6 +2,19 @@
   <el-row>
     <el-card v-loading="loading" class="box-card" >
       <el-row>
+        <el-breadcrumb v-if="item.itemCategory" class="gd-itemDetailsBread">
+          <el-breadcrumb-item :to="{ path: '/home' }">
+            {{item.itemCategory.subcategory.name}}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item :to="{path: '/home'}">
+            {{item.itemCategory.name}}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item class="gd-truncateText">
+            {{item.name}}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </el-row>
+      <el-row :gutter="30">
         <el-col :lg="12" :md="24" :sm="24">
           <el-row>
             <el-carousel height="600px" :autoplay="false" arrow="always">
@@ -16,8 +29,13 @@
                 <h2>{{this.item.name}}</h2>
                 <span>SKU: {{this.item.sku}}</span>
             </el-row>
-            <el-row v-for="attr in this.item.attributes" :key="attr.attributeid">
-              <span>{{attr.name}}: {{attr.value}}</span>
+            <el-row v-for="attr in this.item.attributes" :key="attr.attributeid" :gutter="10">
+              <el-col class="gd-attributeName" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+                {{attr.name}}:
+              </el-col>
+              <el-col class="gd-attributeValue" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+                {{attr.value}}
+              </el-col>
             </el-row>
             <el-row class="gd-itemPrice">
               <span>{{item.price}} €</span>
@@ -128,6 +146,11 @@ export default {
     margin-top: 50px;
   }
 
+  .gd-itemDetailsBread {
+    font-size: 18px;
+    padding-bottom: 20px;
+  }
+  
   .gd-itemName {
     padding-bottom:25px;
   }
@@ -142,6 +165,15 @@ export default {
       padding-top: -12px;
       margin-top: 0px;
     }
+
+  .gd-attributeName {
+    text-align: right;
+  }
+
+  .gd-attributeValue {
+    text-align: left;
+    color: grey;
+  }
 
   .gd-itemPrice {
     font-size: 24px;

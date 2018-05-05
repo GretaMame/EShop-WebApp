@@ -10,7 +10,7 @@
       </el-row>
     </el-header>
     <el-main class="gd-body">
-      <router-view ></router-view>
+      <router-view v-on:cookieExpired="logout()"></router-view>
     </el-main>
   </el-container>
 </template>
@@ -25,11 +25,24 @@ export default {
     Navigation,
     NavigationMobile,
     AdminNavigation
+  },
+  methods: {
+    logout () {
+      this.$router.push(`/login`)
+        this.$notify.error({
+          title: 'Logged out',
+          message: 'You have been logged out.'
+        })
+    }
   }
 }
 </script>
 
 <style>
+  .el-form--label-top .el-form-item__label {
+    float: left;
+  }
+
   .gd-app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -44,8 +57,12 @@ export default {
     padding: 0;
   }
   .gd-body {
-    min-height: calc(100vh - 60px);
+    height: calc(100vh - 60px);
   }
+    .gd-body > * {
+      margin-bottom: 20px;
+    } 
+
   .gd-logo {
 		font: italic bold 20px Georgia, serif;
 		color:peru;
