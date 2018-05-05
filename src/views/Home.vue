@@ -1,13 +1,13 @@
 <template>
-  <el-main v-loading="loading" style="padding: 15px;">
-    <el-card>
-      <el-row v-if="items">
-        <el-col class="gd-home-item-card" v-for="item in items" :key="item.SKU" :xs="12" :sm="8" :md="6" :lg="4">
-          <div class="gd-clickable" @click="onItemClicked(item)">
-            <ItemCard :item="item"></ItemCard>
-          </div>
-        </el-col>
-      </el-row>
+    <el-card v-loading="loading" class="gd-card-border">
+      <div v-if="items && items[0]"> 
+        <el-row>
+          <el-col class="gd-home-item-card" v-for="item in items" :key="item.SKU" :xs="12" :sm="8" :md="6" :lg="4">
+            <div class="gd-clickable" @click="onItemClicked(item)">
+              <ItemCard :item="item"></ItemCard>
+            </div>
+          </el-col>
+        </el-row>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -17,8 +17,13 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="totalItems">
         </el-pagination>
+      </div>
+      <div v-if="items.length === 0 && !loading" class="gd-no-items">
+        <icon name="folder-open-o" class="gd-folder-icon"/>
+        <br>
+        No items are currently available
+      </div>
     </el-card>
-  </el-main>
 </template>
 
 <script>
@@ -82,9 +87,19 @@ export default {
   .gd-home-item-card {
     padding: 10px;
   }
-
   .gd-clickable:hover {
     cursor: pointer;
   }
-
+  .gd-folder-icon{
+    height: 50px;
+    width: 50px;
+  }
+  .gd-no-items{
+    position: relative;
+    transform: translateY(200%);
+    font-size: 18pt;
+  }
+  .gd-card-border{
+    min-height: 85vh;
+  }
 </style>
