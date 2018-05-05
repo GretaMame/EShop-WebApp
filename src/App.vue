@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import Navigation from './components/Navigation/Navigation'
-import NavigationMobile from './components/Navigation/NavigationMobile'
-import AdminNavigation from './components/Navigation/AdminNavigation'
+import Navigation from './components/Navigation/Desktop'
+import NavigationMobile from './components/Navigation/Mobile'
+import AdminNavigation from './components/Navigation/Admin'
 export default {
   name: 'app',
   components: {

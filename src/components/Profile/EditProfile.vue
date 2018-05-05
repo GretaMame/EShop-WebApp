@@ -6,22 +6,48 @@
         <div slot="header">
           <span class="gd_title">Personal information</span>
         </div>
-        <span class="gd_label">Name:</span>
-        <span> {{initialUserData.name}}<br></span>
-        <span class="gd_label">Surname:</span>
-        <span> {{initialUserData.surname}}<br></span>
-        <span class="gd_label">Phone:</span>
-        <span> {{initialUserData.phone}}<br></span>
+        <el-row>
+          <el-col :span="8">
+            <span class="gd_label">Name:</span>
+          </el-col>
+          <el-col :span="16">
+            {{initialUserData.name}}
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <span class="gd_label">Surname:</span>
+          </el-col>
+          <el-col :span="16">
+            {{initialUserData.surname}}
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <span class="gd_label">Phone:</span>
+          </el-col>
+          <el-col :span="16">
+            {{initialUserData.phone}}
+          </el-col>
+        </el-row>
       </el-card>
       <el-card class="gd_info_card" align="left">
         <div slot="header">
           <span class="gd_title">Delivery address</span>
         </div>
         <div class="gd-address-wrapper">
-          <span>{{initialUserData.address.name}} {{initialUserData.address.surname}}<br></span>
-          <span>{{initialUserData.address.street}}<br></span>
-          <span>{{initialUserData.address.city}} {{initialUserData.address.postcode}}<br></span>
-          <span>{{initialUserData.address.country}}<br></span>
+          <el-row>
+            {{initialUserData.address.name}} {{initialUserData.address.surname}}
+          </el-row>
+          <el-row>
+            {{initialUserData.address.street}}
+          </el-row>
+          <el-row>
+            {{initialUserData.address.city}} {{initialUserData.address.postcode}}
+          </el-row>
+          <el-row>
+            {{initialUserData.address.country}}
+          </el-row>
         </div>
       </el-card>
       <div class="gd_buttons">
@@ -316,8 +342,6 @@
 <style scoped>
   .gd_label {
     font-weight: bold;
-    min-width: 90px;
-    float: left;
   }
   .gd_title {
     font-weight: bold;

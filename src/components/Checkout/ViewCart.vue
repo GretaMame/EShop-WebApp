@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import CartItem from '@/components/CartItem.vue'
+import CartItem from '@/components/Cart/CartItem'
 export default {
   props: {
     loading: { type: Boolean },
