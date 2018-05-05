@@ -36,6 +36,7 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    line-height: 1.6;
   }
   .gd-pr-30px{
     padding-right: 30px;
