@@ -41,7 +41,7 @@ export default {
     padding-right: 30px;
   }
   .gd-nav-header {
-    padding: 0;
+    padding: 0 !important;
   }
   .gd-body {
     min-height: calc(100vh - 60px);
