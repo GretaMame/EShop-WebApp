@@ -3,14 +3,38 @@
     <h3>Payment details</h3>
     <div v-if="!editMode" class="gd_payment_details" align="center">
       <div align="left">
-        <span class="gd_label">Card number: </span>
-        <span class="gd_payment_details_data">{{cardDetails.number}}<br></span>
-        <span class="gd_label">Card holder: </span>
-        <span class="gd_payment_details_data">{{cardDetails.holder}}<br></span>
-        <span class="gd_label">Expiration date: </span>
-        <span class="gd_payment_details_data">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}<br></span>
-        <span class="gd_label">CVV: </span>
-        <span class="gd_payment_details_data">{{cardDetails.cvv}}<br></span>
+        <el-row class="gd_data_row">
+          <el-col :span="12">
+            <span class="gd_label">Card number: </span>
+          </el-col>
+          <el-col :span="12">
+            {{cardDetails.number}}
+          </el-col>
+        </el-row>
+        <el-row class="gd_data_row">
+          <el-col :span="12">
+            <span class="gd_label">Card holder: </span>
+          </el-col>
+          <el-col :span="12">
+            <span class="gd_line">{{cardDetails.holder}}</span>
+          </el-col>
+        </el-row>
+        <el-row class="gd_data_row">
+          <el-col :span="12">
+            <span class="gd_label">Expiration date: </span>
+          </el-col>
+          <el-col :span="12">
+            {{cardDetails.exp_year}}/{{cardDetails.exp_month}}
+          </el-col>
+        </el-row>
+        <el-row class="gd_data_row">
+          <el-col :span="12">
+            <span class="gd_label">CVV: </span>
+          </el-col>
+          <el-col :span="12">
+            {{cardDetails.cvv}}
+          </el-col>
+        </el-row>
       </div>
         <el-button class="gd_buttons" @click="editPaymentDetails()">Change card details</el-button>
     </div>
@@ -27,7 +51,7 @@
         <el-form-item prop="holder">
           <el-input v-model="form.holder" placeholder="Name on card"></el-input>
         </el-form-item>
-        <div align="left"><label>Expiration date:</label></div>
+        <div align="left"><el-row class="gd_data_row">Expiration date:</el-row></div>
         <el-form-item >
           <el-col :span="10">
             <el-form-item prop="exp_year">
@@ -221,7 +245,8 @@ export default {
 
 <style scoped>
   h3 {
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 40px;
   }
   .gd_buttons {
     margin-top: 30px;
@@ -229,18 +254,15 @@ export default {
   }
   .gd_label {
     font-weight: bold;
-    min-width: 130px;
-    margin: 10px 0;
-    display: inline-block;
   }
   form {
     max-width: 500px;
   }
   .gd_payment_details {
-    max-width: 400px;
+    max-width: 300px;
     margin: 0 auto;
   }
-  .gd_payment_details_data {
-    margin: 20px 0;
+  .gd_data_row {
+    margin-bottom: 10px;
   }
 </style>

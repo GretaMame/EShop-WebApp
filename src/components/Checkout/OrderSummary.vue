@@ -107,10 +107,10 @@
         <div class="gd_item_wrapper" align="center">
           <h3>Delivery Address</h3>
           <div class="gd_address_wrapper" align="left">
-          <span class="gd_line">{{address.name}} {{address.surname}}</span><br>
-          <span class="gd_line">{{address.street}}</span><br>
-          <span class="gd_line">{{address.city}}</span><br>
-          <span class="gd_line">{{address.country}} {{address.postcode}}</span>
+            <el-row>{{address.name}} {{address.surname}}</el-row>
+            <el-row>{{address.street}}</el-row>
+            <el-row>{{address.city}}</el-row>
+            <el-row>{{address.country}} {{address.postcode}}</el-row>
           </div>
         </div>
       </el-card>

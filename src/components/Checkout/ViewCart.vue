@@ -37,4 +37,7 @@ export default {
   .gd_cart_item {
     margin-bottom: 20px;
   }
+  h3 {
+    margin: 30px 0;
+  }
 </style>

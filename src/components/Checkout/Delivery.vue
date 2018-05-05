@@ -3,10 +3,10 @@
     <div v-if="!changeAddressMode" v-loading="loading">
       <div class="gd_address_wrapper">
         <h3>{{addressTitle}}</h3>
-        <p class="gd_address_line">{{address.name}} {{address.surname}}</p>
-        <p class="gd_address_line">{{address.street}}</p>
-        <p class="gd_address_line">{{address.city}}</p>
-        <p class="gd_address_line">{{address.country}} {{address.postcode}}</p>
+        <el-row class="gd_address_line">{{address.name}} {{address.surname}}</el-row>
+        <el-row class="gd_address_line">{{address.street}}</el-row>
+        <el-row class="gd_address_line">{{address.city}}</el-row>
+        <el-row class="gd_address_line">{{address.country}} {{address.postcode}}</el-row>
       </div>
       <el-button class="gd_buttons" @click="enterChangeAddressMode">Change delivery address</el-button>
     </div>
@@ -182,6 +182,7 @@ export default {
 
 <style scoped>
   .gd_address_line {
+    margin-bottom: 10px;
     text-align: left;
   }
   .gd_address_wrapper {

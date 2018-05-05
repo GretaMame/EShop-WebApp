@@ -16,8 +16,10 @@ Vue.use(Router)
 
 const isAuthenticated = (to, from, next) => {
   if (Store.getters.isAuthenticated) {
+    console.log('authenticated')
     next()
   } else {
+    console.log('not authenticated')
     next({name: 'login', query: {redirect: to.path}})
   }
 }
@@ -27,9 +29,15 @@ export default new Router({
   routes: [
     {
       path: '/user/profile',
-      name: 'profile',
       component: Profile,
-      beforeEnter: isAuthenticated
+      beforeEnter: isAuthenticated,
+      props: { activeName: 'details' }
+    },
+    {
+      path: '/user/orderhistory',
+      component: Profile,
+      beforeEnter: isAuthenticated,
+      props: { activeName: 'orderHistory' }
     },
     {
       path: '/home',
