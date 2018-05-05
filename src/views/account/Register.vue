@@ -1,31 +1,35 @@
 <template>
   <el-row>
-    <el-card class="box-card">
-      <h2>Create new account</h2>
-      <el-form :model="registerForm" :rules="rules" ref="registerForm" size="medium">
-        <el-form-item prop="email" label="Email">
-          <el-input :autofocus="true" v-model="registerForm.email" placeholder="Enter your email"></el-input>
-        </el-form-item>
-        <el-form-item prop="password" label="Password">
-          <el-input type="password" v-model="registerForm.password" placeholder="Enter your password"></el-input>
-        </el-form-item>
-        <el-form-item prop="passwordRepeat" label="Repeat password">
-          <el-input type="password" v-model="registerForm.passwordRepeat" placeholder="Repeat your password"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('registerForm')">Sign up</el-button>
-        </el-form-item>
-      </el-form>
+    <el-card class="box-card" v-loading="loading">
+      <div v-if="!dialogVisible">
+        <h2>Create new account</h2>
+        <el-form :model="registerForm" :rules="rules" ref="registerForm" size="medium">
+          <el-form-item prop="username" label="Email">
+            <el-input :autofocus="true" v-model="registerForm.username" placeholder="Enter your email"></el-input>
+          </el-form-item>
+          <el-form-item prop="password" label="Password">
+            <el-input type="password" v-model="registerForm.password" placeholder="Enter your password"></el-input>
+          </el-form-item>
+          <el-form-item prop="confirmPassword" label="Repeat password">
+            <el-input
+              type="password"
+              v-model="registerForm.confirmPassword"
+              placeholder="Repeat your password"
+              @keyup.enter.native="submitForm('registerForm')">
+            </el-input>
+          </el-form-item>
+          <div class="error-msg" v-if="errorOccured">
+            {{errorMessage}}
+          </div>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('registerForm')">Sign up</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else>
+        <span>Please check your email to validate your account.</span>
+      </div>
     </el-card>
-    <el-dialog
-      title="Your registration was successful!"
-      :visible.sync="dialogVisible"
-      width="35%">
-      <span>Please check your email to validate your account.</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible=false">Ok</el-button>
-      </span>
-    </el-dialog>
   </el-row>
 </template>
 
@@ -41,41 +45,83 @@
       }
       return {
         dialogVisible: false,
+        loading: false,
         registerForm: {
-        email: '',
-        password: '',
-        passwordRepeat: ''
+          username: '',
+          password: '',
+          confirmPassword: ''
         },
         rules: {
-          email: [
-            { required: true, message: 'Please enter your email address', trigger: 'blur' },
-            { type: 'email', message: 'Please input correct email address', trigger: 'blur,change' }
+          username: [{
+            type: 'email',
+            required: true,
+            message: 'Please input correct email address',
+            trigger: 'blur'
+          }],
+          password: [{
+              required: true,
+              message: 'Please enter your password',
+              trigger: 'blur'
+            },
+            {
+              min: 6,
+              message: 'Password must be at least 6 characters',
+              trigger: 'change, blur'
+            },
+            {
+              pattern: '[A-Z]+',
+              message: 'Password must contain at least one upper case letter',
+              trigger: 'blur, change'
+            },
+            {
+              pattern: '[0-9]+',
+              message: 'Password must contain at least one digit',
+              trigger: 'blur, change'
+            },
+            {
+              pattern: '[!@#$%^&*]',
+              message: 'Password must contain at least one speacial character',
+              trigger: 'blur, change'
+            }
           ],
-          password: [
-            { required: true, message: 'Please enter your password', trigger: 'blur' },
-            { min: 6, message: 'Password must be at least 5 characters', trigger: 'change, blur' }
-          ],
-          passwordRepeat: [
-            { required: true, message: 'Please repeat your password', trigger: 'blur' },
-            { validator: validatePasswordRepeat, trigger: 'blur' }
+          confirmPassword: [{
+              required: true,
+              message: 'Please repeat your password',
+              trigger: 'blur'
+            },
+            {
+              validator: validatePasswordRepeat,
+              trigger: 'blur'
+            }
           ]
-        }
+        },
+        errorOccured: false,
+        errorMessage: ''
       }
     },
     methods: {
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log('Sign up successful')
-            this.dialogVisible = true
-          } else {
-            console.log('Sign up error :(')
-            return false
+            this.register()
           }
+        })
+      },
+      register () {
+        this.loading = true
+        this.errorOccured = false
+        this.axios.post('account/register', this.registerForm).then(response => {
+          this.loading = false
+          this.dialogVisible = true
+        }).catch(err => {
+          this.loading = false
+          this.errorOccured = true
+          this.errorMessage = err.response.data[0]
         })
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -85,12 +131,20 @@
     margin-top: 40px;
     padding: 40px 60px 0px 60px;
   }
+
   form {
-    margin: 10px;
+    margin: 0 auto;
+    max-width: 450px;
     margin-top: 30px;
   }
+
   button {
     min-width: 150px;
     margin-top: 30px;
   }
+
+  .error-msg {
+    color: red;
+  }
+
 </style>

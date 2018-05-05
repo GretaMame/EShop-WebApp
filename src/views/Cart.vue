@@ -1,9 +1,37 @@
 <template>
-  <el-row>
-      <el-card class="cart-card">
-        <CartItem class="cart-item-card" v-for="item in items" :key="item.SKU" :item="item"></CartItem>
-      </el-card>
-  </el-row>
+      <el-row>
+        <el-col :lg="18" :md="18" :sm="16" :xs="24">
+          <el-row>
+            <el-card class="gd-cart-card">
+              <h2>My shopping bag</h2>
+              <CartItem class="gd-cart-item-card" v-for="item in items" v-bind:key="item.SKU" v-bind:item="item"></CartItem>
+            </el-card>
+          </el-row>
+        </el-col>
+        <el-col class="gd-summary-card" :lg="6" :md="6" :sm="8" :xs="16" :push="8">
+          <div>
+            <el-card class="gd-cart-total-card">
+              <el-row>
+                <h4>SUMMARY</h4>
+                  <el-row>
+                    <el-col class="gd-total-price-label" :lg="12" :md="10" :sm="9" :xs="14">
+                      <p>Total: </p>
+                    </el-col>
+                    <el-col class="gd-item-price" :lg="12" :md="14" :sm="15" :xs="8">
+                      <p>10000.12 €</p>
+                    </el-col>
+                  </el-row>
+                <el-button
+                  class="gd-checkout-button"
+                  type="primary"
+                  @click="redirect('checkout')">
+                  Checkout
+                </el-button>
+              </el-row>
+            </el-card>
+          </div>
+        </el-col>
+      </el-row>
 </template>
 
 <script>
@@ -44,6 +72,11 @@ export default {
   },
   components: {
     CartItem
+  },
+  methods: {
+    redirect () {
+      this.$router.push('/checkout')
+    }
   }
   // mounted () {
     // this.axios.get('api/items').then(response => {
@@ -56,11 +89,41 @@ export default {
 </script>
 
 <style scoped>
-  .cart-card {
-    margin: 3%;
-    padding: 0;
+  .gd-cart-card{
+    margin-right: 10px;
+    margin-bottom: 16px;
   }
-   .cart-item-card {
-    margin: 2%;
+   .gd-cart-item-card {
+    margin-bottom: 20px;
+  }
+  .gd-cart-total-card{
+    background-color: #F5F5F5;
+    margin-bottom: 20px;
+    margin-right: 8px;
+  }
+  .gd-summary-card{
+    position: sticky;
+    top: 0;
+  }
+  .cart-total-price-font{
+    font-size: 16pt;
+    text-decoration-color: gray;
+    font-weight: bold;
+    margin: 0;
+  }
+  .gd-checkout-button{
+    float: right;
+  }
+  .gd-total-price-label{
+    margin-bottom: 0;
+    text-align: right;
+    vertical-align: text-bottom;
+  }
+  .gd-item-price{
+    font-size: 14pt;
+    color: midnightblue;
+    font-weight: bold;
+    text-align: right;
+    float: left;
   }
 </style>

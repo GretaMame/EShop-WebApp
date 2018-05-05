@@ -8,7 +8,19 @@ import ForgotPassword from '@/views/account/ForgotPassword'
 import AdminUsers from '@/views/AdminUsers'
 import Cart from '@/views/Cart'
 import ResetPassword from '@/views/account/ResetPassword'
+import ConfirmAccount from '@/views/account/ConfirmAccount'
+import ItemDetails from '@/views/ItemDetails'
+import Checkout from '@/views/Checkout'
+import Store from '@/store'
 Vue.use(Router)
+
+const isAuthenticated = (to, from, next) => {
+  if (Store.getters.isAuthenticated) {
+    next()
+  } else {
+    next({name: 'login', query: {redirect: to.path}})
+  }
+}
 
 export default new Router({
   mode: 'history',
@@ -16,7 +28,8 @@ export default new Router({
     {
       path: '/user/profile',
       name: 'profile',
-      component: Profile
+      component: Profile,
+      beforeEnter: isAuthenticated
     },
     {
       path: '/home',
@@ -56,6 +69,23 @@ export default new Router({
       path: '/resetpassword',
       name: 'resetpassword',
       component: ResetPassword
+    },
+    {
+      path: '/confirmaccount',
+      name: 'confirmaccount',
+      component: ConfirmAccount
+    },
+    {
+      path: '/itemdetails/:id',
+      name: 'itemdetails',
+      component: ItemDetails,
+      props: true
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout,
+      beforeEnter: isAuthenticated
     }
   ]
 })
