@@ -10,7 +10,7 @@
       </el-row>
     </el-header>
     <el-main class="gd-body">
-      <router-view v-on:cookieExpired="logout()"></router-view>
+      <router-view ></router-view>
     </el-main>
   </el-container>
 </template>
@@ -19,6 +19,7 @@
 import Navigation from './components/Navigation'
 import NavigationMobile from './components/NavigationMobile'
 import AdminNavigation from './components/AdminNavigation'
+import EventBus from './eventBus'
 export default {
   name: 'app',
   components: {
@@ -26,14 +27,14 @@ export default {
     NavigationMobile,
     AdminNavigation
   },
-  methods: {
-    logout () {
-      this.$router.push(`/login`)
-        this.$notify.error({
-          title: 'Logged out',
-          message: 'You have been logged out.'
-        })
-    }
+  created () {
+    EventBus.$on('cookieExpired', () => {
+      this.$router.push('/login')
+      this.$notify.error({
+        title: 'Logged out',
+        message: 'You were logged out'
+      })
+    })
   }
 }
 </script>
