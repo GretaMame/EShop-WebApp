@@ -111,6 +111,7 @@
 </template>
 
 <script>
+  import EventBus from '@/eventBus'
   export default {
     data () {
       return {
@@ -237,11 +238,15 @@
             this.loading = false
           })
           .catch(err => {
+            this.loading = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
               message: err.response.data.message
             })
-            this.loading = false
           })
       },
       saveChanges () {
