@@ -5,7 +5,8 @@
       v-for="item in cart.items"
       v-bind:key="item.sku"
       v-bind:item="item"
-      v-on:updated="calculateSubtotal">
+      v-on:updated="calculateSubtotal"
+      v-on:delete="deleteCartItem">
     </cart-item>
     <h3><b>Subtotal:</b> {{(subtotal.toFixed(2))}} €</h3>
     <div class="gd_step_buttons">
@@ -42,6 +43,18 @@ export default {
 
       this.axios.get(`Cart`).then(response => {
         this.cart = response.data
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    deleteCartItem (Id) {
+      this.axios.delete('Cart/deletecartitem/' + Id).then(response => {
+        for (var i = 0; i <= this.cart.items.length; i++) {
+          if (this.cart.items[i].id === Id) {
+            this.cart.items.splice(i, 1)
+            break
+          }
+        }
       }).catch(err => {
         console.log(err)
       })

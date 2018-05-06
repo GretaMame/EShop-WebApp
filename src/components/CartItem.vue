@@ -12,7 +12,7 @@
             </el-col>
             <el-col :xs="3" :sm="3">
               <!-- cia kai jau apsirasysi metoda, kuris handlintu delete, tai eilute $emit('updated') butinai idek -->
-              <el-button @click="$emit('updated')" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
+              <el-button @click="$emit('delete', item.id)" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>
         </el-col>
@@ -57,7 +57,7 @@
               </el-row>
             </el-col>
             <el-col class="item-delete hidden-sm-and-down" :md="6" :lg="6">
-              <el-button type="danger" icon="el-icon-delete"></el-button>
+              <el-button @click="$emit('delete', item.id)" type="danger" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>
         </el-col>
