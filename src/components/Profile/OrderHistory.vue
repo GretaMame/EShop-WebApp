@@ -1,11 +1,10 @@
 <template>
-  <el-card class="gd_wrapper">
+  <el-card class="gd_wrapper" v-loading="loading">
     <h2>Order history</h2>
     <el-card
       class="gd_order"
       v-for="order in orders"
       :key="order.ID"
-      v-loading="loading"
       shadow="hover">
         <div slot="header" class="gd_order_header" align="left">
           <el-row>
@@ -223,12 +222,11 @@ export default {
       var ordersCountPromise = this.axios.get(`odata/Orders?$count=true&$top=0`)
       ordersCountPromise.then(response => {
         this.totalOrders = response.data['@odata.count']
-        console.log('Total orders:' + this.totalOrders)
       }).catch(err => {
         console.log(err)
       })
 
-      var ordersPromise = this.axios.get(`odata/Orders?$expand=Items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}`)
+      var ordersPromise = this.axios.get(`odata/Orders?$expand=Items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}&$orderby=CreateDate desc`)
       ordersPromise.then(response => {
         this.orders = response.data.value
         this.parseAddressesToObjects()
@@ -249,19 +247,30 @@ export default {
     },
     addItemsToCart (items) {
       if (items === null) return
-      // var itemsList
+      var itemsList = []
       for (var i = 0; i < items.length; i++) {
-        this.addItemsToCart(items[i].itemId)
-        // itemsList.push({ItemID: (items[i].itemId), Count: 1})
+        itemsList.push({ItemID: (items[i].ItemID), Count: 1})
       }
-      // var addPromise = null
-      // if (this.$store.getters.isAuthenticated) {
-      //   addPromise = this.addToCartRemote(newItem)
-      // } else {
-      //   addPromise = this.addToCartLocal(newItem)
-      // }
+      this.loading = true
+      this.axios.post('cart', {Items: itemsList})
+        .then(() => {
+          this.loading = false
+          this.$notify.success({
+            title: 'Success',
+            message: 'Items was added to cart.'
+          })
+        })
+        .catch(err => {
+          console.log(err)
+          this.loading = false
+          this.$notify.error({
+            title: 'Error',
+            message: 'Ups! Something bad happened.'
+          })
+        })
     },
     addItemToCart (id) {
+      this.loading = true
       var newItem = {
         ItemID: id,
         Count: 1
@@ -274,6 +283,7 @@ export default {
       }
 
       addPromise.then(() => {
+        this.loading = false
         this.$notify.success({
           title: 'Success',
           message: 'Item was added to cart.'
@@ -285,6 +295,7 @@ export default {
           this.addItemToCart(id)
           return
         }
+        this.loading = false
         console.log(err)
         this.$notify.error({
           title: 'Error',

@@ -16,10 +16,8 @@ Vue.use(Router)
 
 const isAuthenticated = (to, from, next) => {
   if (Store.getters.isAuthenticated) {
-    console.log('authenticated')
     next()
   } else {
-    console.log('not authenticated')
     next({name: 'login', query: {redirect: to.path}})
   }
 }
