@@ -9,6 +9,8 @@ import AdminUsers from '@/views/AdminUsers'
 import Cart from '@/views/Cart'
 import ResetPassword from '@/views/account/ResetPassword'
 import ConfirmAccount from '@/views/account/ConfirmAccount'
+import AdminItems from '@/views/AdminItems'
+import NewAdminItems from '@/views/NewAdminItems'
 Vue.use(Router)
 
 export default new Router({
@@ -47,6 +49,16 @@ export default new Router({
       path: '/admin/users',
       name: 'adminUsers',
       component: AdminUsers
+    },
+    {
+      path: '/admin/items',
+      name: 'adminItems',
+      component: AdminItems
+    },
+    {
+      path: '/admin/items/add',
+      name: 'adminItemsAdd',
+      component: NewAdminItems
     },
     {
       path: '/cart',
