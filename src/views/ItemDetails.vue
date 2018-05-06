@@ -103,6 +103,7 @@ export default {
       }
 
       addPromise.then(() => {
+        this.$notify.closeAll()
         this.$notify.success({
           title: 'Success',
           message: 'Item was added to cart.'
@@ -115,6 +116,7 @@ export default {
           return
         }
         console.log(err)
+        this.$notify.closeAll()
         this.$notify.error({
           title: 'Error',
           message: 'Ups! Something bad happened.'
