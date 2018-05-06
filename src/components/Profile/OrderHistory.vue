@@ -4,33 +4,33 @@
     <el-card
       class="gd_order"
       v-for="order in orders"
-      :key="order.orderNumber"
+      :key="order.ID"
       v-loading="loading"
       shadow="hover">
         <div slot="header" class="gd_order_header" align="left">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="14">
               <el-row>
                 <span class="gd_label">Order no.:</span>
               </el-row>
               <el-row>
-                {{order.orderNumber}}
+                {{order.OrderNumber}}
               </el-row>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="5">
               <el-row>
                 <span class="gd_label">Order date:</span>
               </el-row>
               <el-row>
-                {{order.createDate}}
+                {{order.CreateDate}}
               </el-row>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="5">
               <el-row>
               <span class="gd_label">Order status:</span>
               </el-row>
               <el-row>
-                {{order.status}}
+                {{order.Status}}
               </el-row>
             </el-col>
           </el-row>
@@ -38,23 +38,23 @@
         <el-row class="gd_line_bottom_margin">
           <el-col :span="18">
           <span class="gd_label">Total: </span>
-          {{order.totalPrice.toFixed(2)}} €
+          {{order.TotalPrice.toFixed(2)}} €
           </el-col>
           <el-col :span="6">
-            <el-button size="small" @click="addItemsToCart(order.items)" align="right">
+            <el-button size="small" @click="addItemsToCart(order.Items)" align="right">
               Add all items to cart
             </el-button>
           </el-col>
         </el-row>
-        <el-collapse @change="loadOrderItems()">
+        <el-collapse>
           <el-collapse-item>
             <template slot="title">
-              <span class="gd_label">{{countItems(order.items)}}</span>
+              <span class="gd_label">{{countItems(order.Items)}}</span>
             </template>
-            <div v-for="item in order.items" :key="item.itemId" :item="item">
+            <div v-for="item in order.Items" :key="item.ItemID" :item="item">
             <el-row class="gd_item_name_row">
               <el-col :span="19">
-              {{item.name}}
+              {{item.Name}}
               </el-col>
               <el-col :span="5" align="right">
                 <el-tooltip
@@ -63,7 +63,7 @@
                   effect="dark">
                   <el-button
                     icon="el-icon-search"
-                    @click="viewItemDetails(item.itemId)"
+                    @click="viewItemDetails(item.ItemID)"
                     size ="small"
                     circle>
                   </el-button>
@@ -74,7 +74,7 @@
                   effect="dark">
                     <el-button
                       icon="el-icon-goods"
-                      @click="addItemToCart(item.itemId)"
+                      @click="addItemToCart(item.ItemID)"
                       size ="small"
                       circle>
                     </el-button>
@@ -86,7 +86,7 @@
                 <span class="gd_label gd_gray_text">Unit price:</span>
               </el-col>
               <el-col :span="4">
-                <span class="gd_gray_text">{{item.price}}</span>
+                <span class="gd_gray_text">{{item.Price.toFixed(2)}} €</span>
               </el-col>
             </el-row>
             <el-row>
@@ -94,7 +94,7 @@
                 <span class="gd_label gd_gray_text">Quantity:</span>
               </el-col>
               <el-col :span="4">
-                <span class="gd_gray_text">{{item.count}}</span>
+                <span class="gd_gray_text">{{item.Count}}</span>
               </el-col>
             </el-row>
             </div>
@@ -104,10 +104,10 @@
               <span class="gd_label">Delivery address</span>
             </template>
             <div class="gd_gray_text">
-              <el-row>{{order.deliveryAddress.name}} {{order.deliveryAddress.surname}}</el-row>
-              <el-row>{{order.deliveryAddress.street}}</el-row>
-              <el-row>{{order.deliveryAddress.city}}</el-row>
-              <el-row>{{order.deliveryAddress.country}} {{order.deliveryAddress.postcode}}</el-row>
+              <el-row>{{order.DeliveryAddress.Name}} {{order.DeliveryAddress.Surname}}</el-row>
+              <el-row>{{order.DeliveryAddress.Street}}</el-row>
+              <el-row>{{order.DeliveryAddress.City}}</el-row>
+              <el-row>{{order.DeliveryAddress.Country}} {{order.DeliveryAddress.Postcode}}</el-row>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -138,19 +138,20 @@ export default {
     }
   },
   mounted () {
-    this.loadOrders()
+    this.fetchData()
   },
   methods: {
     loadOrders () {
       /* axios GET */
       this.orders = [
         {
-          orderNumber: '12312412',
+          id: 1,
           user: '',
           createDate: '2017-03-27',
           status: 'Accepted',
           items: [
               {
+                id: '',
                 itemId: '1',
                 sku: '1241241',
                 name: 'Men\'s jacket Rahfa',
@@ -208,9 +209,6 @@ export default {
     viewItemDetails (id) {
       this.$router.push({name: 'itemdetails', params: {id: id}})
     },
-    loadOrderItems () {
-
-    },
     handleSizeChange (pageSize) {
       this.perPage = pageSize
       this.fetchOrders()
@@ -222,30 +220,46 @@ export default {
     fetchData () {
       this.loading = true
 
-      var itemsCountPromise = this.axios.get(`odata/Items?$count=true&$top=0`)
-      itemsCountPromise.then(response => {
-        this.totalItems = response.data['@odata.count']
+      var ordersCountPromise = this.axios.get(`odata/Orders?$count=true&$top=0`)
+      ordersCountPromise.then(response => {
+        this.totalOrders = response.data['@odata.count']
+        console.log('Total orders:' + this.totalOrders)
       }).catch(err => {
         console.log(err)
       })
 
-      var itemsPromise = this.axios.get(`odata/Items?$expand=Attributes&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}`)
-      itemsPromise.then(response => {
-        this.items = response.data.value
+      var ordersPromise = this.axios.get(`odata/Orders?$expand=Items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}`)
+      ordersPromise.then(response => {
+        this.orders = response.data.value
+        this.parseAddressesToObjects()
       }).catch(err => console.log(err))
 
-      Promise.all([itemsCountPromise, itemsPromise]).then(() => {
+      Promise.all([ordersCountPromise, ordersPromise]).then(() => {
         this.loading = false
       }).catch((err) => {
         console.log(err)
         this.loading = false
       })
     },
+    parseAddressesToObjects () {
+      var length = this.orders.length
+      for (var i = 0; i < length; i++) {
+        this.orders[i].DeliveryAddress = JSON.parse(this.orders[i].DeliveryAddress)
+      }
+    },
     addItemsToCart (items) {
       if (items === null) return
+      // var itemsList
       for (var i = 0; i < items.length; i++) {
-        this.addItemToCart(items[i].itemId)
+        this.addItemsToCart(items[i].itemId)
+        // itemsList.push({ItemID: (items[i].itemId), Count: 1})
       }
+      // var addPromise = null
+      // if (this.$store.getters.isAuthenticated) {
+      //   addPromise = this.addToCartRemote(newItem)
+      // } else {
+      //   addPromise = this.addToCartLocal(newItem)
+      // }
     },
     addItemToCart (id) {
       var newItem = {
@@ -292,6 +306,10 @@ export default {
 </script>
 
 <style scoped>
+  .el-card__header {
+    padding: 0px !important;
+    background-color:#F5F5F5;
+  }
   .gd_order {
     max-width: 600px;;
     margin: 20px auto;
