@@ -18,6 +18,9 @@
         <el-col :lg="12" :md="24" :sm="24">
           <el-row>
             <el-carousel height="600px" :autoplay="false" arrow="always">
+              <el-carousel-item v-if="this.item.pictures.length === 0">
+                <img class="carouselImage" src="@/../static/image-not-found.jpg">
+              </el-carousel-item>
               <el-carousel-item v-for="picture in this.item.pictures" :key="picture.id" >
                 <img class="carouselImage" :src="picture.url">
               </el-carousel-item>
