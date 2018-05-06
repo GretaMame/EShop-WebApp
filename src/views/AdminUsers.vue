@@ -99,7 +99,7 @@ export default{
       }).then(() => {
         this.loading = true
 
-        this.axios.post('/api/admin/users/changerole', {
+        this.axios.post('admin/users/changerole', {
           Role: role,
           Email: user.Email
         })
