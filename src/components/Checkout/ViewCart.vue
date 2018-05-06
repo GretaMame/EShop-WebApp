@@ -18,34 +18,22 @@
 <script>
 import CartItem from '@/components/CartItem.vue'
 export default {
-  data () {
-    return {
-      cart: []
-    }
-  },
+  // data () {
+  //   return {
+  //     cart: []
+  //   }
+  // },
   props: {
+    cart: { type: Object },
     loading: { type: Boolean },
-    // items: { type: Array },
     subtotal: { type: Number }
   },
   components: {
     'cart-item': CartItem
   },
-  created () {
-    this.fetchData()
-  },
   methods: {
     calculateSubtotal () {
       this.$emit('updateSubtotal')
-    },
-    fetchData () {
-      //  this.loading = true
-
-      this.axios.get(`Cart`).then(response => {
-        this.cart = response.data
-      }).catch(err => {
-        console.log(err)
-      })
     },
     deleteCartItem (Id) {
       this.axios.delete('Cart/deletecartitem/' + Id).then(response => {
@@ -55,6 +43,7 @@ export default {
             break
           }
         }
+        this.calculateSubtotal()
       }).catch(err => {
         console.log(err)
       })

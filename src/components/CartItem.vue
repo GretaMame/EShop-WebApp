@@ -11,7 +11,6 @@
               <img v-else src="http://www.wellesleysocietyofartists.org/wp-content/uploads/2015/11/image-not-found.jpg" class="image">
             </el-col>
             <el-col :xs="3" :sm="3">
-              <!-- cia kai jau apsirasysi metoda, kuris handlintu delete, tai eilute $emit('updated') butinai idek -->
               <el-button @click="$emit('delete', item.id)" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>

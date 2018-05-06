@@ -12,7 +12,7 @@
     </el-steps>
     <view-cart
       v-if="activeIndex === 0"
-      :items="items"
+      :cart="cart"
       :subtotal="subtotal"
       :loading="loading"
       v-on:updateSubtotal="calculateSubtotal"
@@ -39,7 +39,7 @@
       v-if="activeIndex === 3"
       :cardDetails="cardDetails"
       :address="deliveryAddress"
-      :items="items"
+      :cart="cart"
       :subtotal="subtotal"
       :loading="loading"
       v-on:nextStep="nextStep"
@@ -71,23 +71,42 @@ export default {
       numberOfSteps: 4,
       activeIndex: 0,
       loading: '',
+      cart: {},
       deliveryAddress: {},
-      items: [],
       cardDetails: {}
     }
   },
   mounted () {
-    this.loadItems()
-    this.loadAddress()
-    this.calculateSubtotal()
+    var cartPromise = this.loadCart()
+    var addressPromise = this.loadAddress()
+    Promise.all([cartPromise, addressPromise]).then(() => {
+        this.calculateSubtotal()
+        this.loading = false
+      }).catch((err) => {
+        console.log(err)
+        this.loading = false
+      })
   },
   methods: {
+    loadCart () {
+      this.loading = true
+      return this.axios.get(`Cart`)
+      .then(response => {
+        this.cart = response.data
+      })
+      .catch(error => {
+        this.$notify.error({
+          title: 'Error!',
+          message: 'Could not fetch cart'
+        })
+        console.log(error)
+      })
+    },
     loadAddress () {
       this.loading = true
-      this.axios.get('user/profile')
+      return this.axios.get('user/profile')
       .then(response => {
         this.setAddressFields(response.data.address, this.deliveryAddress)
-        this.loading = false
       })
       .catch(error => {
         this.$notify.error({
@@ -95,39 +114,7 @@ export default {
           message: 'Could not fetch address'
         })
         console.log(error)
-        this.loading = false
       })
-    },
-    loadItems () {
-      // for now hardcoded data
-      this.items.push(
-            {SKU: '12134123',
-            Name: 'Men\'s jacket Rahfa',
-            Image: 'https://style24.lt/image/cache/data/products/82/vyriskas-megztinis-rahfa-39052-750x750.jpg',
-            Price: 37.95,
-            Count: 1,
-            CreateDate: '2018-03-17 15:00',
-            Attributes: [{Name: 'Color', Value: 'blue'}, {Name: 'Style', Value: 'casual'}]},
-            {SKU: '12144123',
-            Name: 'Mountainskin Thicken Fleece Winter Jackets Men\'s Coats 5XL Cotton Fur Collar Men\'s Jackets Military Casual Male Outerwear SA351',
-            Image: 'https://ae01.alicdn.com/kf/HTB1Tzy9SpXXXXaKXpXXq6xXFXXXX/Mountainskin-Thicken-Fleece-Winter-Jackets-Men-s-Coats-5XL-Cotton-Fur-Collar-Men-s-Jackets-Military.jpg_640x640.jpg',
-            Price: 31.89,
-            Count: 3,
-            CreateDate: '2018-03-17 14:45',
-            Attributes: [{Name: 'Color', Value: 'black'}, {Name: 'Size', Value: 'XXL'}]},
-            {SKU: '12144122223',
-            Name: 'New Version Jumper EZbook 3 Pro Dual Band AC Wifi laptop with M.2 SATA SSD Slot Apollo Lake N3450 13.3" IPS 6GB DDR3 ultrabook',
-            Image: 'https://ae01.alicdn.com/kf/HTB1WgwNQVXXXXXrXFXXq6xXFXXXP/New-Version-Jumper-EZbook-3-Pro-Dual-Band-AC-Wifi-laptop-with-M-2-SATA-SSD.jpg_640x640.jpg',
-            Price: 322.83,
-            Count: 1,
-            CreateDate: '2018-03-17 13:10',
-            Attributes: [{Name: 'Color', Value: 'white'}]},
-            {SKU: '2323122223',
-            Name: '50pcs T5577 EM4305 Copy Rewritable Writable Rewrite Duplicate RFID Tag Can Copy EM4100 125khz card Proximity Token Keyfobs',
-            Image: 'https://ae01.alicdn.com/kf/HTB1SQEUPFXXXXalXpXXq6xXFXXXI/50pcs-T5577-EM4305-Copy-Rewritable-Writable-Rewrite-Duplicate-RFID-Tag-Can-Copy-EM4100-125khz-card-Proximity.jpg_640x640.jpg',
-            Price: 15.49,
-            Count: 4,
-            CreateDate: '2018-03-16 23:20'})
     },
     changeAddress (newAddress) {
       this.setAddressFields(newAddress, this.deliveryAddress)
@@ -160,11 +147,12 @@ export default {
       to.cvv = from.cvv
     },
     calculateSubtotal () {
+      var items = this.cart.items
       this.$nextTick(() => {
-        var arrayLength = this.items.length
+        var arrayLength = items.length
         this.subtotal = 0
         for (var i = 0; i < arrayLength; i++) {
-          this.subtotal += this.items[i].Price * this.items[i].Count
+          this.subtotal += items[i].price * items[i].count
         }
       })
     }
