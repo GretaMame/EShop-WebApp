@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     user: {
       authenticated: false,
       profile: null
-    }
+    },
+    cart: null
   },
   getters: {
     isAuthenticated: state => {
@@ -22,6 +23,9 @@ const store = new Vuex.Store({
     },
     logOut ({ commit }) {
       commit('logout')
+    },
+    addItemToCart ({ commit }, item) {
+      commit('addItemToCart', item)
     }
   },
   mutations: {
@@ -30,6 +34,18 @@ const store = new Vuex.Store({
     },
     logout (state) {
       state.user.authenticated = false
+    },
+    addItemToCart (state, item) {
+      if (!state.cart) {
+        state.cart = []
+      }
+      for (var cartItem of state.cart) {
+        if (cartItem.ItemID === item.ItemID) {
+          cartItem.Count += item.Count
+          return
+        }
+      }
+      state.cart.push(item)
     }
   },
   plugins: [createPersistedState()]

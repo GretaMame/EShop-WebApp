@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Store from '@/store'
-import Router from '@/router'
 import Vue from 'vue'
 
 export default function execute () {
@@ -10,10 +9,9 @@ export default function execute () {
         }
         return response
     }, function (err) {
-        if (err.response.status === 401) {
+        if (err.response && err.response.status === 401) {
             Store.dispatch('logOut')
-            Router.push('/login')
-            err.autoLogout = true
+            err.cookieExpired = true
         }
         return Promise.reject(err)
     })

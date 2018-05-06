@@ -3,9 +3,13 @@
     <el-card class="box-card" v-loading="loading">
       <h2>Reset your password</h2>
       <p>Please enter the email address registered on your account.</p>
-      <el-form ref="forgotPasswordForm" :rules="rules" :inline="true" :model="forgotPasswordForm" size="medium">
+      <el-form ref="forgotPasswordForm" :rules="rules" :model="forgotPasswordForm" size="medium">
         <el-form-item prop="email">
-          <el-input :autofocus="true" v-model="forgotPasswordForm.email" placeholder="Enter your email"></el-input>
+          <el-input
+            :autofocus="true"
+            v-model="forgotPasswordForm.email"
+            placeholder="Enter your email"
+            @keyup.enter.native="submitForm('forgotPasswordForm')"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('forgotPasswordForm')">Reset password</el-button>
@@ -54,12 +58,11 @@
           this.loading = false
           this.dialogVisible = true
         }).catch(err => {
-          console.log(err)
           this.dialogVisible = false
           this.loading = false
           this.$notify.error({
             title: 'Error',
-            message: 'Can not reset password at this moment.'
+            message: err.response.data.message
           })
         })
       }
@@ -71,9 +74,14 @@
 <style scoped>
   .box-card {
     margin: auto;
-    max-width: 600px;
+    max-width: 700px;
     margin-top: 40px;
     padding: 50px;
+  }
+
+  form {
+    margin: 40px auto;
+    max-width: 450px;
   }
 
   h2 {
@@ -84,9 +92,7 @@
     margin: 15px;
   }
 
-  form {
-    margin: 10px;
-    margin-top: 50px;
+  button {
+    margin-top: 30px;
   }
-
 </style>

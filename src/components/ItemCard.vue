@@ -1,84 +1,90 @@
 <template>
-  <el-card class="card" :body-style="{ padding: '0px' }">
-    <img :src="item.img" class="image">
-    <div class="itemCardPrice">
-      <span>{{item.price}} €</span>
-    </div>
-    <div style="padding: 3%;">
-      <el-tooltip class="module line-clamp" :content="item.name">
-        <span>{{item.name}}</span>
-      </el-tooltip>
-      <!-- Uzkomentuotas mygtukas, jei reiks 'Add to cart' is home page mygtuko, tai atkomentuosime. -->
-      <!-- <div class="bottom">
-        <el-button class="itemCardButton" type="primary" icon="el-icon-plus" size="medium">
-          Add to cart
-        </el-button>
-      </div> -->
+  <el-card :body-style="{ padding: '0px' }">
+    <img v-if="item.MainPicture" :src="item.MainPicture" class="gd-item-image">
+    <img v-else src="http://www.wellesleysocietyofartists.org/wp-content/uploads/2015/11/image-not-found.jpg" class="gd-item-image">
+    <el-row class="gd-item-price">
+      <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
+        <span>{{item.Price}} €</span>
+      </el-col>
+    </el-row>
+    <el-row class="gd-item-card-main">
+      <el-popover class="gd-module"
+        width="300"
+        :open-delay="300"
+        placement="bottom"
+        trigger="hover">
+        <div slot="reference" class="gd-item-tooltip">{{item.Name}}</div>
+        <span>{{item.Name}}</span>
+      </el-popover>
+      <!-- 'Add to cart' button. Uncommend  -->
+      <!-- <el-row class="gd-add-to-card">
+        <el-col :lg="20" :md="20" :sm="20" :xs="20" :push="2">
+          <el-button class="gd-add-to-card-button" type="primary" icon="el-icon-plus" size="medium">
+            Add to cart
+          </el-button>
+        </el-col>
+      </el-row> -->
       <div style="border-bottom: 1px solid;"/>
-    </div>
-    <!-- Cia bus ideti pirmi du pasitaike imet'o pozymiai. 
-    Kadangi pozymiu gali ir nebuti / buti vienas / buti du, tai darant ideti v-if salyga.
-    Card'o dydis neturetu kisti => line-height: 1.2em; height: 2.4em;-->
-    <div class="itemCardAttributes">
-      <div>
-        <span>Spalva: </span>
-        <span>ruda</span>
+    </el-row>
+    <el-row v-if="item.Attributes" class="gd-item-attributes" >
+      <div v-for="attribute in item.Attributes" :key="attribute.Name">
+        <div>{{attribute.Name}}:   {{attribute.Value}}</div>
       </div>
-      <div>
-        <span>Dydis: </span>
-        <span>gigantiškas</span>
-      </div>
-    </div>
+    </el-row>
+    <el-row v-else class="gd-item-attributes" >
+      <div></div>
+    </el-row>
   </el-card>
 </template>
 
 <script>
-export default {
-  props: [ 'item' ]
-}
+  export default {
+    props: [ 'item' ]
+  }
 </script>
 
-<style>
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
+<style scoped>
+  .gd-item-card-main{
+    padding: 10px;
   }
-  .image {
-    width: 100%;
-    display: block;
+  .gd-item-tooltip{
+    width: 100%; 
+    word-wrap: break-word; 
+    text-align: justify;
   }
-  .itemCardAttributes{
+  .gd-add-to-card{
+    margin: 5px;
+  }
+  .gd-item-image {
+    align-content: center;
+    max-height: 150px;
+  }
+  .gd-item-attributes{
     text-align: left;
     font-size: 10pt;
-    margin-left: 5%;
-    margin-bottom: 3%;
+    margin-left: 10px;
     color: grey;
     line-height: 1.2em;
     height: 2.4em;
   }
-  .itemCardButton{
-    width: 50%;
-    padding: 2%;
+  .gd-add-to-card-button{
+    width: 100%;
+    padding: 0;
+    height: 20px;
   }
-  .module {
+  .gd-module {
     overflow: hidden;
     line-height: 1.2em;
-    height: 2.4em;
-    text-align: center;
-    font-size: 12pt;
-    margin: 2%;
-  }
-  .line-clamp {
+    height: 3.6em;
+    text-align: left;
+    font-size: 10pt;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;  
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
-  .itemCardPrice{
+  .gd-item-price{
     color:midnightblue;
     font-weight: bold;
     font-size: 12pt;
-    text-align: left;
-    padding-left: 10%;
-    padding-top: 2%;
   }
 </style>

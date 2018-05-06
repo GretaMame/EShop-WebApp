@@ -1,6 +1,6 @@
 <template>
-  <el-card class="box-card gd_wrapper" v-loading="loading">
-    <div v-if="!editMode">
+  <el-card class="gd_wrapper" v-loading="loading">
+    <div v-if="!editMode" class ="gd_card_content_wrapper">
       <h2>My details</h2>
       <el-card class="box-card gd_info_card" align="left">
         <div slot="header">
@@ -13,7 +13,7 @@
         <span class="gd_label">Phone:</span>
         <span> {{initialUserData.phone}}<br></span>
       </el-card>
-      <el-card class="box-card gd_info_card" align="left">
+      <el-card class="gd_info_card" align="left">
         <div slot="header">
           <span class="gd_title">Delivery address</span>
         </div>
@@ -28,7 +28,7 @@
         <el-button type="primary" @click="enterEditMode()">Edit info</el-button>
       </div>
     </div>
-    <div v-if="editMode">
+    <div v-if="editMode" class="gd_card_content_wrapper">
       <div>
         <h2>Edit profile</h2>
         <p>Please update your personal details and save the changes.</p>
@@ -72,7 +72,7 @@
             <el-input v-model="form.postcode"></el-input>
           </el-form-item>
           <el-form-item label="Country" prop="country">
-            <el-input v-model="form.country"></el-input>
+            <el-input v-model="form.country" @keyup.enter.native="saveChanges()"></el-input>
           </el-form-item>
         </el-card>
       </el-form>
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+  import EventBus from '@/eventBus'
   export default {
     data () {
       return {
@@ -207,17 +208,19 @@
         this.loading = true
         this.axios.get('user/profile')
           .then(response => {
-            console.log(response)
-            this.initialUserData = response.data
+            this.setValues(response.data, this.initialUserData)
             this.loading = false
           })
           .catch(err => {
-            console.log(err)
+            this.loading = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
-              message: 'Ups! Something bad happened.'
+              message: err.response.data.message
             })
-            this.loading = false
           })
       },
       saveChanges () {
@@ -266,10 +269,11 @@
         this.form.postcode = this.initialUserData.address.postcode
       },
       setValues (fromObject, toObject) {
-        toObject.name = fromObject.name
-        toObject.surname = fromObject.surname
-        toObject.phone = fromObject.phone
-        toObject.address = fromObject.address
+        toObject.email = fromObject.email
+        toObject.name = fromObject.name !== null ? fromObject.name : ''
+        toObject.surname = fromObject.surname !== null ? fromObject.surname : ''
+        toObject.phone = fromObject.phone !== null ? fromObject.phone : ''
+        toObject.address = fromObject.address !== null ? fromObject.address : {}
       },
       prepareUserToUpdate () {
         this.updatedUser.address.id = this.initialUserData.address.id
@@ -326,11 +330,17 @@
   .gd_buttons {
     margin-top: 20px;
   }
+  button {
+    margin: 5px;
+  }
   .gd_wrapper {
     margin: auto;
     max-width: 700px;
     margin-top: 40px;
-    padding: 10px 50px;
+  }
+  .gd_card_content_wrapper {
+    margin: 0 auto;
+    max-width: 500px;
   }
   h2 {
     margin: 20px;

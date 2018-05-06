@@ -18,9 +18,9 @@
 </template>
 
 <script>
-  import EditProfile from '@/components/ProfileComponents/EditProfile.vue'
-  import ChangePassword from '@/components/ProfileComponents/ChangePassword.vue'
-  import OrderHistory from '@/components/ProfileComponents/OrderHistory.vue'
+  import EditProfile from '@/components/Profile/EditProfile.vue'
+  import ChangePassword from '@/components/Profile/ChangePassword.vue'
+  import OrderHistory from '@/components/Profile/OrderHistory.vue'
   export default {
     components: {
       'edit-profile': EditProfile,

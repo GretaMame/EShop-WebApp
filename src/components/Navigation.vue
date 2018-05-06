@@ -1,26 +1,54 @@
 <template>
   <div class="gd-nav">
-    <el-menu :default-active="activeIndex" :mode="displayMode" :router="true" background-color="#333333" text-color="#fff" active-text-color="#DF3A01">
-      <el-menu-item index="1" route="/home">
-        <template slot="title">Goal Diggers</template>
+    <el-menu :default-active="$route.path" :mode="displayMode" :router="true" background-color="#333333" text-color="#fff" active-text-color="#DF3A01">
+      <el-menu-item index="/home" route="/home">
+        <template slot="title">
+          <span class="gd-logo">
+            Goal Diggers
+          </span>
+        </template>
       </el-menu-item>
-      <el-submenu index="2">
+      <el-submenu index="/categories">
         <template slot="title">Goods</template>
-        <el-menu-item index="2-1" v-for="category in categories" :key="category.name">
-          {{category.name}}
-        </el-menu-item>
+        <el-submenu v-for="Category in Categories" :key="Category.Name" :index="Category.Name">
+          <template slot="title">
+            <span class="gd-category gd-pr-30px">
+              {{Category.Name}}
+            </span>
+          </template>
+          <el-menu-item v-if="Category.Subcategories" 
+          v-for="Subcategory in Category.Subcategories" 
+          :key="Subcategory.Name" 
+          :index="Subcategory.Name">
+            <template slot="title">
+              <span class="gd-category">
+                {{Subcategory.Name}}
+              </span>
+            </template>
+          </el-menu-item>
+        </el-submenu>
       </el-submenu>
-      <el-menu-item class="gd_right" index="8" v-if="!this.$store.getters.isAuthenticated" route="/register">Sign up</el-menu-item>
-      <el-menu-item class="gd_right" index="7" v-if="!this.$store.getters.isAuthenticated" route="/login">Log in</el-menu-item>
-      <el-submenu class="gd_right" index="6" v-if="this.$store.getters.isAuthenticated">
+      <el-menu-item class="gd-float-right" index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
+        Sign up
+      </el-menu-item>
+      <el-menu-item class="gd-float-right" index="/login" v-if="!this.$store.getters.isAuthenticated" route="/login">
+        Log in
+      </el-menu-item>
+      <el-submenu class="gd-float-right" index="/user" v-if="this.$store.getters.isAuthenticated">
         <template slot="title">
           <icon name="user-o"></icon>
         </template>
-        <el-menu-item index="6-1" route="/user/profile">My account</el-menu-item>
-        <el-menu-item index="6-1" route="/user/orderHistory">Order history</el-menu-item>
-        <el-menu-item index="6-1" v-on:click="signOut">Sign out</el-menu-item>
+        <el-menu-item index="/user/profile" route="/user/profile">
+          My account
+        </el-menu-item>
+        <el-menu-item index="/user/orderHistory" route="/user/orderHistory">
+          Order history
+        </el-menu-item>
+        <el-menu-item index="/user/signout" v-on:click="signOut">
+          Sign out
+        </el-menu-item>
       </el-submenu>
-      <el-menu-item class="gd_right" index="5" route="/cart">
+      <el-menu-item class="gd-float-right" index="/cart" route="/cart">
         <i class="el-icon-goods"></i>
         {{(itemsInCart)}}
       </el-menu-item>
@@ -35,23 +63,17 @@
         activeIndex: '1',
         itemsInCart: 0,
         displayMode: 'horizontal',
-        categories: [{
-            name: 'Category 0',
-            subcategories: [
-
-            ]
+        Categories: [{
+            Name: 'Category 0 z-a22324',
+            Subcategories: [{ Name: 'SubCategory 0-0' }, { Name: 'SubCategory 0-1' }]
           },
           {
-            name: 'Category 1',
-            subcategories: [
-
-            ]
+            Name: 'Clothes',
+            Subcategories: [{ Name: 'SubCategory 1-0' }, { Name: 'SubCategory 1-1' }, { Name: 'SubCategory 1-2' }, { Name: 'SubCategory 1-3' }]
           },
           {
-            name: 'Category 2',
-            subcategories: [
-
-            ]
+            Name: 'Mobile smarthones',
+            Subcategories: [{ Name: 'SubCategory 2-0' }]
           }
         ]
       }
@@ -82,7 +104,11 @@
 </script>
 
 <style scoped>
-  .gd_right {
-    float: right;
+  .gd-category{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 300px; 
+    display: inline-block;
   }
 </style>

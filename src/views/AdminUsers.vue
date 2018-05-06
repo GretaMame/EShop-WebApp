@@ -106,7 +106,7 @@ export default{
         .then(() => this.fetchData())
         .catch((err) => {
           console.log(err)
-          this.$notify.error({title: 'Error', message: 'Error encountered while changing role: ' + err})
+          this.$notify.error({title: 'Error', message: 'Error encountered while changing role: ' + err.response.data.message})
           this.fetchData()
         })
       })

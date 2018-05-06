@@ -7,7 +7,12 @@
           <el-input :autofocus="true" v-model="loginForm.email" placeholder="Enter your email"></el-input>
         </el-form-item>
         <el-form-item id="passwordItem" prop="password" label="Password">
-          <el-input type="password" v-model="loginForm.password" placeholder="Enter your password"></el-input>
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            placeholder="Enter your password"
+            @keyup.enter.native="onSubmit('loginForm')">
+          </el-input>
         </el-form-item>
         <el-row>
           <el-form-item id="forgotPasswordLinkItem" size="mini">
@@ -40,8 +45,7 @@
           password: 'K0ldunai!'
         },
         rules: {
-          email: [
-            {
+          email: [{
               type: 'email',
               message: 'Please input correct email address',
               trigger: 'blur,change'
@@ -51,12 +55,10 @@
               trigger: 'blur'
             }
           ],
-          password: [
-            {
-              validator: checkIfEmptyField,
-              trigger: 'blur'
-            }
-          ]
+          password: [{
+            validator: checkIfEmptyField,
+            trigger: 'blur'
+          }]
         }
       }
     },
@@ -68,12 +70,11 @@
             this.axios.post('account/login', this.loginForm).then(response => {
               this.loading = false
               this.$store.dispatch('logIn', response)
-              this.$router.push('/home')
+              this.$router.push(this.$route.query.redirect || '/home')
             }).catch(err => {
-              console.log(err)
               this.$notify.error({
                 title: 'Error',
-                message: 'Ups! Something bad happened.'
+                message: err.response.data.message
               })
               this.loading = false
             })
@@ -96,12 +97,11 @@
     margin-top: 40px;
     padding: 40px 60px 20px 60px;
   }
-
   form {
-    margin: 10px;
+    margin: 0 auto;
+    max-width: 450px;
     margin-top: 30px;
   }
-
   #forgotPasswordLinkItem {
     text-align: end;
   }
