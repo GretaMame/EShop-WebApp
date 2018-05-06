@@ -4,10 +4,10 @@
       <el-row>
         <el-breadcrumb v-if="item.itemCategory" class="gd-itemDetailsBread">
           <el-breadcrumb-item :to="{ path: '/home' }">
-            {{item.itemCategory.subcategory.name}}
+            {{item.itemCategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item :to="{path: '/home'}">
-            {{item.itemCategory.name}}
+            {{item.itemCategory.subcategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
             {{item.name}}
