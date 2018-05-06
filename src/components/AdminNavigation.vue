@@ -11,9 +11,9 @@
           <i class="el-icon-document"></i>
           <span slot="title">Oneone</span>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="2" :route="{name:'adminItems'}">
           <i class="el-icon-goods"></i>
-          <span slot="title">Twotwo</span>
+          <span slot="title">Items</span>
         </el-menu-item>
         <el-menu-item index="3" :route="{name:'adminUsers'}">
           <i class="el-icon-service"></i>
