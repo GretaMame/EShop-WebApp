@@ -71,7 +71,6 @@ export default {
         this.loading = false
       })
     },
-
     onItemClicked (item) {
       this.$router.push(`/itemdetails/${item.ID}`)
     }

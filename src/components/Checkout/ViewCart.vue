@@ -18,11 +18,6 @@
 <script>
 import CartItem from '@/components/CartItem.vue'
 export default {
-  // data () {
-  //   return {
-  //     cart: []
-  //   }
-  // },
   props: {
     cart: { type: Object },
     loading: { type: Boolean },
