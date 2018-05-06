@@ -28,11 +28,26 @@ export default {
     AdminNavigation
   },
   created () {
+    this.axios.get('account/renewcsrftoken').catch(err => { console.log(err) })
+
     EventBus.$on('cookieExpired', () => {
       this.$router.push({name: 'login', query: {redirect: this.$router.currentRoute.path}})
       this.$notify.error({
         title: 'Logged out',
         message: 'You were logged out'
+      })
+    })
+
+    EventBus.$on('onLogin', () => {
+      var cart = this.$store.getters.localCart
+      if (!cart) {
+        return
+      }
+      this.axios.post('cart', {Items: cart}).then(response => {
+        this.$store.dispatch('clearCart')
+      })
+      .catch(err => {
+        console.log('Error while mergin cart ' + err)
       })
     })
   }
