@@ -140,66 +140,6 @@ export default {
     this.fetchData()
   },
   methods: {
-    loadOrders () {
-      /* axios GET */
-      this.orders = [
-        {
-          id: 1,
-          user: '',
-          createDate: '2017-03-27',
-          status: 'Accepted',
-          items: [
-              {
-                id: '',
-                itemId: '1',
-                sku: '1241241',
-                name: 'Men\'s jacket Rahfa',
-                price: 37.95,
-                count: 1
-              },
-              {
-                itemId: '2',
-                sku: '3465456',
-                name: '50pcs T5577 EM4305 Copy Rewritable Writable Rewrite Duplicate RFID Tag Can Copy EM4100 125khz card Proximity Token Keyfobs',
-                price: 37.95,
-                count: 3
-              },
-              {
-                itemId: '17',
-                sku: '12352345',
-                name: 'Men\'s jacket Rahfa',
-                price: 37.95,
-                count: 4
-              }
-          ],
-          deliveryAddress: {
-            name: 'Greta',
-            surname: 'Grietine',
-            street: 'Koldunciku 27',
-            city: 'Utena',
-            postcode: '28176',
-            country: 'Lietuva'
-          },
-          totalPrice: 598.98
-        },
-        {
-          orderNumber: '21342322',
-          user: '',
-          createDate: '2017-03-27',
-          status: 'Accepted',
-          items: [],
-          deliveryAddress: {
-            name: 'Greta',
-            surname: 'Grietine',
-            street: 'Koldunciku 27',
-            city: 'Utena',
-            postcode: '28176',
-            country: 'Lietuva'
-          },
-          totalPrice: 45.78
-        }
-      ]
-    },
     countItems (items) {
       var length = items.length
       if (length === 1) return length + ' item'
@@ -257,7 +197,7 @@ export default {
           this.loading = false
           this.$notify.success({
             title: 'Success',
-            message: 'Items was added to cart.'
+            message: 'Items were added to cart.'
           })
         })
         .catch(err => {
