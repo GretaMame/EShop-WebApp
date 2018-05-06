@@ -10,19 +10,19 @@
       </el-menu-item>
       <el-submenu index="/categories">
         <template slot="title">Goods</template>
-        <el-submenu v-for="Category in Categories" :key="Category.Name" :index="Category.Name">
+        <el-submenu v-for="category in categories" :key="category.name" :index="category.name">
           <template slot="title">
             <span class="gd-category gd-pr-30px">
-              {{Category.Name}}
+              {{category.name}}
             </span>
           </template>
-          <el-menu-item v-if="Category.Subcategories" 
-          v-for="Subcategory in Category.Subcategories" 
-          :key="Subcategory.Name" 
-          :index="Subcategory.Name">
+          <el-menu-item v-if="category.subCategories" 
+          v-for="subcategory in category.subCategories" 
+          :key="subcategory.name" 
+          :index="subcategory.name">
             <template slot="title">
               <span class="gd-category">
-                {{Subcategory.Name}}
+                {{subcategory.name}}
               </span>
             </template>
           </el-menu-item>
@@ -60,25 +60,23 @@
   export default {
     data () {
       return {
+        categories: [],
         activeIndex: '1',
         itemsInCart: 0,
-        displayMode: 'horizontal',
-        Categories: [{
-            Name: 'Category 0 z-a22324',
-            Subcategories: [{ Name: 'SubCategory 0-0' }, { Name: 'SubCategory 0-1' }]
-          },
-          {
-            Name: 'Clothes',
-            Subcategories: [{ Name: 'SubCategory 1-0' }, { Name: 'SubCategory 1-1' }, { Name: 'SubCategory 1-2' }, { Name: 'SubCategory 1-3' }]
-          },
-          {
-            Name: 'Mobile smarthones',
-            Subcategories: [{ Name: 'SubCategory 2-0' }]
-          }
-        ]
+        displayMode: 'horizontal'
       }
     },
+    created () {
+      this.fetchData()
+    },
     methods: {
+      fetchData () {
+        this.axios.get('Category').then(response => {
+          this.categories = response.data
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       signOut () {
         this.axios.post('account/logout').then(response => {
           this.$store.dispatch('logOut')
