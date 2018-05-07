@@ -10,7 +10,7 @@
       </el-menu-item>
       <el-submenu index="/categories">
         <template slot="title">Goods</template>
-        <el-submenu v-for="category in categories" :key="category.name" :index="category.name">
+        <el-submenu v-for="category in categories" :key="category.name" :index="`/home/${category.id}`">
           <template slot="title">
             <span class="gd-category gd-pr-30px">
               {{category.name}}
@@ -19,7 +19,7 @@
           <el-menu-item v-if="category.subCategories" 
           v-for="subcategory in category.subCategories" 
           :key="subcategory.name" 
-          :index="subcategory.name">
+          :index="`/home/${category.id}/${subcategory.id}`">
             <template slot="title">
               <span class="gd-category">
                 {{subcategory.name}}
@@ -57,22 +57,35 @@
 </template>
 
 <script>
+  import EventBus from '@/eventBus'
   export default {
     data () {
       return {
         categories: [],
         activeIndex: '1',
         itemsInCart: 0,
-        displayMode: 'horizontal'
+        displayMode: 'horizontal',
+        categoriesPromise: null
       }
     },
     created () {
       this.fetchData()
+
+      EventBus.$on('getNamesForBreadcrumb', (ids) => {
+        if (this.categoriesPromise) {
+          Promise.all([this.categoriesPromise]).then(() => {
+            this.resolveCategoriesNames(ids)
+          })
+        } else {
+          this.resolveCategoriesNames(ids)
+        }
+      })
     },
     methods: {
       fetchData () {
-        this.axios.get('Category').then(response => {
+        this.categoriesPromise = this.axios.get('Category').then(response => {
           this.categories = response.data
+          this.categoriesPromise = null
         }).catch(err => {
           console.log(err)
         })
@@ -95,6 +108,31 @@
             message: 'Unable to log out.'
           })
         })
+      },
+      resolveCategoriesNames (ids) {
+        var categoryName
+        var subcategoryName
+        console.log(ids)
+        if (ids.categoryID) {
+          for (let i = 0; i < this.categories.length; i++) {
+            if (Number(ids.categoryID) === this.categories[i].id) {
+              categoryName = this.categories[i].name
+            }
+          }
+        }
+        if (ids.subcategoryID) {
+          for (let i = 0; i < this.categories.length; i++) {
+            if (!this.categories[i].subCategories) {
+              continue
+            }
+            for (let j = 0; j < this.categories[i].subCategories.length; j++) {
+              if (Number(ids.subcategoryID) === this.categories[i].subCategories[j].id) {
+                subcategoryName = this.categories[i].subCategories[j].name
+              }
+            }
+          }
+        }
+        EventBus.$emit('setBreadcrumbNames', {categoryName: categoryName, subcategoryName: subcategoryName})
       }
     }
   }

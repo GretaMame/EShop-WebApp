@@ -39,6 +39,18 @@ export default new Router({
       component: Home
     },
     {
+      path: '/home/:categoryID/',
+      name: 'categoryItems',
+      component: Home,
+      props: true
+    },
+    {
+      path: '/home/:categoryID/:subcategoryID',
+      name: 'subcategoryItems',
+      component: Home,
+      props: true
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login
