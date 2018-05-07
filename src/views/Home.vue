@@ -81,6 +81,8 @@ export default {
     },
     fetchData () {
       this.loading = true
+      this.categoryName = null
+      this.subcategoryName = null
       var filter
       if (this.subcategoryID) {
         filter = `ItemCategory/SubCategory/ID eq ${this.subcategoryID}`

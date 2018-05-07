@@ -73,7 +73,7 @@
 
       EventBus.$on('getNamesForBreadcrumb', (ids) => {
         if (this.categoriesPromise) {
-          Promise.all([this.categoriesPromise]).then(() => {
+          this.categoriesPromise.then(() => {
             this.resolveCategoriesNames(ids)
           })
         } else {
@@ -112,7 +112,6 @@
       resolveCategoriesNames (ids) {
         var categoryName
         var subcategoryName
-        console.log(ids)
         if (ids.categoryID) {
           for (let i = 0; i < this.categories.length; i++) {
             if (Number(ids.categoryID) === this.categories[i].id) {
