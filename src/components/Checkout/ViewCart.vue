@@ -5,7 +5,7 @@
       v-for="item in cart.items"
       v-bind:key="item.sku"
       v-bind:item="item"
-      v-on:updated="calculateSubtotal"
+      v-on:updated="updateCartItem"
       v-on:delete="deleteCartItem">
     </cart-item>
     <h3><b>Subtotal:</b> {{(subtotal.toFixed(2))}} €</h3>
@@ -18,6 +18,14 @@
 <script>
 import CartItem from '@/components/CartItem.vue'
 export default {
+  data () {
+    return {
+      isUpdated: false
+    }
+  },
+  beforeDestroy () {
+    this.updateCart()
+  },
   props: {
     cart: { type: Object },
     loading: { type: Boolean },
@@ -30,6 +38,10 @@ export default {
     calculateSubtotal () {
       this.$emit('updateSubtotal')
     },
+    updateCartItem () {
+      this.isUpdated = true
+      this.calculateSubtotal()
+    },
     deleteCartItem (Id) {
       this.axios.delete('Cart/deletecartitem/' + Id).then(response => {
         for (var i = 0; i <= this.cart.items.length; i++) {
@@ -39,6 +51,20 @@ export default {
           }
         }
         this.calculateSubtotal()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    updateCart () {
+      if (this.isUpdated !== true) {
+        return
+      }
+      var itemsCount = []
+      this.cart.items.forEach(item => {
+        itemsCount.push({ ItemID: item.id, Count: item.count })
+      })
+      this.axios.put('Cart/updatecartitems', { items: itemsCount }).then(response => {
+        this.isUpdated = false
       }).catch(err => {
         console.log(err)
       })

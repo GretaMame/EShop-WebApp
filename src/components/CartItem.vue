@@ -11,7 +11,8 @@
               <img v-else src="http://www.wellesleysocietyofartists.org/wp-content/uploads/2015/11/image-not-found.jpg" class="image">
             </el-col>
             <el-col :xs="3" :sm="3">
-              <el-button @click="$emit('delete', item.id)" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
+              <!-- <el-button @click="$emit('delete', item.id)" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button> -->
+              <el-button  @click="removeDialogVisible = true" class="hidden-md-and-up" type="danger" size="small" icon="el-icon-delete"></el-button>
             </el-col>
           </el-row>
         </el-col>
@@ -56,17 +57,35 @@
               </el-row>
             </el-col>
             <el-col class="item-delete hidden-sm-and-down" :md="6" :lg="6">
-              <el-button @click="$emit('delete', item.id)" type="danger" icon="el-icon-delete"></el-button>
+              <el-button @click="removeDialogVisible = true" type="danger" icon="el-icon-delete"></el-button>
+              <!-- <el-button @click="$emit('delete', item.id)" type="danger" icon="el-icon-delete"></el-button> -->
             </el-col>
           </el-row>
         </el-col>
     </el-row>
+    <el-dialog
+      title="Remove cart item"
+      :visible.sync="removeDialogVisible"
+      width="400px"
+      center>
+      <span >Are you sure you want to remove this item?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="removeDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="removeDialogVisible = false, $emit('delete', item.id)">Remove</el-button>
+      </span>
+    </el-dialog>
   </el-card>
 </template>
 
+
 <script>
 export default {
-  props: [ 'item' ]
+  props: [ 'item' ],
+  data () {
+    return {
+      removeDialogVisible: false
+    }
+  }
 }
 </script>
 
