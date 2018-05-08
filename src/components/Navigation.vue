@@ -10,19 +10,19 @@
       </el-menu-item>
       <el-submenu index="/categories">
         <template slot="title">Goods</template>
-        <el-submenu v-for="Category in Categories" :key="Category.Name" :index="Category.Name">
+        <el-submenu v-for="category in categories" :key="category.name" :index="`/home/${category.id}`">
           <template slot="title">
             <span class="gd-category gd-pr-30px">
-              {{Category.Name}}
+              {{category.name}}
             </span>
           </template>
-          <el-menu-item v-if="Category.Subcategories" 
-          v-for="Subcategory in Category.Subcategories" 
-          :key="Subcategory.Name" 
-          :index="Subcategory.Name">
+          <el-menu-item v-if="category.subCategories" 
+          v-for="subcategory in category.subCategories" 
+          :key="subcategory.name" 
+          :index="`/home/${category.id}/${subcategory.id}`">
             <template slot="title">
               <span class="gd-category">
-                {{Subcategory.Name}}
+                {{subcategory.name}}
               </span>
             </template>
           </el-menu-item>
@@ -57,28 +57,39 @@
 </template>
 
 <script>
+  import EventBus from '@/eventBus'
   export default {
     data () {
       return {
+        categories: [],
         activeIndex: '1',
         itemsInCart: 0,
         displayMode: 'horizontal',
-        Categories: [{
-            Name: 'Category 0 z-a22324',
-            Subcategories: [{ Name: 'SubCategory 0-0' }, { Name: 'SubCategory 0-1' }]
-          },
-          {
-            Name: 'Clothes',
-            Subcategories: [{ Name: 'SubCategory 1-0' }, { Name: 'SubCategory 1-1' }, { Name: 'SubCategory 1-2' }, { Name: 'SubCategory 1-3' }]
-          },
-          {
-            Name: 'Mobile smarthones',
-            Subcategories: [{ Name: 'SubCategory 2-0' }]
-          }
-        ]
+        categoriesPromise: null
       }
     },
+    created () {
+      this.fetchData()
+
+      EventBus.$on('getNamesForBreadcrumb', (ids) => {
+        if (this.categoriesPromise) {
+          this.categoriesPromise.then(() => {
+            this.resolveCategoriesNames(ids)
+          })
+        } else {
+          this.resolveCategoriesNames(ids)
+        }
+      })
+    },
     methods: {
+      fetchData () {
+        this.categoriesPromise = this.axios.get('Category').then(response => {
+          this.categories = response.data
+          this.categoriesPromise = null
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       signOut () {
         this.axios.post('account/logout').then(response => {
           this.postSignOut()
@@ -101,6 +112,30 @@
         })
         this.$router.push('/home')
         this.axios.get('account/renewcsrftoken')
+      },
+      resolveCategoriesNames (ids) {
+        var categoryName
+        var subcategoryName
+        if (ids.categoryID) {
+          for (let i = 0; i < this.categories.length; i++) {
+            if (Number(ids.categoryID) === this.categories[i].id) {
+              categoryName = this.categories[i].name
+            }
+          }
+        }
+        if (ids.subcategoryID) {
+          for (let i = 0; i < this.categories.length; i++) {
+            if (!this.categories[i].subCategories) {
+              continue
+            }
+            for (let j = 0; j < this.categories[i].subCategories.length; j++) {
+              if (Number(ids.subcategoryID) === this.categories[i].subCategories[j].id) {
+                subcategoryName = this.categories[i].subCategories[j].name
+              }
+            }
+          }
+        }
+        EventBus.$emit('setBreadcrumbNames', {categoryName: categoryName, subcategoryName: subcategoryName})
       }
     }
   }
