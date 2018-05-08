@@ -3,14 +3,14 @@
     <el-card v-loading="loading" class="box-card" >
       <el-row>
         <el-breadcrumb v-if="item.ItemCategory" class="gd-itemDetailsBread">
-          <el-breadcrumb-item :to="{ path: '/home' }">
+          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}`">
             {{item.ItemCategory.Name}}
           </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{path: '/home'}">
+          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}/${item.ItemCategory.SubCategory.ID}`">
             {{item.ItemCategory.SubCategory.Name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
-            {{item.name}}
+            {{item.Name}}
           </el-breadcrumb-item>
         </el-breadcrumb>
       </el-row>

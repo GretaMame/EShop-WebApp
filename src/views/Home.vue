@@ -45,8 +45,7 @@ export default {
       pageOptions: [20, 40, 100, 200],
       currentPage: 1,
       categoryName: null,
-      subcategoryName: null,
-      pathCategoryID: null
+      subcategoryName: null
     }
   },
   components: {
@@ -72,12 +71,8 @@ export default {
       this.loading = true
       this.categoryName = null
       this.subcategoryName = null
-      this.pathCategoryID = this.categoryID
       var filter
 
-      console.log(this.categoryID)
-      console.log('sss')
-      console.log(this.subcategoryID)
       if (this.subcategoryID) {
         filter = `ItemCategory/SubCategory/ID eq ${this.subcategoryID}`
       } else if (this.categoryID) {
@@ -94,7 +89,7 @@ export default {
         console.log(err)
       })
 
-      var select = 'ID,Name,Price,Attributes&$expand=Attributes($top=2),Pictures($select=URL;$top=1)'
+      var select = 'ID,Name,Price,Attributes&$expand=Attributes,Pictures($select=URL)'
       var itemsPromise = this.axios.get(`odata/Items?$select=${select}&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filter ? `&$filter=${filter}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
@@ -110,8 +105,10 @@ export default {
     onCategoryClicked () {
       this.$router.push(`/home/${this.categoryID}`)
     },
+    onItemClicked (item) {
+      this.$router.push(`/itemdetails/${item.ID}`)
+    },
     setBreadcrumbNames (names) {
-      console.log(names)
       if (names.categoryName) {
         this.categoryName = names.categoryName
       }
