@@ -1,6 +1,6 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <img v-if="item.MainPicture" :src="item.MainPicture" class="gd-item-image">
+    <img v-if="item.Pictures && item.Pictures[0]" :src="item.Pictures[0].URL" class="gd-item-image">
     <img v-else src="@/../static/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">

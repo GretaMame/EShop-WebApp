@@ -70,14 +70,13 @@
     },
     created () {
       this.fetchData()
-
-      EventBus.$on('getNamesForBreadcrumb', (ids) => {
+      EventBus.$on('getNamesForBreadcrumb', (ids, setNames) => {
         if (this.categoriesPromise) {
           this.categoriesPromise.then(() => {
-            this.resolveCategoriesNames(ids)
+            this.resolveCategoriesNames(ids, setNames)
           })
         } else {
-          this.resolveCategoriesNames(ids)
+          this.resolveCategoriesNames(ids, setNames)
         }
       })
     },
@@ -109,7 +108,7 @@
           })
         })
       },
-      resolveCategoriesNames (ids) {
+      resolveCategoriesNames (ids, setNames) {
         var categoryName
         var subcategoryName
         if (ids.categoryID) {
@@ -131,7 +130,7 @@
             }
           }
         }
-        EventBus.$emit('setBreadcrumbNames', {categoryName: categoryName, subcategoryName: subcategoryName})
+        setNames({categoryName: categoryName, subcategoryName: subcategoryName})
       }
     }
   }
