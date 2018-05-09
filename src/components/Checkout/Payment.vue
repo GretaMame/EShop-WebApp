@@ -2,7 +2,7 @@
   <el-card class="gd_step_body" v-loading="loading">
     <h3>Payment details</h3>
     <div v-if="!editMode" class="gd_payment_details" align="center">
-      <div align="left">
+      <!-- <div align="left">
         <span class="gd_label">Card number: </span>
         <span class="gd_payment_details_data">{{cardDetails.number}}<br></span>
         <span class="gd_label">Card holder: </span>
@@ -11,7 +11,25 @@
         <span class="gd_payment_details_data">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}<br></span>
         <span class="gd_label">CVV: </span>
         <span class="gd_payment_details_data">{{cardDetails.cvv}}<br></span>
-      </div>
+      </div> -->
+      <el-row class="gd-text-align-left">
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">Card number: </el-col>
+          <el-col :span="10">{{cardDetails.number}}</el-col>
+        </el-row>
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">Card holder: </el-col>
+          <el-col :span="10">{{cardDetails.holder}}</el-col>
+        </el-row>
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">Expiration date: </el-col>
+          <el-col :span="10">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
+        </el-row>
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">CVV: </el-col>
+          <el-col :span="10">{{cardDetails.cvv}}</el-col>
+        </el-row>
+      </el-row>
         <el-button class="gd_buttons" @click="editPaymentDetails()">Change card details</el-button>
     </div>
     <div class="gd_form_wrapper" v-if="editMode" align="center">
@@ -223,6 +241,9 @@ export default {
   h3 {
     margin-bottom: 30px;
   }
+  .gd_margin {
+    margin-bottom: 20px;
+  }
   .gd_buttons {
     margin-top: 30px;
     margin-bottom: 22px;
@@ -230,7 +251,6 @@ export default {
   .gd_label {
     font-weight: bold;
     min-width: 130px;
-    margin: 10px 0;
     display: inline-block;
   }
   form {
