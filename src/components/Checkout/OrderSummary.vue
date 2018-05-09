@@ -98,7 +98,6 @@ export default {
   props: {
     cardDetails: { type: Object },
     address: { type: Object },
-    cart: {type: Object},
     loading: { type: Boolean },
     subtotal: { type: Number }
   },
@@ -108,7 +107,35 @@ export default {
   data () {
     return {
       shippingCost: 0,
-      formName: 'Summary'
+      formName: 'Summary',
+      cart: {}
+    }
+  },
+  mounted () {
+    var cartPromise = this.loadCart()
+    Promise.all([cartPromise]).then(() => {
+        this.calculateSubtotal()
+        this.$emit('updateSubtotal')
+        this.loading = false
+      }).catch((err) => {
+        console.log(err)
+        this.loading = false
+      })
+  },
+  methods: {
+    loadCart () {
+      this.loading = true
+      return this.axios.get(`Cart`)
+      .then(response => {
+        this.cart = response.data
+      })
+      .catch(error => {
+        this.$notify.error({
+          title: 'Error!',
+          message: 'Could not fetch cart'
+        })
+        console.log(error)
+      })
     }
   }
 }

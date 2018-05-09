@@ -39,7 +39,6 @@
       v-if="activeIndex === 3"
       :cardDetails="cardDetails"
       :address="deliveryAddress"
-      :cart="cart"
       :subtotal="subtotal"
       :loading="loading"
       v-on:nextStep="nextStep"
