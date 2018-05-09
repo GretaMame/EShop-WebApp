@@ -8,6 +8,8 @@ import ForgotPassword from '@/views/account/ForgotPassword'
 import AdminUsers from '@/views/AdminUsers'
 import ResetPassword from '@/views/account/ResetPassword'
 import ConfirmAccount from '@/views/account/ConfirmAccount'
+import AdminItems from '@/views/AdminItems'
+import NewAdminItems from '@/views/NewAdminItems'
 import ItemDetails from '@/views/ItemDetails'
 import Checkout from '@/views/Checkout'
 import Store from '@/store'
@@ -36,6 +38,18 @@ export default new Router({
       component: Home
     },
     {
+      path: '/home/:categoryID/',
+      name: 'categoryItems',
+      component: Home,
+      props: true
+    },
+    {
+      path: '/home/:categoryID/:subcategoryID',
+      name: 'subcategoryItems',
+      component: Home,
+      props: true
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login
@@ -58,6 +72,16 @@ export default new Router({
       path: '/admin/users',
       name: 'adminUsers',
       component: AdminUsers
+    },
+    {
+      path: '/admin/items',
+      name: 'adminItems',
+      component: AdminItems
+    },
+    {
+      path: '/admin/items/add',
+      name: 'adminItemsAdd',
+      component: NewAdminItems
     },
     {
       path: '/resetpassword',
