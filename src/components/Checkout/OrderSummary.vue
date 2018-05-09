@@ -68,7 +68,7 @@
           </el-col>
         </el-row>
         <div class="gd_summary">
-          <el-row>
+          <el-row class="gd_padding_bottom">
             <el-row>
               <el-col class="gd-text-align-right" :span="18">Subtotal:</el-col>
               <el-col :span="5">{{(subtotal.toFixed(2))}} €</el-col>
