@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import Navigation from './components/Navigation'
-import NavigationMobile from './components/NavigationMobile'
-import AdminNavigation from './components/AdminNavigation'
+import Navigation from './components/Navigation/Desktop'
+import NavigationMobile from './components/Navigation/Mobile'
+import AdminNavigation from './components/Navigation/Admin'
 import EventBus from './eventBus'
 export default {
   name: 'app',
@@ -63,7 +63,7 @@ export default {
   }
     .gd-body > * {
       margin-bottom: 20px;
-    } 
+    }
 
   .gd-logo {
 		font: italic bold 20px Georgia, serif;

@@ -1,7 +1,7 @@
 <template>
   <el-card class="gd_step_body" v-loading="loading">
-    <el-row>
-      <h3>Order summary</h3>
+    <el-row class="gd_card_row">
+      <h3 class="gd_step_title">Order summary</h3>
       <el-card class="gd_cart_item" v-for="item in items" :key="item.SKU" :item="item">
         <el-row :gutter="20">
         <el-col :span="8">
@@ -15,64 +15,114 @@
         </el-col>
         <el-col :span="16">
           <div class="gd_item_wrapper" align="left">
-          <span class="gd_short_label">SKU:</span>
-          <span class="gd_line">{{item.SKU}}</span><br>
-          <span class="gd_line">{{item.Name}}</span><br>
-          <span class="gd_short_label">Unit price:</span>
-          <span class="gd_line">{{item.Price}}</span><br>
-          <span class="gd_short_label">Quantity:</span>
-          <span class="gd_line">{{item.Count}}</span><br>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">SKU:</span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">{{item.SKU}}</span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <span class="gd_line">{{item.Name}}</span>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">Unit price:</span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">{{item.Price}}</span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">Quantity:</span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">{{item.Count}}</span>
+              </el-col>
+            </el-row>
           <div
             v-if="item.Attributes"
             v-for="attribute in item.Attributes"
             :key="attribute.Name"
             :attribute="attribute">
-              <span class="gd_attribute gd_short_label">{{attribute.Name}}:</span>
-              <span class="gd_attribute gd_line"> {{attribute.Value}}</span><br>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_attribute gd_label">{{attribute.Name}}:</span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_attribute gd_line"> {{attribute.Value}}</span>
+              </el-col>
+            </el-row>
           </div>
           </div>
         </el-col>
         </el-row>
       </el-card>
     </el-row>
-    <el-row>
+    <el-row class="gd_card_row">
       <el-card class="gd_cart_item">
         <div class="gd_wrapper" align="center">
           <h3>Payment details</h3>
           <div align="left">
-            <span class="gd_label">Card number: </span>
-            <span class="gd_line">**** **** **** {{cardDetails.number.substr(15)}}</span><br>
-            <span class="gd_label">Card holder: </span>
-            <span class="gd_line">{{cardDetails.holder}}</span><br>
-            <span class="gd_label">Expiration date: </span>
-            <span class="gd_line">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</span><br>
-            <span class="gd_label">CVV: </span>
-            <span class="gd_line">***</span>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">Card number: </span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">**** **** **** {{cardDetails.number.substr(15)}}</span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">Card holder: </span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">{{cardDetails.holder}}</span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">Expiration date: </span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <span class="gd_label">CVV: </span>
+              </el-col>
+              <el-col :span="12">
+                <span class="gd_line">***</span>
+              </el-col>
+            </el-row>
           </div>
         </div>
       </el-card>
     </el-row>
-    <el-row>
+    <el-row class="gd_card_row">
       <el-card class="gd_cart_item">
         <div class="gd_item_wrapper" align="center">
           <h3>Delivery Address</h3>
           <div class="gd_address_wrapper" align="left">
-          <span class="gd_line">{{address.name}} {{address.surname}}</span><br>
-          <span class="gd_line">{{address.street}}</span><br>
-          <span class="gd_line">{{address.city}}</span><br>
-          <span class="gd_line">{{address.country}} {{address.postcode}}</span>
+            <el-row>{{address.name}} {{address.surname}}</el-row>
+            <el-row>{{address.street}}</el-row>
+            <el-row>{{address.city}}</el-row>
+            <el-row>{{address.country}} {{address.postcode}}</el-row>
           </div>
         </div>
       </el-card>
     </el-row>
-    <el-row>
+    <el-row class="gd_card_row">
       <el-card>
         <div class="gd_item_wrapper" align="right">
           <div class="gd_subtotals">
-        <h5><span class="gd_label">Subtotal:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h5>
-        <h5><span class="gd_label">Shipping:</span><span class="gd_price">{{(shippingCost)}} €</span></h5>
+        <h3><span class="gd_label">Subtotal:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h3>
+        <h3><span class="gd_label">Shipping:</span><span class="gd_price">{{(shippingCost)}} €</span></h3>
           </div>
-        <h4><span class="gd_label">Total:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h4>
+        <h2><span class="gd_label">Total:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h2>
         </div>
       </el-card>
     </el-row>
@@ -102,29 +152,17 @@ export default {
 
 <style scoped>
   .el-row {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
-  .gd_line {
-    margin: 5px 0;
-    text-align: left;
-    display: inline-block;
+  .gd_card_row {
+    margin-bottom: 20px;
   }
   .gd_label {
     font-weight: bold;
-    min-width: 130px;
-    margin: 5px 0;
-    display: inline-block;
-  }
-  .gd_short_label {
-    font-weight: bold;
-    min-width: 90px;
-    margin: 5px 0;
-    display: inline-block;
   }
   .gd_wrapper {
     margin: 0px auto;
     max-width: 300px;
-    min-height: 220px;
   }
   .gd_item_wrapper {
     margin: 0 auto;
@@ -134,7 +172,7 @@ export default {
     margin: 0 auto;
     max-width: 120px;
   }
-  h3 {
+  .gd_step_title {
     margin-top: 20px;
     margin-bottom: 30px;
   }

@@ -41,7 +41,7 @@
         <el-menu-item index="/user/profile" route="/user/profile">
           My account
         </el-menu-item>
-        <el-menu-item index="/user/orderHistory" route="/user/orderHistory">
+        <el-menu-item index="/user/orderhistory" route="/user/orderhistory">
           Order history
         </el-menu-item>
         <el-menu-item index="/user/signout" v-on:click="signOut">
@@ -131,6 +131,9 @@
           }
         }
         setNames({categoryName: categoryName, subcategoryName: subcategoryName})
+      },
+      goToOrderHistory () {
+        this.$router.push()
       }
     }
   }
@@ -142,7 +145,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 300px; 
+    max-width: 300px;
     display: inline-block;
   }
 </style>
