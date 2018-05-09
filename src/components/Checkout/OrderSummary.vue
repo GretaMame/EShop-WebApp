@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import CartItem from '@/components/CartItem.vue'
+import CartItem from '@/components/Cart/CartItem.vue'
 export default {
   props: {
     cardDetails: { type: Object },
