@@ -124,6 +124,7 @@
 </template>
 
 <script>
+import EventBus from '@/eventBus'
 export default {
   data () {
     return {
@@ -132,7 +133,7 @@ export default {
       itemsText: 'items',
       perPage: 20,
       totalOrders: 0,
-      pageOptions: [20, 40, 100, 200],
+      pageOptions: [5, 10, 15, 20],
       currentPage: 1
     }
   },
@@ -150,11 +151,11 @@ export default {
     },
     handleSizeChange (pageSize) {
       this.perPage = pageSize
-      this.fetchOrders()
+      this.fetchData()
     },
     handleCurrentChange (currentPage) {
       this.currentPage = currentPage
-      this.fetchOrders()
+      this.fetchData()
     },
     fetchData () {
       this.loading = true
@@ -162,22 +163,17 @@ export default {
       var ordersCountPromise = this.axios.get(`odata/Orders?$count=true&$top=0`)
       ordersCountPromise.then(response => {
         this.totalOrders = response.data['@odata.count']
-      }).catch(err => {
-        console.log(err)
       })
 
       var ordersPromise = this.axios.get(`odata/Orders?$expand=Items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}&$orderby=CreateDate desc`)
       ordersPromise.then(response => {
         this.orders = response.data.value
         this.parseAddressesToObjects()
-      }).catch(err => console.log(err))
+      })
 
       Promise.all([ordersCountPromise, ordersPromise]).then(() => {
         this.loading = false
-      }).catch((err) => {
-        console.log(err)
-        this.loading = false
-      })
+      }).catch(this.handleError)
     },
     parseAddressesToObjects () {
       var length = this.orders.length
@@ -189,7 +185,7 @@ export default {
       if (items === null) return
       var itemsList = []
       for (var i = 0; i < items.length; i++) {
-        itemsList.push({ItemID: (items[i].ItemID), Count: 1})
+        itemsList.push({ItemID: items[i].ItemID, Count: 1})
       }
       this.loading = true
       this.axios.post('cart', {Items: itemsList})
@@ -200,14 +196,7 @@ export default {
             message: 'Items were added to cart.'
           })
         })
-        .catch(err => {
-          console.log(err)
-          this.loading = false
-          this.$notify.error({
-            title: 'Error',
-            message: 'Ups! Something bad happened.'
-          })
-        })
+        .catch(this.handleError)
     },
     addItemToCart (id) {
       this.loading = true
@@ -215,42 +204,26 @@ export default {
         ItemID: id,
         Count: 1
       }
-      var addPromise = null
-      if (this.$store.getters.isAuthenticated) {
-        addPromise = this.addToCartRemote(newItem)
-      } else {
-        addPromise = this.addToCartLocal(newItem)
-      }
-
-      addPromise.then(() => {
+      this.axios.put(`cart`, newItem).then(() => {
         this.loading = false
         this.$notify.success({
           title: 'Success',
           message: 'Item was added to cart.'
         })
       })
-      .catch(err => {
-        // try again if cookie expired, so items will be added to local storage cart
-        if (err.cookieExpired) {
-          this.addItemToCart(id)
-          return
-        }
-        this.loading = false
-        console.log(err)
-        this.$notify.error({
-          title: 'Error',
-          message: 'Ups! Something bad happened.'
-        })
-      })
+      .catch(this.handleError)
     },
-    addToCartLocal (item) {
-      return new Promise((resolve) => {
-        this.$store.dispatch('addItemToCart', item)
-        resolve()
+    handleError (err) {
+      this.loading = false
+      if (err.cookieExpired) {
+        EventBus.$emit('cookieExpired')
+        return
+      }
+      console.log(err)
+      this.$notify.error({
+        title: 'Error',
+        message: 'Ups! Something bad happened.'
       })
-    },
-    addToCartRemote (item) {
-      return this.axios.put(`cart`, item)
     }
   }
 }

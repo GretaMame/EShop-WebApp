@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ItemCard from '@/components/Cart/ItemCard'
+import ItemCard from '@/components/ItemCard'
 export default {
   data () {
     return {

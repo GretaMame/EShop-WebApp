@@ -19,6 +19,7 @@
 import Navigation from './components/Navigation/Desktop'
 import NavigationMobile from './components/Navigation/Mobile'
 import AdminNavigation from './components/Navigation/Admin'
+import EventBus from './eventBus'
 export default {
   name: 'app',
   components: {
