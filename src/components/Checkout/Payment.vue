@@ -2,40 +2,24 @@
   <el-card class="gd_step_body" v-loading="loading">
     <h3>Payment details</h3>
     <div v-if="!editMode" class="gd_payment_details" align="center">
-      <div align="left">
-        <el-row class="gd_data_row">
-          <el-col :span="12">
-            <span class="gd_label">Card number: </span>
-          </el-col>
-          <el-col :span="12">
-            {{cardDetails.number}}
-          </el-col>
+      <el-row class="gd-text-align-left">
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">Card number: </el-col>
+          <el-col :span="10">{{cardDetails.number}}</el-col>
         </el-row>
-        <el-row class="gd_data_row">
-          <el-col :span="12">
-            <span class="gd_label">Card holder: </span>
-          </el-col>
-          <el-col :span="12">
-            <span class="gd_line">{{cardDetails.holder}}</span>
-          </el-col>
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">Card holder: </el-col>
+          <el-col :span="10">{{cardDetails.holder}}</el-col>
         </el-row>
-        <el-row class="gd_data_row">
-          <el-col :span="12">
-            <span class="gd_label">Expiration date: </span>
-          </el-col>
-          <el-col :span="12">
-            {{cardDetails.exp_year}}/{{cardDetails.exp_month}}
-          </el-col>
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">Expiration date: </el-col>
+          <el-col :span="10">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
         </el-row>
-        <el-row class="gd_data_row">
-          <el-col :span="12">
-            <span class="gd_label">CVV: </span>
-          </el-col>
-          <el-col :span="12">
-            {{cardDetails.cvv}}
-          </el-col>
+        <el-row class="gd_margin">
+          <el-col :push="2" :span="12" class="gd_label">CVV: </el-col>
+          <el-col :span="10">{{cardDetails.cvv}}</el-col>
         </el-row>
-      </div>
+      </el-row>
         <el-button class="gd_buttons" @click="editPaymentDetails()">Change card details</el-button>
     </div>
     <div class="gd_form_wrapper" v-if="editMode" align="center">
@@ -247,6 +231,9 @@ export default {
   h3 {
     margin-top: 10px;
     margin-bottom: 40px;
+  }
+  .gd_margin {
+    margin-bottom: 20px;
   }
   .gd_buttons {
     margin-top: 30px;

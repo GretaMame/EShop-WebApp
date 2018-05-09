@@ -3,10 +3,24 @@
     <div v-if="!changeAddressMode" v-loading="loading">
       <div class="gd_address_wrapper">
         <h3>{{addressTitle}}</h3>
-        <el-row class="gd_address_line">{{address.name}} {{address.surname}}</el-row>
-        <el-row class="gd_address_line">{{address.street}}</el-row>
-        <el-row class="gd_address_line">{{address.city}}</el-row>
-        <el-row class="gd_address_line">{{address.country}} {{address.postcode}}</el-row>
+        <el-row class="gd-text-align-left">
+          <el-row class="gd_margin">
+            <el-col :span="10" class="gd_label">Name: </el-col>
+            <el-col :span="14">{{address.name}} {{address.surname}}</el-col>
+          </el-row>
+          <el-row class="gd_margin">
+            <el-col :span="10" class="gd_label">Street: </el-col>
+            <el-col :span="14">{{address.street}}</el-col>
+          </el-row>
+          <el-row class="gd_margin">
+            <el-col :span="10" class="gd_label">Postcode: </el-col>
+            <el-col :span="14">{{address.postcode}}</el-col>
+          </el-row>
+          <el-row class="gd_margin">
+            <el-col :span="10" class="gd_label">City: </el-col>
+            <el-col :span="14">{{address.city}}, {{address.country}}</el-col>
+          </el-row>
+        </el-row>
       </div>
       <el-button class="gd_buttons" @click="enterChangeAddressMode">Change delivery address</el-button>
     </div>
@@ -193,11 +207,17 @@ export default {
     margin-top: 20px;
     margin-bottom: 40px;
   }
+  .gd_margin {
+    margin-bottom: 20px;
+  }
   form {
     max-width: 500px;
   }
   .gd_buttons {
     margin-top: 30px;
     margin-bottom: 20px;
+  }
+  .gd_label {
+    font-weight: bold;
   }
 </style>
