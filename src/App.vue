@@ -63,4 +63,7 @@ export default {
   .gd-text-align-left{
     text-align: left;
   }
+  .gd-text-align-right{
+    text-align: right;
+  }
 </style>

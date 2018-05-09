@@ -5,6 +5,7 @@
       v-for="item in cart.items"
       v-bind:key="item.sku"
       v-bind:item="item"
+      v-bind:editable="true"
       v-on:updated="updateCartItem"
       v-on:delete="deleteCartItem">
     </cart-item>
@@ -20,7 +21,8 @@ import CartItem from '@/components/CartItem.vue'
 export default {
   data () {
     return {
-      isUpdated: false
+      isUpdated: false,
+      formName: 'ViewCart'
     }
   },
   beforeDestroy () {
