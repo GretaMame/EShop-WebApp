@@ -91,22 +91,26 @@
       },
       signOut () {
         this.axios.post('account/logout').then(response => {
-          this.$store.dispatch('logOut')
-          this.$notify.success({
-            title: 'Successful logout'
-          })
-          this.$router.push('/home')
+          this.postSignOut()
         }).catch(err => {
-          console.log('error: ', err)
-          if (err.autoLogout) {
-            this.$notify.info('You were logged out')
+          if (err.cookieExpired) {
+            this.postSignOut()
             return
           }
+          console.log('error: ', err)
           this.$notify.error({
             title: 'Error',
             message: 'Unable to log out.'
           })
         })
+      },
+      postSignOut () {
+        this.$store.dispatch('logOut')
+        this.$notify.success({
+          title: 'Successful logout'
+        })
+        this.$router.push('/home')
+        this.axios.get('account/renewcsrftoken')
       },
       resolveCategoriesNames (ids, setNames) {
         var categoryName
