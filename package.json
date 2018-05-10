@@ -13,9 +13,10 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-theme": "^2.0.1",
-    "element-ui": "^2.2.1",
+    "element-ui": "^2.3.7",
     "npm": "^5.7.1",
     "popper.js": "^1.12.9",
+    "v-money": "^0.8.1",
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.4",
     "vue-axios": "^2.0.2",

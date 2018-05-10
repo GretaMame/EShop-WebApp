@@ -9,7 +9,7 @@ export default function execute () {
         }
         return response
     }, function (err) {
-        if (err.response.status === 401) {
+        if (err.response && err.response.status === 401) {
             Store.dispatch('logOut')
             err.cookieExpired = true
         }
