@@ -12,6 +12,7 @@ export default {
     EventBus.$on('cookieExpired', () => {
       this.$router.push({name: 'login', query: {redirect: this.$router.currentRoute.path}})
       this.$notify.error({
+        title: 'Logged out',
         message: 'You were logged out'
       })
     })
