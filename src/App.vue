@@ -1,32 +1,11 @@
 <template>
-  <el-container>
-      <AdminNavigation v-if="this.$route.path.indexOf('admin') !== -1"></AdminNavigation>
-    <el-header v-else class="gd-nav-header">
-      <el-row class="hidden-sm-and-up">
-        <NavigationMobile/>
-      </el-row>
-      <el-row class="hidden-xs-only">
-        <Navigation/>
-      </el-row>
-    </el-header>
-    <el-main class="gd-body">
-      <router-view ></router-view>
-    </el-main>
-  </el-container>
+<router-view></router-view>
 </template>
 
 <script>
-import Navigation from './components/Navigation/Desktop'
-import NavigationMobile from './components/Navigation/Mobile'
-import AdminNavigation from './components/Navigation/Admin'
 import EventBus from './eventBus'
 export default {
   name: 'app',
-  components: {
-    Navigation,
-    NavigationMobile,
-    AdminNavigation
-  },
   created () {
     this.axios.get('account/renewcsrftoken').catch(err => { console.log(err) })
 
@@ -53,7 +32,6 @@ export default {
   }
 }
 </script>
-
 <style>
   .el-form--label-top .el-form-item__label {
     float: left;
