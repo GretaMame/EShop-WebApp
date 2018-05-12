@@ -1,6 +1,5 @@
 <template>
-<div class="main-categories">
-  <el-container>
+  <el-container class="main-categories">
     <el-header>
       <h3>Categories</h3>
     </el-header>
@@ -24,7 +23,6 @@
       </el-tree>
     </el-main>
   </el-container>
-</div>
 </template>
 <script>
 export default {
