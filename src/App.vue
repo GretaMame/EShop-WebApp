@@ -43,12 +43,13 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    line-height: 1.6;
   }
   .gd-pr-30px{
     padding-right: 30px;
   }
   .gd-nav-header {
-    padding: 0;
+    padding: 0 !important;
   }
   .gd-body {
     height: calc(100vh - 60px);
@@ -72,5 +73,8 @@ export default {
   }
   .gd-text-align-left{
     text-align: left;
+  }
+  .gd-text-align-right{
+    text-align: right;
   }
 </style>
