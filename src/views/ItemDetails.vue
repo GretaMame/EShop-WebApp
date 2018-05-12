@@ -2,15 +2,15 @@
   <el-row>
     <el-card v-loading="loading" class="box-card" >
       <el-row>
-        <el-breadcrumb v-if="item.itemCategory" class="gd-itemDetailsBread">
-          <el-breadcrumb-item :to="{ path: '/home' }">
-            {{item.itemCategory.subcategory.name}}
+        <el-breadcrumb v-if="item.ItemCategory" class="gd-itemDetailsBread">
+          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}`">
+            {{item.ItemCategory.Name}}
           </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{path: '/home'}">
-            {{item.itemCategory.name}}
+          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}/${item.ItemCategory.SubCategory.ID}`">
+            {{item.ItemCategory.SubCategory.Name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
-            {{item.name}}
+            {{item.Name}}
           </el-breadcrumb-item>
         </el-breadcrumb>
       </el-row>
@@ -18,27 +18,30 @@
         <el-col :lg="12" :md="24" :sm="24">
           <el-row>
             <el-carousel height="600px" :autoplay="false" arrow="always">
-              <el-carousel-item v-for="picture in this.item.pictures" :key="picture.id" >
-                <img class="carouselImage" :src="picture.url">
+              <el-carousel-item v-if="item.Pictures && item.Pictures.length === 0">
+                <img class="carouselImage" src="@/../static/image-not-found.jpg">
+              </el-carousel-item>
+              <el-carousel-item v-for="picture in this.item.Pictures" :key="picture.ID" >
+                <img class="carouselImage" :src="picture.URL">
               </el-carousel-item>
             </el-carousel>
           </el-row>
         </el-col>
         <el-col :lg="12" :md="24" :sm="24">
             <el-row class="gd-itemName">
-                <h2>{{this.item.name}}</h2>
-                <span>SKU: {{this.item.sku}}</span>
+                <h2>{{this.item.Name}}</h2>
+                <span>SKU: {{this.item.SKU}}</span>
             </el-row>
-            <el-row v-for="attr in this.item.attributes" :key="attr.attributeid" :gutter="10">
+            <el-row v-for="attr in this.item.Attributes" :key="attr.AttributeID" :gutter="10">
               <el-col class="gd-attributeName" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-                {{attr.name}}:
+                {{attr.Name}}:
               </el-col>
               <el-col class="gd-attributeValue" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-                {{attr.value}}
+                {{attr.Value}}
               </el-col>
             </el-row>
             <el-row class="gd-itemPrice">
-              <span>{{item.price}} €</span>
+              <span>{{item.Price}} €</span>
             </el-row>
             <el-row class="gd-addToCard">
               <el-input-number size="medium" :min="1" v-model="count"/>
@@ -50,7 +53,7 @@
         <h2>Description</h2>
       </el-row>
       <el-row>
-        {{this.item.description}}
+        {{this.item.Description}}
       </el-row>
     </el-card>
   </el-row>
@@ -74,8 +77,10 @@ export default {
   methods: {
     loadItemDetails () {
       this.loading = true
-      this.axios.get(`items/itemdetails/${this.id}`).then(response => {
-        this.item = response.data
+      this.axios.get(`odata/Items?$expand=Attributes,Pictures,ItemCategory($expand=SubCategory)&$filter=ID eq ${this.id}`).then(response => {
+        if (response.data.value && response.data.value[0]) {
+          this.item = response.data.value[0]
+        }
         this.loading = false
       })
       .catch(err => {
@@ -100,6 +105,7 @@ export default {
       }
 
       addPromise.then(() => {
+        this.$notify.closeAll()
         this.$notify.success({
           title: 'Success',
           message: 'Item was added to cart.'
@@ -112,6 +118,7 @@ export default {
           return
         }
         console.log(err)
+        this.$notify.closeAll()
         this.$notify.error({
           title: 'Error',
           message: 'Ups! Something bad happened.'

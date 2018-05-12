@@ -2,155 +2,171 @@
   <el-card class="gd_step_body" v-loading="loading">
     <el-row>
       <h3>Order summary</h3>
-      <el-card class="gd_cart_item" v-for="item in items" :key="item.SKU" :item="item">
-        <el-row :gutter="20">
-        <el-col :span="8">
+      <cart-item
+      class="gd_cart_item"
+      v-for="item in cart.items"
+      v-bind:key="item.sku"
+      v-bind:item="item"
+      v-bind:editable="false"/>
+    </el-row>
+    <el-row>
+      <el-card class="gd_cart_item gd_font">
+        <el-row>
           <el-row>
-          <img class="gd_image" :src="item.Image">
+            <el-col :span="12">
+              <h3>Payment details</h3>
+            </el-col>
+            <el-col :span="12">
+              <h3>Delivery Address</h3>
+            </el-col>
           </el-row>
-          <el-row>
-            <div align="left">
-            </div>
-          </el-row>
-        </el-col>
-        <el-col :span="16">
-          <div class="gd_item_wrapper" align="left">
-          <span class="gd_short_label">SKU:</span>
-          <span class="gd_line">{{item.SKU}}</span><br>
-          <span class="gd_line">{{item.Name}}</span><br>
-          <span class="gd_short_label">Unit price:</span>
-          <span class="gd_line">{{item.Price}}</span><br>
-          <span class="gd_short_label">Quantity:</span>
-          <span class="gd_line">{{item.Count}}</span><br>
-          <div
-            v-if="item.Attributes"
-            v-for="attribute in item.Attributes"
-            :key="attribute.Name"
-            :attribute="attribute">
-              <span class="gd_attribute gd_short_label">{{attribute.Name}}:</span>
-              <span class="gd_attribute gd_line"> {{attribute.Value}}</span><br>
-          </div>
-          </div>
-        </el-col>
+          <el-col class="gd_padding_bottom" :span="12">
+            <el-col :span="6">
+              <img src="http://prints.ultracoloringpages.com/26394191ee3b0e1409d127324c3a5d56.png" class="gd_image">
+            </el-col>
+            <el-col :span="18" align="left">
+              <el-row>
+                <el-col :span="11" class="gd_label">Card number: </el-col>
+                <el-col :span="12">**** **** **** {{cardDetails.number.substr(15)}}</el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="11"  class="gd_label">Card holder: </el-col>
+                <el-col :span="12">{{cardDetails.holder}}</el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="11" class="gd_label">Expiration date: </el-col>
+                <el-col :span="12">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="11" class="gd_label">CVV: </el-col>
+                <el-col :span="12">***</el-col>
+              </el-row>
+            </el-col>
+          </el-col>
+          <el-col class="gd_padding_bottom gd_border_color" :span="12">
+            <el-col :span="6">
+              <img src="https://seeklogo.com/images/M/man-silhouette-delivery-logo-0DBA9FBE43-seeklogo.com.png" class="gd_image">
+            </el-col>
+            <el-col :span="18" align="left">
+                <el-row>
+                  <el-col :span="8" class="gd_label">Name: </el-col>
+                  <el-col :span="12">{{address.name}} {{address.surname}}</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8" class="gd_label">Street: </el-col>
+                  <el-col :span="12">{{address.street}}</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8" class="gd_label">Postcode: </el-col>
+                  <el-col :span="12">{{address.postcode}}</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8" class="gd_label">City: </el-col>
+                  <el-col :span="12">{{address.city}}, {{address.country}}</el-col>
+                </el-row>
+            </el-col>
+          </el-col>
         </el-row>
-      </el-card>
-    </el-row>
-    <el-row>
-      <el-card class="gd_cart_item">
-        <div class="gd_wrapper" align="center">
-          <h3>Payment details</h3>
-          <div align="left">
-            <span class="gd_label">Card number: </span>
-            <span class="gd_line">**** **** **** {{cardDetails.number.substr(15)}}</span><br>
-            <span class="gd_label">Card holder: </span>
-            <span class="gd_line">{{cardDetails.holder}}</span><br>
-            <span class="gd_label">Expiration date: </span>
-            <span class="gd_line">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</span><br>
-            <span class="gd_label">CVV: </span>
-            <span class="gd_line">***</span>
-          </div>
+        <div class="gd_summary">
+          <el-row class="gd_padding_bottom">
+            <el-row>
+              <el-col class="gd-text-align-right" :span="18">Subtotal:</el-col>
+              <el-col :span="5">{{(subtotal.toFixed(2))}} €</el-col>
+            </el-row>
+            <el-row>
+              <el-col class="gd-text-align-right" :span="18">Shipping:</el-col>
+              <el-col :span="5">{{(shippingCost)}} €</el-col>
+            </el-row>
+          </el-row>
+          <el-row>
+            <el-col class="gd-text-align-right" :span="18">Total:</el-col>
+            <el-col :span="5">{{(subtotal.toFixed(2))}} €</el-col>
+          </el-row>
         </div>
       </el-card>
     </el-row>
     <el-row>
-      <el-card class="gd_cart_item">
-        <div class="gd_item_wrapper" align="center">
-          <h3>Delivery Address</h3>
-          <div class="gd_address_wrapper" align="left">
-          <span class="gd_line">{{address.name}} {{address.surname}}</span><br>
-          <span class="gd_line">{{address.street}}</span><br>
-          <span class="gd_line">{{address.city}}</span><br>
-          <span class="gd_line">{{address.country}} {{address.postcode}}</span>
-          </div>
-        </div>
-      </el-card>
+      <el-button @click="$emit('previousStep')">Previous</el-button>
+      <el-button type="primary" @click="$emit('nextStep')">Place order</el-button>
     </el-row>
-    <el-row>
-      <el-card>
-        <div class="gd_item_wrapper" align="right">
-          <div class="gd_subtotals">
-        <h5><span class="gd_label">Subtotal:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h5>
-        <h5><span class="gd_label">Shipping:</span><span class="gd_price">{{(shippingCost)}} €</span></h5>
-          </div>
-        <h4><span class="gd_label">Total:</span><span class="gd_price">{{(subtotal.toFixed(2))}} €</span></h4>
-        </div>
-      </el-card>
-    </el-row>
-      <div class="gd_step_buttons">
-        <el-button @click="$emit('previousStep')">Previous</el-button>
-        <el-button type="primary" @click="$emit('nextStep')">Place order</el-button>
-    </div>
   </el-card>
 </template>
 
 <script>
+import CartItem from '@/components/Cart/CartItem.vue'
 export default {
   props: {
     cardDetails: { type: Object },
     address: { type: Object },
-    items: {type: Array},
     loading: { type: Boolean },
     subtotal: { type: Number }
   },
+  components: {
+    'cart-item': CartItem
+  },
   data () {
     return {
-      shippingCost: 0
+      shippingCost: 0,
+      formName: 'Summary',
+      cart: {}
+    }
+  },
+  mounted () {
+    var cartPromise = this.loadCart()
+    Promise.all([cartPromise]).then(() => {
+        this.calculateSubtotal()
+        this.$emit('updateSubtotal')
+        this.loading = false
+      }).catch((err) => {
+        console.log(err)
+        this.loading = false
+      })
+  },
+  methods: {
+    loadCart () {
+      this.loading = true
+      return this.axios.get(`Cart`)
+      .then(response => {
+        this.cart = response.data
+      })
+      .catch(error => {
+        this.$notify.error({
+          title: 'Error!',
+          message: 'Could not fetch cart'
+        })
+        console.log(error)
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-  .el-row {
-    margin-bottom: 20px;
-  }
-  .gd_line {
-    margin: 5px 0;
-    text-align: left;
-    display: inline-block;
+  .gd_font{
+    background: #F5F5F5;
   }
   .gd_label {
     font-weight: bold;
-    min-width: 130px;
-    margin: 5px 0;
-    display: inline-block;
   }
-  .gd_short_label {
-    font-weight: bold;
-    min-width: 90px;
-    margin: 5px 0;
-    display: inline-block;
-  }
-  .gd_wrapper {
-    margin: 0px auto;
-    max-width: 300px;
-    min-height: 220px;
-  }
-  .gd_item_wrapper {
-    margin: 0 auto;
-    max-width: 300px;
-  }
-  .gd_address_wrapper {
-    margin: 0 auto;
-    max-width: 120px;
-  }
-  h3 {
+  .gd_step_title {
     margin-top: 20px;
     margin-bottom: 30px;
   }
   .gd_image {
-    max-width: 140px;
-    max-height: 140px;
+    max-width: 60px;
+    max-height: 70px;
   }
   .gd_cart_item {
     margin-bottom: 20px;
   }
-  .gd_attribute {
-    color: gray;
+  .gd_summary{
+    padding-top: 20px; 
+    font-size: 20pt;
   }
-  .gd_price {
-    min-width: 150px;
-    text-align: right;
-    display: inline-block;
+  .gd_padding_bottom{
+    padding-bottom: 20px;
+  }
+  .gd_border_color{
+    border-bottom: 0.5px outset #8a170617;
   }
 </style>

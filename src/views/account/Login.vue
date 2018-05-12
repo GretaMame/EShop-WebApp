@@ -28,6 +28,7 @@
   </el-row>
 </template>
 <script>
+  import EventBus from '@/eventBus'
   export default {
     data () {
       var checkIfEmptyField = (rule, value, callback) => {
@@ -67,11 +68,8 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.loading = true
-            this.axios.post('account/login', this.loginForm).then(response => {
-              this.loading = false
-              this.$store.dispatch('logIn', response)
-              this.$router.push(this.$route.query.redirect || '/home')
-            }).catch(err => {
+            this.axios.post('account/login', this.loginForm).then(this.postLogin)
+            .catch(err => {
               this.$notify.error({
                 title: 'Error',
                 message: err.response.data.message
@@ -82,6 +80,14 @@
             console.log('Inputs not valid')
           }
         })
+      },
+      postLogin (response) {
+        this.axios.get('account/renewcsrftoken').then(() => {
+          EventBus.$emit('onLogin')
+        })
+        this.loading = false
+        this.$store.dispatch('logIn')
+        this.$router.push(this.$route.query.redirect || '/home')
       },
       redirect (windowName) {
         this.$router.push(windowName)

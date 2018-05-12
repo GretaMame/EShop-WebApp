@@ -6,7 +6,6 @@ import Login from '@/views/account/Login'
 import Register from '@/views/account/Register'
 import ForgotPassword from '@/views/account/ForgotPassword'
 import AdminUsers from '@/views/AdminUsers'
-import Cart from '@/views/Cart'
 import ResetPassword from '@/views/account/ResetPassword'
 import ConfirmAccount from '@/views/account/ConfirmAccount'
 import AdminItems from '@/views/AdminItems'
@@ -30,14 +29,32 @@ export default new Router({
   routes: [
     {
       path: '/user/profile',
-      name: 'profile',
       component: Profile,
-      beforeEnter: isAuthenticated
+      beforeEnter: isAuthenticated,
+      props: { activeName: 'details' }
+    },
+    {
+      path: '/user/orderhistory',
+      component: Profile,
+      beforeEnter: isAuthenticated,
+      props: { activeName: 'orderHistory' }
     },
     {
       path: '/home',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/home/:categoryID/',
+      name: 'categoryItems',
+      component: Home,
+      props: true
+    },
+    {
+      path: '/home/:categoryID/:subcategoryID',
+      name: 'subcategoryItems',
+      component: Home,
+      props: true
     },
     {
       path: '/login',
@@ -79,11 +96,6 @@ export default new Router({
       component: AdminCategories
     },
     {
-      path: '/cart',
-      name: 'cart',
-      component: Cart
-    },
-    {
       path: '/resetpassword',
       name: 'resetpassword',
       component: ResetPassword
@@ -100,10 +112,9 @@ export default new Router({
       props: true
     },
     {
-      path: '/checkout',
-      name: 'checkout',
-      component: Checkout,
-      beforeEnter: isAuthenticated
+      path: '/cart',
+      name: 'cart',
+      component: Checkout
     }
   ]
 })

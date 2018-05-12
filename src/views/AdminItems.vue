@@ -17,7 +17,7 @@
                 <el-option label="Name" value="Name"></el-option>
                 <el-option label="SKU" value="SKU"></el-option>
               </el-select>
-              <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="fetchData()"></el-button>
             </el-input>
           </el-col>
         </el-row>
@@ -36,13 +36,13 @@
             width="55">
           </el-table-column>
           <el-table-column
-            label="Name"
-            prop="Name"
-            width="300px"/>
-          <el-table-column
             label="SKU"
             prop="SKU"
             width="100px"/>
+          <el-table-column
+            label="Name"
+            prop="Name"
+            width="300px"/>
           <el-table-column
             label="Description"
             prop="Description">
@@ -92,29 +92,6 @@
         </el-pagination>
       </el-footer>
     </el-container>
-
-    <el-dialog
-      title="Add item"
-      :visible.sync="showAddItemModal"
-      width="50%">
-      <span>THIS IS WHAT A REAL MODAL WINDOW IS SUPPOSED TO LOOK LIKE</span>
-      <el-button @click="showAddCategoryModal = true">Add category</el-button>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">Add item</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
-      title="Add category"
-      :visible.sync="showAddCategoryModal"
-      width="30%">
-      <span>THIS IS WHAT A REAL MODAL WINDOW IS SUPPOSED TO LOOK LIKE</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">Add item</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -123,7 +100,7 @@ export default{
     return {
       loading: false,
       pageOptions: [5, 10, 25, 50],
-      perPage: 5,
+      perPage: 10,
       currentPage: 1,
       filter: null,
       items: [],
@@ -209,7 +186,7 @@ export default{
   }
 }
 </script>
-<style>
+<style scoped>
   .items-table{
     padding: 16px 0 0 0;
     display: flex;
@@ -228,7 +205,12 @@ export default{
   }
   .description-cell{
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.2em;
+    height: 3.6em;
+    text-align: left;
+    font-size: 10pt;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 </style>

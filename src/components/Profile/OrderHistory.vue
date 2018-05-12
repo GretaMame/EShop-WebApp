@@ -1,64 +1,269 @@
 <template>
-  <el-card class="box-card gd_wrapper">
+  <el-card class="gd_wrapper" v-loading="loading">
     <h2>Order history</h2>
     <el-card
-      class="box-card gd_order"
+      class="gd_order"
       v-for="order in orders"
-      :key="order.orderNumber"
-      v-loading="loading">
-        {{order.orderNumber}}
-    </el-card>
+      :key="order.ID"
+      shadow="hover">
+        <div slot="header" class="gd_order_header" align="left">
+          <el-row>
+            <el-col :span="14">
+              <el-row>
+                <span class="gd_label">Order no.:</span>
+              </el-row>
+              <el-row>
+                {{order.OrderNumber}}
+              </el-row>
+            </el-col>
+            <el-col :span="5">
+              <el-row>
+                <span class="gd_label">Order date:</span>
+              </el-row>
+              <el-row>
+                {{order.CreateDate}}
+              </el-row>
+            </el-col>
+            <el-col :span="5">
+              <el-row>
+              <span class="gd_label">Order status:</span>
+              </el-row>
+              <el-row>
+                {{order.Status}}
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+        <el-row class="gd_line_bottom_margin">
+          <el-col :span="18">
+          <span class="gd_label">Total: </span>
+          {{order.TotalPrice.toFixed(2)}} €
+          </el-col>
+          <el-col :span="6">
+            <el-button size="small" @click="addItemsToCart(order.Items)" align="right">
+              Add all items to cart
+            </el-button>
+          </el-col>
+        </el-row>
+        <el-collapse>
+          <el-collapse-item>
+            <template slot="title">
+              <span class="gd_label">{{countItems(order.Items)}}</span>
+            </template>
+            <div v-for="item in order.Items" :key="item.ItemID" :item="item">
+            <el-row class="gd_item_name_row">
+              <el-col :span="19">
+              {{item.Name}}
+              </el-col>
+              <el-col :span="5" align="right">
+                <el-tooltip
+                  placement="top"
+                  content="View item"
+                  effect="dark">
+                  <el-button
+                    icon="el-icon-search"
+                    @click="viewItemDetails(item.ItemID)"
+                    size ="small"
+                    circle>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip
+                  placement="top"
+                  content="Add to cart"
+                  effect="dark">
+                    <el-button
+                      icon="el-icon-goods"
+                      @click="addItemToCart(item.ItemID)"
+                      size ="small"
+                      circle>
+                    </el-button>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="4">
+                <span class="gd_label gd_gray_text">Unit price:</span>
+              </el-col>
+              <el-col :span="4">
+                <span class="gd_gray_text">{{item.Price.toFixed(2)}} €</span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="4">
+                <span class="gd_label gd_gray_text">Quantity:</span>
+              </el-col>
+              <el-col :span="4">
+                <span class="gd_gray_text">{{item.Count}}</span>
+              </el-col>
+            </el-row>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item>
+            <template slot="title">
+              <span class="gd_label">Delivery address</span>
+            </template>
+            <div class="gd_gray_text">
+              <el-row>{{order.DeliveryAddress.Name}} {{order.DeliveryAddress.Surname}}</el-row>
+              <el-row>{{order.DeliveryAddress.Street}}</el-row>
+              <el-row>{{order.DeliveryAddress.City}}</el-row>
+              <el-row>{{order.DeliveryAddress.Country}} {{order.DeliveryAddress.Postcode}}</el-row>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-card>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="pageOptions"
+        :page-size="perPage"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalOrders">
+      </el-pagination>
   </el-card>
 </template>
 
 <script>
+import EventBus from '@/eventBus'
 export default {
   data () {
     return {
-      orders: [
-        {
-          orderNumber: '1',
-          user: '',
-          createDate: '2017-03-27',
-          orderStatus: 'Accepted',
-          items: []
-        },
-        {
-          orderNumber: '2',
-          user: '',
-          createDate: '2017-03-27',
-          orderStatus: 'Accepted',
-          items: []
-        }
-      ],
-      loading: ''
+      orders: [],
+      loading: '',
+      itemsText: 'items',
+      perPage: 20,
+      totalOrders: 0,
+      pageOptions: [5, 10, 15, 20],
+      currentPage: 1
     }
   },
   mounted () {
-    this.loadOrders()
+    this.fetchData()
   },
   methods: {
-    loadOrders () {
-      /* axios GET */
+    countItems (items) {
+      var length = items.length
+      if (length === 1) return length + ' item'
+      return length + ' items'
+    },
+    viewItemDetails (id) {
+      this.$router.push({name: 'itemdetails', params: {id: id}})
+    },
+    handleSizeChange (pageSize) {
+      this.perPage = pageSize
+      this.fetchData()
+    },
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      this.fetchData()
+    },
+    fetchData () {
+      this.loading = true
+
+      var ordersCountPromise = this.axios.get(`odata/Orders?$count=true&$top=0`)
+      ordersCountPromise.then(response => {
+        this.totalOrders = response.data['@odata.count']
+      })
+
+      var ordersPromise = this.axios.get(`odata/Orders?$expand=Items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}&$orderby=CreateDate desc`)
+      ordersPromise.then(response => {
+        this.orders = response.data.value
+        this.parseAddressesToObjects()
+      })
+
+      Promise.all([ordersCountPromise, ordersPromise]).then(() => {
+        this.loading = false
+      }).catch(this.handleError)
+    },
+    parseAddressesToObjects () {
+      var length = this.orders.length
+      for (var i = 0; i < length; i++) {
+        this.orders[i].DeliveryAddress = JSON.parse(this.orders[i].DeliveryAddress)
+      }
+    },
+    addItemsToCart (items) {
+      if (items === null) return
+      var itemsList = []
+      for (var i = 0; i < items.length; i++) {
+        itemsList.push({ItemID: items[i].ItemID, Count: 1})
+      }
+      this.loading = true
+      this.axios.post('cart', {Items: itemsList})
+        .then(() => {
+          this.loading = false
+          this.$notify.success({
+            title: 'Success',
+            message: 'Items were added to cart.'
+          })
+        })
+        .catch(this.handleError)
+    },
+    addItemToCart (id) {
+      this.loading = true
+      var newItem = {
+        ItemID: id,
+        Count: 1
+      }
+      this.axios.put(`cart`, newItem).then(() => {
+        this.loading = false
+        this.$notify.success({
+          title: 'Success',
+          message: 'Item was added to cart.'
+        })
+      })
+      .catch(this.handleError)
+    },
+    handleError (err) {
+      this.loading = false
+      if (err.cookieExpired) {
+        EventBus.$emit('cookieExpired')
+        return
+      }
+      console.log(err)
+      this.$notify.error({
+        title: 'Error',
+        message: 'Ups! Something bad happened.'
+      })
     }
   }
 }
 </script>
 
 <style scoped>
+  .el-card__header {
+    padding: 0px !important;
+    background-color:#F5F5F5;
+  }
   .gd_order {
-    padding: 10px;
-    margin: 20px;
+    max-width: 600px;;
+    margin: 20px auto;
+    padding: 5px;
+    text-align: left;
   }
   .gd_wrapper {
     margin: auto;
-    max-width: 800px;
+    max-width: 700px;
     margin-top: 40px;
-    padding: 10px 50px;
   }
   h2 {
-    margin: 20px;
-    margin-bottom: 40px;
+    margin: 20px 0;
+  }
+  .gd_label {
+    font-weight: bold;
+  }
+  .gd_gray_text {
+    color: gray;
+  }
+  .gd_line_bottom_margin {
+    margin-bottom: 10px;
+  }
+  .gd_item_name_row {
+    border-top: 1px solid lightgray;
+    padding-top: 5px;
+    color: #DF3A01;
+  }
+  .el-button {
+    margin-left: 1px;
   }
 </style>
 
