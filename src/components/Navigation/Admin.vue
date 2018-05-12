@@ -17,7 +17,11 @@
         </el-menu-item>
         <el-menu-item index="3" :route="{name:'adminUsers'}">
           <i class="el-icon-service"></i>
-          <a slot="title">Users</a>
+          <span slot="title">Users</span>
+        </el-menu-item>
+        <el-menu-item index="4" :route="{name:'adminCategories'}">
+          <i class="el-icon-d-caret"></i>
+          <span slot="title">Categories</span>
         </el-menu-item>
       </el-menu>
     </div>
