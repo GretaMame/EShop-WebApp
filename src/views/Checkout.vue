@@ -41,7 +41,7 @@
       :address="deliveryAddress"
       :subtotal="subtotal"
       :loading="loading"
-      v-on:nextStep="nextStep"
+      v-on:performCheckout="performCheckout"
       v-on:previousStep="previousStep">
     </order-summary>
     <el-card v-if="activeIndex === numberOfSteps">
@@ -153,6 +153,17 @@ export default {
         for (var i = 0; i < arrayLength; i++) {
           this.subtotal += items[i].price * items[i].count
         }
+      })
+    },
+    performCheckout () {
+      this.cardDetails['address'] = this.deliveryAddress
+      this.axios.post('checkout', this.cardDetails).then(response => {
+        this.nextStep()
+      }).catch(e => {
+        this.$notify.error({
+            title: 'Error',
+            message: e.response.data.message
+          })
       })
     }
   }

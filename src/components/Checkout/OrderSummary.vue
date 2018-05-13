@@ -87,7 +87,7 @@
     </el-row>
     <el-row>
       <el-button @click="$emit('previousStep')">Previous</el-button>
-      <el-button type="primary" @click="$emit('nextStep')">Place order</el-button>
+      <el-button type="primary" @click="$emit('performCheckout')">Place order</el-button>
     </el-row>
   </el-card>
 </template>
@@ -160,7 +160,7 @@ export default {
     margin-bottom: 20px;
   }
   .gd_summary{
-    padding-top: 20px; 
+    padding-top: 20px;
     font-size: 20pt;
   }
   .gd_padding_bottom{
