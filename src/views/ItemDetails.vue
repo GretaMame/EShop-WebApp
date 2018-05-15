@@ -17,7 +17,7 @@
       <el-row :gutter="30">
         <el-col :lg="12" :md="24" :sm="24">
           <el-row>
-            <el-carousel height="600px" :autoplay="false" arrow="always">
+            <el-carousel height="500px" :autoplay="false" arrow="always">
               <el-carousel-item v-if="item.Pictures && item.Pictures.length === 0">
                 <img class="carouselImage" src="@/../static/image-not-found.jpg">
               </el-carousel-item>
@@ -147,10 +147,22 @@ export default {
   }
 
   .carouselImage {
-    height: 500px;
-    width: auto;
-    max-width: 500px;
-    margin-top: 50px;
+    max-height: 500px;
+    max-width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto auto;
+  }
+
+  .gd-truncateText {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 25vw;
   }
 
   .gd-itemDetailsBread {
