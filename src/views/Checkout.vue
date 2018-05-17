@@ -10,8 +10,16 @@
       <el-step title="Payment"></el-step>
       <el-step title="Review and place order"></el-step>
     </el-steps>
+    <info-message
+      v-if="cartItemsCount === 0"
+      message="Your cart is empty. Please add items to your cart"
+      v-loading="loading">
+    </info-message>
+    <el-button v-if="cartItemsCount === 0" @click="nextStep">
+      next
+    </el-button>
     <view-cart
-      v-if="activeIndex === 0"
+      v-if="activeIndex === 0 && cartItemsCount !== 0"
       :cart="cart"
       :subtotal="subtotal"
       :loading="loading"
@@ -42,13 +50,14 @@
       :subtotal="subtotal"
       :loading="loading"
       v-on:performCheckout="performCheckout"
-      v-on:previousStep="previousStep">
+      v-on:previousStep="previousStep"
+      v-on:setLoading="setLoading"
+      v-on:calcluateSubtotal="calculateSubtotal">
     </order-summary>
-    <el-card v-if="activeIndex === numberOfSteps">
-      <div class="gd_order_placed_text">
-      <h2>Thank you for your order!</h2>
-      </div>
-    </el-card>
+    <info-message
+      v-if="activeIndex === numberOfSteps"
+      message="Your order has been placed. Thank you for your order!">
+    </info-message>
   </el-card>
 </template>
 
@@ -57,13 +66,18 @@ import Viewcart from '@/components/Checkout/ViewCart.vue'
 import Delivery from '@/components/Checkout/Delivery.vue'
 import Payment from '@/components/Checkout/Payment.vue'
 import OrderSummary from '@/components/Checkout/OrderSummary.vue'
+import InfoMessage from '@/components/Shared/InfoMessage.vue'
 export default {
   components: {
     'view-cart': Viewcart,
     'delivery': Delivery,
     'payment': Payment,
-    'order-summary': OrderSummary
+    'order-summary': OrderSummary,
+    'info-message': InfoMessage
   },
+  /* props: {
+    activeIndexProp: { type: Number }
+  }, */
   data () {
     return {
       subtotal: 0,
@@ -71,11 +85,21 @@ export default {
       activeIndex: 0,
       loading: '',
       cart: {},
+      cartItemsCount: 0,
       deliveryAddress: {},
       cardDetails: {}
     }
   },
+  /* watch: {
+    activeIndexProp: function (newIndex, oldIndex) {
+      if (this.activeIndexProp) {
+        this.activeIndex = this.activeIndexProp
+        console.log(this.activeIndex)
+      }
+    }
+  }, */
   mounted () {
+    if (this.$store.getters.isAuthenticated) {
     var cartPromise = this.loadCart()
     var addressPromise = this.loadAddress()
     Promise.all([cartPromise, addressPromise]).then(() => {
@@ -85,27 +109,40 @@ export default {
         console.log(err)
         this.loading = false
       })
+    }
   },
   methods: {
+    countItemsInCart () {
+      if (this.cart.items) {
+        this.cartItemsCount = this.cart.items.length
+      } else {
+        this.cartItemsCount = 0
+      }
+    },
     loadCart () {
       this.loading = true
       return this.axios.get(`Cart`)
       .then(response => {
         this.cart = response.data
+        this.countItemsInCart()
       })
       .catch(error => {
-        this.$notify.error({
-          title: 'Error!',
-          message: 'Could not fetch cart'
-        })
-        console.log(error)
+        if (error.response.status !== 404) {
+          this.$notify.error({
+            title: 'Error!',
+            message: 'Could not fetch cart'
+          })
+          console.log(error)
+        }
       })
     },
     loadAddress () {
       this.loading = true
       return this.axios.get('user/profile')
       .then(response => {
-        this.setAddressFields(response.data.address, this.deliveryAddress)
+        if (response.data.address) {
+          this.setAddressFields(response.data.address, this.deliveryAddress)
+        }
       })
       .catch(error => {
         this.$notify.error({
@@ -126,9 +163,15 @@ export default {
     },
     nextStep () {
       if (++this.activeIndex > this.numberOfSteps) this.activeIndex = this.numberOfSteps
+      if (this.activeIndex === 1) {
+        this.$router.push({path: '/checkout'})
+      }
     },
     previousStep () {
       if (--this.activeIndex < 0) this.activeIndex = 0
+      if (this.activeIndex === 0) {
+        this.$router.push({path: '/cart'})
+      }
     },
     setAddressFields (from, to) {
       to.name = from.name
@@ -148,15 +191,19 @@ export default {
     calculateSubtotal () {
       var items = this.cart.items
       this.$nextTick(() => {
-        var arrayLength = items.length
-        this.subtotal = 0
-        for (var i = 0; i < arrayLength; i++) {
-          this.subtotal += items[i].price * items[i].count
+        if (items) {
+          var arrayLength = items.length
+          this.subtotal = 0
+          for (var i = 0; i < arrayLength; i++) {
+            this.subtotal += items[i].price * items[i].count
+          }
         }
       })
     },
     performCheckout () {
       this.cardDetails['address'] = this.deliveryAddress
+      this.cardDetails.number = this.cardDetails.number.replace(/\s/g, '')
+      console.log(this.cardDetails.number)
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
       }).catch(e => {
@@ -165,6 +212,9 @@ export default {
             message: e.response.data.message
           })
       })
+    },
+    setLoading (value) {
+      this.loading = value
     }
   }
 }
@@ -184,15 +234,6 @@ export default {
   .gd_step_body {
     max-width: 900px;
     margin: 0 auto;
-  }
-  .gd_order_placed_text {
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .gd_order_placed_text h2{
-    margin: 0;
   }
   .gd_step_buttons {
     margin: 20px;

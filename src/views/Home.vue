@@ -5,7 +5,7 @@
         <span v-else>{{this.categoryName}}</span>
         <span v-if="this.subcategoryID">/ {{subcategoryName}}</span>
       </div>
-      <div v-if="items && items[0]"> 
+      <div v-if="items && items[0]">
         <el-row>
           <el-col class="gd-home-item-card" v-for="item in items" :key="item.SKU" :xs="12" :sm="8" :md="6" :lg="4">
             <div class="gd-clickable" @click="onItemClicked(item)">
@@ -33,7 +33,7 @@
 
 <script>
 import EventBus from '@/eventBus'
-import ItemCard from '@/components/ItemCard'
+import ItemCard from '@/components/Shared/ItemCard'
 export default {
   props: ['categoryID', 'subcategoryID'],
   data () {
