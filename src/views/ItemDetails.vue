@@ -169,7 +169,7 @@ export default {
     font-size: 18px;
     padding-bottom: 20px;
   }
-  
+
   .gd-itemName {
     padding-bottom:25px;
   }

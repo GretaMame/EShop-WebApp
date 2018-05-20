@@ -99,6 +99,14 @@ export default {
     loading: { type: Boolean }
   },
   data () {
+    var validateCreditCardNumber = (rule, value, callback) => {
+      value = value.replace(/\s/g, '')
+      if (this.mod10check(value)) {
+        callback()
+      } else {
+        callback(new Error('Please input a valid credit card number'))
+      }
+    }
     return {
       editMode: true,
       formName: 'CardDetailsForm',
@@ -121,6 +129,10 @@ export default {
             /* TODO: pasiziuret, kas ten per Luhn algoritmas, kuri turi tenktinti */
             pattern: '^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$',
             message: 'Please enter a valid card number',
+            trigger: 'blur'
+          },
+          {
+            validator: validateCreditCardNumber,
             trigger: 'blur'
           }
         ],
@@ -176,6 +188,22 @@ export default {
    this.fetchCardDetails()
   },
   methods: {
+    mod10check (value) {
+      var nCheck = 0
+      var nDigit = 0
+      var bEven = false
+      for (var n = value.length - 1; n >= 0; n--) {
+        var cDigit = value.charAt(n)
+        nDigit = parseInt(cDigit, 10)
+        if (bEven) {
+          if ((nDigit *= 2) > 9) nDigit -= 9
+        }
+
+        nCheck += nDigit
+        bEven = !bEven
+      }
+      return (nCheck % 10) === 0
+    },
     fetchCardDetails () {
       if (!this.cardDetails.number) {
         this.editMode = true

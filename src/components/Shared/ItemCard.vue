@@ -40,8 +40,8 @@
     padding: 10px;
   }
   .gd-item-tooltip{
-    width: 100%; 
-    word-wrap: break-word; 
+    width: 100%;
+    word-wrap: break-word;
     text-align: justify;
   }
   .gd-add-to-card{

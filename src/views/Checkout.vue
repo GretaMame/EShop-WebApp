@@ -1,55 +1,67 @@
 <template>
-  <el-card>
-    <el-steps
-      :active="activeIndex"
-      finish-status="success"
-      process-status="process"
-      align-center>
-      <el-step title="View cart"></el-step>
-      <el-step title="Delivery"></el-step>
-      <el-step title="Payment"></el-step>
-      <el-step title="Review and place order"></el-step>
-    </el-steps>
-    <view-cart
-      v-if="activeIndex === 0"
-      :cart="cart"
-      :subtotal="subtotal"
-      :loading="loading"
-      v-on:updateSubtotal="calculateSubtotal"
-      v-on:nextStep="nextStep"
-      v-on:previousStep="previousStep">
-    </view-cart>
-    <delivery
-      v-if="activeIndex === 1"
-      :address="deliveryAddress"
-      :loading="loading"
-      v-on:nextStep="nextStep"
-      v-on:previousStep="previousStep"
-      v-on:updateAddress="changeAddress">
-    </delivery>
-    <payment
-      v-if="activeIndex === 2"
-      :cardDetails="cardDetails"
-      :loading="loading"
-      v-on:updatePaymentDetails="changePaymentDetails"
-      v-on:nextStep="nextStep"
-      v-on:previousStep="previousStep">
-    </payment>
-    <order-summary
-      v-if="activeIndex === 3"
-      :cardDetails="cardDetails"
-      :address="deliveryAddress"
-      :subtotal="subtotal"
-      :loading="loading"
-      v-on:performCheckout="performCheckout"
-      v-on:previousStep="previousStep">
-    </order-summary>
-    <el-card v-if="activeIndex === numberOfSteps">
-      <div class="gd_order_placed_text">
-      <h2>Thank you for your order!</h2>
-      </div>
+  <div>
+    <info-message
+      v-if="cartItemsCount === 0"
+      message="Your cart is empty. Please add items to your cart :("
+      v-loading="loading">
+    </info-message>
+    <el-card v-if="cartItemsCount !== 0">
+      <el-steps
+        :active="activeIndex"
+        finish-status="success"
+        process-status="process"
+        align-center>
+        <el-step title="View cart"></el-step>
+        <el-step title="Delivery"></el-step>
+        <el-step title="Payment"></el-step>
+        <el-step title="Review and place order"></el-step>
+      </el-steps>
+      <el-button v-if="cartItemsCount === 0" @click="nextStep">
+        next
+      </el-button>
+      <view-cart
+        v-if="activeIndex === 0"
+        :cart="cart"
+        :subtotal="subtotal"
+        :loading="loading"
+        v-on:updateSubtotal="calculateSubtotal"
+        v-on:nextStep="nextStep"
+        v-on:previousStep="previousStep">
+      </view-cart>
+      <delivery
+        v-if="activeIndex === 1"
+        :address="deliveryAddress"
+        :loading="loading"
+        v-on:nextStep="nextStep"
+        v-on:previousStep="previousStep"
+        v-on:updateAddress="changeAddress">
+      </delivery>
+      <payment
+        v-if="activeIndex === 2"
+        :cardDetails="cardDetails"
+        :loading="loading"
+        v-on:updatePaymentDetails="changePaymentDetails"
+        v-on:nextStep="nextStep"
+        v-on:previousStep="previousStep">
+      </payment>
+      <order-summary
+        v-if="activeIndex === 3"
+        :cardDetails="cardDetails"
+        :address="deliveryAddress"
+        :subtotal="subtotal"
+        :loading="loading"
+        v-on:performCheckout="performCheckout"
+        v-on:previousStep="previousStep"
+        v-on:setLoading="setLoading"
+        v-on:calcluateSubtotal="calculateSubtotal">
+      </order-summary>
+      <info-message
+        v-if="activeIndex === numberOfSteps"
+        message="Thank you for your order! Please check your email for your order details"
+        v-loading="loading">
+      </info-message>
     </el-card>
-  </el-card>
+  </div>
 </template>
 
 <script>
@@ -57,12 +69,14 @@ import Viewcart from '@/components/Checkout/ViewCart.vue'
 import Delivery from '@/components/Checkout/Delivery.vue'
 import Payment from '@/components/Checkout/Payment.vue'
 import OrderSummary from '@/components/Checkout/OrderSummary.vue'
+import InfoMessage from '@/components/Shared/InfoMessage.vue'
 export default {
   components: {
     'view-cart': Viewcart,
     'delivery': Delivery,
     'payment': Payment,
-    'order-summary': OrderSummary
+    'order-summary': OrderSummary,
+    'info-message': InfoMessage
   },
   data () {
     return {
@@ -71,41 +85,86 @@ export default {
       activeIndex: 0,
       loading: '',
       cart: {},
+      cartItemsCount: 0,
       deliveryAddress: {},
       cardDetails: {}
     }
   },
   mounted () {
-    var cartPromise = this.loadCart()
-    var addressPromise = this.loadAddress()
-    Promise.all([cartPromise, addressPromise]).then(() => {
-        this.calculateSubtotal()
-        this.loading = false
-      }).catch((err) => {
-        console.log(err)
-        this.loading = false
-      })
+    if (this.$store.getters.isAuthenticated) {
+      var cartPromise = this.loadCart()
+      var addressPromise = this.loadAddress()
+      Promise.all([cartPromise, addressPromise]).then(() => {
+          this.calculateSubtotal()
+          this.loading = false
+        }).catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
+    } else {
+      this.loadLocalCart()
+    }
   },
   methods: {
+    countItemsInCart () {
+      if (this.cart.items) {
+        this.cartItemsCount = this.cart.items.length
+      } else {
+        this.cartItemsCount = 0
+      }
+    },
     loadCart () {
       this.loading = true
       return this.axios.get(`Cart`)
       .then(response => {
         this.cart = response.data
+        this.countItemsInCart()
       })
       .catch(error => {
-        this.$notify.error({
-          title: 'Error!',
-          message: 'Could not fetch cart'
-        })
-        console.log(error)
+        if (error.response.status !== 404) {
+          this.$notify.error({
+            title: 'Error!',
+            message: 'Could not fetch cart'
+          })
+          console.log(error)
+        }
       })
     },
+    loadLocalCart () {
+      this.loading = true
+      var cart = this.$store.getters.localCart
+      if (!cart) {
+        this.loading = false
+        return
+      }
+
+      var filter
+      for (var i = 0; i < cart.length; i++) {
+        filter = `id eq ${cart[i].ItemID} or`
+      }
+      filter = filter.slice(0, -3)
+      var select = 'id,sku,name,price,attributes&$expand=attributes,pictures($select=url)'
+
+      this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`)
+        .then(response => {
+          this.cart.items = response.data.value
+          this.countItemsInCart()
+          this.prepareItems(cart)
+          this.calculateSubtotal()
+          this.loading = false
+        })
+        .catch(err => {
+          console.log(err)
+          this.loading = false
+        })
+      },
     loadAddress () {
       this.loading = true
       return this.axios.get('user/profile')
       .then(response => {
-        this.setAddressFields(response.data.address, this.deliveryAddress)
+        if (response.data.address) {
+          this.setAddressFields(response.data.address, this.deliveryAddress)
+        }
       })
       .catch(error => {
         this.$notify.error({
@@ -114,6 +173,13 @@ export default {
         })
         console.log(error)
       })
+    },
+    prepareItems (cart) {
+      if (cart === null) return
+      for (var i = 0; i < cart.length; i++) {
+        this.cart.items[i]['count'] = cart[i].Count
+        this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0].url
+      }
     },
     changeAddress (newAddress) {
       this.setAddressFields(newAddress, this.deliveryAddress)
@@ -126,9 +192,15 @@ export default {
     },
     nextStep () {
       if (++this.activeIndex > this.numberOfSteps) this.activeIndex = this.numberOfSteps
+      if (this.activeIndex === 1) {
+        this.$router.push({path: '/checkout'})
+      }
     },
     previousStep () {
       if (--this.activeIndex < 0) this.activeIndex = 0
+      if (this.activeIndex === 0) {
+        this.$router.push({path: '/cart'})
+      }
     },
     setAddressFields (from, to) {
       to.name = from.name
@@ -148,23 +220,33 @@ export default {
     calculateSubtotal () {
       var items = this.cart.items
       this.$nextTick(() => {
-        var arrayLength = items.length
-        this.subtotal = 0
-        for (var i = 0; i < arrayLength; i++) {
-          this.subtotal += items[i].price * items[i].count
+        if (items) {
+          var arrayLength = items.length
+          this.subtotal = 0
+          for (var i = 0; i < arrayLength; i++) {
+            this.subtotal += items[i].price * items[i].count
+          }
         }
       })
     },
     performCheckout () {
+      this.loading = true
       this.cardDetails['address'] = this.deliveryAddress
+      this.cardDetails.number = this.cardDetails.number.replace(/\s/g, '')
+      console.log(this.cardDetails.number)
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
+        this.loading = false
       }).catch(e => {
         this.$notify.error({
             title: 'Error',
             message: e.response.data.message
           })
+        this.loading = false
       })
+    },
+    setLoading (value) {
+      this.loading = value
     }
   }
 }
@@ -184,15 +266,6 @@ export default {
   .gd_step_body {
     max-width: 900px;
     margin: 0 auto;
-  }
-  .gd_order_placed_text {
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .gd_order_placed_text h2{
-    margin: 0;
   }
   .gd_step_buttons {
     margin: 20px;
