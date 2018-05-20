@@ -147,7 +147,6 @@ export default {
 
       this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`)
         .then(response => {
-          this.countItemsInCart()
           this.cart.items = response.data.value
           this.countItemsInCart()
           this.prepareItems(cart)
