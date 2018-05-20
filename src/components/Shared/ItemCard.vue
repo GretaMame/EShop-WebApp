@@ -1,10 +1,10 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <img v-if="item.Pictures && item.Pictures[0]" :src="item.Pictures[0].URL" class="gd-item-image">
+    <img v-if="item.pictures && item.pictures[0]" :src="item.pictures[0].URL" class="gd-item-image">
     <img v-else src="@/../static/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
-        <span>{{item.Price}} €</span>
+        <span>{{item.price}} €</span>
       </el-col>
     </el-row>
     <el-row class="gd-item-card-main">
@@ -13,8 +13,8 @@
         :open-delay="300"
         placement="bottom"
         trigger="hover">
-        <div slot="reference" class="gd-item-tooltip">{{item.Name}}</div>
-        <span>{{item.Name}}</span>
+        <div slot="reference" class="gd-item-tooltip">{{item.name}}</div>
+        <span>{{item.name}}</span>
       </el-popover>
       <!-- 'Add to cart' button. Uncommend  -->
       <!-- <el-row class="gd-add-to-card">
@@ -48,8 +48,8 @@
     padding: 10px;
   }
   .gd-item-tooltip{
-    width: 100%; 
-    word-wrap: break-word; 
+    width: 100%;
+    word-wrap: break-word;
     text-align: justify;
   }
   .gd-add-to-card{

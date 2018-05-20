@@ -4,13 +4,13 @@
       <el-row>
         <el-breadcrumb v-if="item.ItemCategory" class="gd-itemDetailsBread">
           <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}`">
-            {{item.ItemCategory.Name}}
+            {{item.ItemCategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}/${item.ItemCategory.SubCategory.ID}`">
             {{item.ItemCategory.SubCategory.Name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
-            {{item.Name}}
+            {{item.name}}
           </el-breadcrumb-item>
         </el-breadcrumb>
       </el-row>
@@ -18,10 +18,10 @@
         <el-col :lg="12" :md="24" :sm="24">
           <el-row>
             <el-carousel height="500px" :autoplay="false" arrow="always">
-              <el-carousel-item v-if="item.Pictures && item.Pictures.length === 0">
+              <el-carousel-item v-if="item.pictures && item.pictures.length === 0">
                 <img class="carouselImage" src="@/../static/image-not-found.jpg">
               </el-carousel-item>
-              <el-carousel-item v-for="picture in this.item.Pictures" :key="picture.ID" >
+              <el-carousel-item v-for="picture in this.item.pictures" :key="picture.ID" >
                 <img class="carouselImage" :src="picture.URL">
               </el-carousel-item>
             </el-carousel>
@@ -169,7 +169,7 @@ export default {
     font-size: 18px;
     padding-bottom: 20px;
   }
-  
+
   .gd-itemName {
     padding-bottom:25px;
   }

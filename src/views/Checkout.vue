@@ -1,64 +1,66 @@
 <template>
-  <el-card>
-    <el-steps
-      :active="activeIndex"
-      finish-status="success"
-      process-status="process"
-      align-center>
-      <el-step title="View cart"></el-step>
-      <el-step title="Delivery"></el-step>
-      <el-step title="Payment"></el-step>
-      <el-step title="Review and place order"></el-step>
-    </el-steps>
+  <div>
     <info-message
       v-if="cartItemsCount === 0"
-      message="Your cart is empty. Please add items to your cart"
+      message="Your cart is empty. Please add items to your cart :("
       v-loading="loading">
     </info-message>
-    <el-button v-if="cartItemsCount === 0" @click="nextStep">
-      next
-    </el-button>
-    <view-cart
-      v-if="activeIndex === 0 && cartItemsCount !== 0"
-      :cart="cart"
-      :subtotal="subtotal"
-      :loading="loading"
-      v-on:updateSubtotal="calculateSubtotal"
-      v-on:nextStep="nextStep"
-      v-on:previousStep="previousStep">
-    </view-cart>
-    <delivery
-      v-if="activeIndex === 1"
-      :address="deliveryAddress"
-      :loading="loading"
-      v-on:nextStep="nextStep"
-      v-on:previousStep="previousStep"
-      v-on:updateAddress="changeAddress">
-    </delivery>
-    <payment
-      v-if="activeIndex === 2"
-      :cardDetails="cardDetails"
-      :loading="loading"
-      v-on:updatePaymentDetails="changePaymentDetails"
-      v-on:nextStep="nextStep"
-      v-on:previousStep="previousStep">
-    </payment>
-    <order-summary
-      v-if="activeIndex === 3"
-      :cardDetails="cardDetails"
-      :address="deliveryAddress"
-      :subtotal="subtotal"
-      :loading="loading"
-      v-on:performCheckout="performCheckout"
-      v-on:previousStep="previousStep"
-      v-on:setLoading="setLoading"
-      v-on:calcluateSubtotal="calculateSubtotal">
-    </order-summary>
-    <info-message
-      v-if="activeIndex === numberOfSteps"
-      message="Your order has been placed. Thank you for your order!">
-    </info-message>
-  </el-card>
+    <el-card v-if="cartItemsCount !== 0">
+      <el-steps
+        :active="activeIndex"
+        finish-status="success"
+        process-status="process"
+        align-center>
+        <el-step title="View cart"></el-step>
+        <el-step title="Delivery"></el-step>
+        <el-step title="Payment"></el-step>
+        <el-step title="Review and place order"></el-step>
+      </el-steps>
+      <el-button v-if="cartItemsCount === 0" @click="nextStep">
+        next
+      </el-button>
+      <view-cart
+        v-if="activeIndex === 0"
+        :cart="cart"
+        :subtotal="subtotal"
+        :loading="loading"
+        v-on:updateSubtotal="calculateSubtotal"
+        v-on:nextStep="nextStep"
+        v-on:previousStep="previousStep">
+      </view-cart>
+      <delivery
+        v-if="activeIndex === 1"
+        :address="deliveryAddress"
+        :loading="loading"
+        v-on:nextStep="nextStep"
+        v-on:previousStep="previousStep"
+        v-on:updateAddress="changeAddress">
+      </delivery>
+      <payment
+        v-if="activeIndex === 2"
+        :cardDetails="cardDetails"
+        :loading="loading"
+        v-on:updatePaymentDetails="changePaymentDetails"
+        v-on:nextStep="nextStep"
+        v-on:previousStep="previousStep">
+      </payment>
+      <order-summary
+        v-if="activeIndex === 3"
+        :cardDetails="cardDetails"
+        :address="deliveryAddress"
+        :subtotal="subtotal"
+        :loading="loading"
+        v-on:performCheckout="performCheckout"
+        v-on:previousStep="previousStep"
+        v-on:setLoading="setLoading"
+        v-on:calcluateSubtotal="calculateSubtotal">
+      </order-summary>
+      <info-message
+        v-if="activeIndex === numberOfSteps"
+        message="Your order has been placed. Thank you for your order!">
+      </info-message>
+    </el-card>
+  </div>
 </template>
 
 <script>
@@ -75,9 +77,6 @@ export default {
     'order-summary': OrderSummary,
     'info-message': InfoMessage
   },
-  /* props: {
-    activeIndexProp: { type: Number }
-  }, */
   data () {
     return {
       subtotal: 0,
@@ -90,25 +89,19 @@ export default {
       cardDetails: {}
     }
   },
-  /* watch: {
-    activeIndexProp: function (newIndex, oldIndex) {
-      if (this.activeIndexProp) {
-        this.activeIndex = this.activeIndexProp
-        console.log(this.activeIndex)
-      }
-    }
-  }, */
   mounted () {
     if (this.$store.getters.isAuthenticated) {
-    var cartPromise = this.loadCart()
-    var addressPromise = this.loadAddress()
-    Promise.all([cartPromise, addressPromise]).then(() => {
-        this.calculateSubtotal()
-        this.loading = false
-      }).catch((err) => {
-        console.log(err)
-        this.loading = false
-      })
+      var cartPromise = this.loadCart()
+      var addressPromise = this.loadAddress()
+      Promise.all([cartPromise, addressPromise]).then(() => {
+          this.calculateSubtotal()
+          this.loading = false
+        }).catch((err) => {
+          console.log(err)
+          this.loading = false
+        })
+    } else {
+      this.loadLocalCart()
     }
   },
   methods: {
@@ -136,6 +129,34 @@ export default {
         }
       })
     },
+    loadLocalCart () {
+      this.loading = true
+      var cart = this.$store.getters.localCart
+      if (!cart) {
+        this.loading = false
+        return
+      }
+
+      var filter
+      for (var i = 0; i < cart.length; i++) {
+        filter = `id eq ${cart[i].ItemID} or`
+      }
+      filter = filter.slice(0, -3)
+      var select = 'id,sku,name,price,attributes&$expand=attributes,pictures($select=url)'
+
+      this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`)
+        .then(response => {
+          this.countItemsInCart()
+          this.cart.items = response.data.value
+          this.countItemsInCart()
+          this.setCartItemsQuantities(cart)
+          this.loading = false
+        })
+        .catch(err => {
+          console.log(err)
+          this.loading = false
+        })
+      },
     loadAddress () {
       this.loading = true
       return this.axios.get('user/profile')
@@ -151,6 +172,14 @@ export default {
         })
         console.log(error)
       })
+    },
+    setCartItemsQuantities (cart) {
+      if (cart === null) return
+      for (var i = 0; i < cart.length; i++) {
+        this.cart.items[i]['count'] = cart[i].Count
+        console.log(this.cart.items[i].pictures)
+        this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0]
+      }
     },
     changeAddress (newAddress) {
       this.setAddressFields(newAddress, this.deliveryAddress)
