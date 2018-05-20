@@ -14,8 +14,8 @@
           <el-col :span="18">
             <el-input placeholder="Search" v-model="searchText">
               <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
-                <el-option label="Name" value="Name"></el-option>
-                <el-option label="SKU" value="SKU"></el-option>
+                <el-option label="Name" value="name"></el-option>
+                <el-option label="SKU" value="sku"></el-option>
               </el-select>
               <el-button slot="append" icon="el-icon-search" @click="fetchData()"></el-button>
             </el-input>
@@ -37,35 +37,35 @@
           </el-table-column>
           <el-table-column
             label="SKU"
-            prop="SKU"
+            prop="sku"
             width="100px"/>
           <el-table-column
             label="Name"
-            prop="Name"
+            prop="name"
             width="300px"/>
           <el-table-column
             label="Description"
-            prop="Description">
+            prop="description">
             <template slot-scope="scope">
               <el-popover
                 placement="top-start"
                 title="Description"
                 width="400"
                 trigger="hover"
-                :content="scope.row.Description">
+                :content="scope.row.description">
                 <div slot="reference" class="description-cell" >
-                  {{scope.row.Description}}
+                  {{scope.row.description}}
                 </div>
               </el-popover>
             </template>
           </el-table-column>
           <el-table-column
             label="Price"
-            prop="Price"
+            prop="price"
             width="100px"/>
           <el-table-column
             label="Category"
-            prop="Category"
+            prop="category"
             width="130px"/>
           <el-table-column
             fixed="right"
