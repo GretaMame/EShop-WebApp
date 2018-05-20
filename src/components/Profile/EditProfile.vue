@@ -160,7 +160,7 @@
           ],
           phone: [
             {
-              pattern: '^[0-9]+$',
+              pattern: '^[+]?[0-9]+$',
               message: 'Please enter a valid phone number',
               trigger: 'blur'
             },
