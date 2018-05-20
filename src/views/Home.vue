@@ -7,7 +7,7 @@
       </div>
       <div v-if="items && items[0]"> 
         <el-row>
-          <el-col class="gd-home-item-card" v-for="item in items" :key="item.SKU" :xs="12" :sm="8" :md="6" :lg="4">
+          <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="12" :sm="8" :md="6" :lg="4">
             <div class="gd-clickable" @click="onItemClicked(item)">
               <ItemCard :item="item"></ItemCard>
             </div>
@@ -74,9 +74,9 @@ export default {
       var filter
 
       if (this.subcategoryID) {
-        filter = `ItemCategory/SubCategory/ID eq ${this.subcategoryID}`
+        filter = `itemCategory/subCategory/id eq ${this.subcategoryID}`
       } else if (this.categoryID) {
-        filter = `ItemCategory/ID eq ${this.categoryID}`
+        filter = `itemCategory/id eq ${this.categoryID}`
       }
       if (this.categoryID) {
         EventBus.$emit('getNamesForBreadcrumb', {categoryID: this.categoryID, subcategoryID: this.subcategoryID}, this.setBreadcrumbNames)
@@ -89,7 +89,7 @@ export default {
         console.log(err)
       })
 
-      var select = 'ID,Name,Price,Attributes&$expand=Attributes,Pictures($select=URL)'
+      var select = 'id,name,price,attributes&$expand=attributes,pictures($select=url)'
       var itemsPromise = this.axios.get(`odata/Items?$select=${select}&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filter ? `&$filter=${filter}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
@@ -106,7 +106,7 @@ export default {
       this.$router.push(`/home/${this.categoryID}`)
     },
     onItemClicked (item) {
-      this.$router.push(`/itemdetails/${item.ID}`)
+      this.$router.push(`/itemdetails/${item.id}`)
     },
     setBreadcrumbNames (names) {
       if (names.categoryName) {

@@ -1,10 +1,10 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <img v-if="item.Pictures && item.Pictures[0]" :src="item.Pictures[0].URL" class="gd-item-image">
+    <img v-if="item.pictures && item.pictures[0]" :src="item.pictures[0].url" class="gd-item-image">
     <img v-else src="@/../static/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
-        <span>{{item.Price}} €</span>
+        <span>{{item.price}} €</span>
       </el-col>
     </el-row>
     <el-row class="gd-item-card-main">
@@ -13,22 +13,14 @@
         :open-delay="300"
         placement="bottom"
         trigger="hover">
-        <div slot="reference" class="gd-item-tooltip">{{item.Name}}</div>
-        <span>{{item.Name}}</span>
+        <div slot="reference" class="gd-item-tooltip">{{item.name}}</div>
+        <span>{{item.name}}</span>
       </el-popover>
-      <!-- 'Add to cart' button. Uncommend  -->
-      <!-- <el-row class="gd-add-to-card">
-        <el-col :lg="20" :md="20" :sm="20" :xs="20" :push="2">
-          <el-button class="gd-add-to-card-button" type="primary" icon="el-icon-plus" size="medium">
-            Add to cart
-          </el-button>
-        </el-col>
-      </el-row> -->
       <div style="border-bottom: 1px solid;"/>
     </el-row>
-    <el-row v-if="item.Attributes" class="gd-item-attributes" >
-      <div v-for="attribute in item.Attributes" :key="attribute.Name">
-        <div>{{attribute.Name}}:   {{attribute.Value}}</div>
+    <el-row v-if="item.attributes" class="gd-item-attributes" >
+      <div v-for="attribute in item.attributes" :key="attribute.name">
+        <div>{{attribute.name}}:   {{attribute.value}}</div>
       </div>
     </el-row>
     <el-row v-else class="gd-item-attributes" >

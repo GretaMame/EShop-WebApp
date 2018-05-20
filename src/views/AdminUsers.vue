@@ -4,8 +4,8 @@
       <el-header>
         <el-input placeholder="Search" v-model="searchText">
           <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
-            <el-option label="Name" value="Name"></el-option>
-            <el-option label="Email" value="Email"></el-option>
+            <el-option label="Name" value="fullName"></el-option>
+            <el-option label="Email" value="email"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
         </el-input>
@@ -20,13 +20,13 @@
           :header-cell-style="headerCellStyle()">
           <el-table-column
             label="Email"
-            prop="Email"/>
+            prop="email"/>
           <el-table-column
             label="Name"
-            prop="Name"/>
+            prop="fullName"/>
           <el-table-column
             label="Role"
-            prop="Role"
+            prop="role"
             width="100px"/>
           <el-table-column
             fixed="right"
