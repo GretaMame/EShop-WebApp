@@ -2,15 +2,9 @@
   <el-row>
     <el-card v-loading="loading" class="box-card" >
       <el-row>
-<<<<<<< HEAD
-        <el-breadcrumb v-if="item.ItemCategory" class="gd-itemDetailsBread">
-          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}`">
-            {{item.ItemCategory.name}}
-=======
         <el-breadcrumb v-if="item.itemCategory" class="gd-itemDetailsBread">
           <el-breadcrumb-item :to="`/home/${item.itemCategory.id}`">
             {{item.itemCategory.name}}
->>>>>>> master
           </el-breadcrumb-item>
           <el-breadcrumb-item :to="`/home/${item.itemCategory.id}/${item.itemCategory.subCategory.id}`">
             {{item.itemCategory.subCategory.name}}
@@ -27,13 +21,8 @@
               <el-carousel-item v-if="item.pictures && item.pictures.length === 0">
                 <img class="carouselImage" src="@/../static/image-not-found.jpg">
               </el-carousel-item>
-<<<<<<< HEAD
-              <el-carousel-item v-for="picture in this.item.pictures" :key="picture.ID" >
-                <img class="carouselImage" :src="picture.URL">
-=======
               <el-carousel-item v-for="picture in this.item.pictures" :key="picture.id" >
                 <img class="carouselImage" :src="picture.url">
->>>>>>> master
               </el-carousel-item>
             </el-carousel>
           </el-row>

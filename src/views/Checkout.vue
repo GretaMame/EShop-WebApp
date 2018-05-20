@@ -57,7 +57,8 @@
       </order-summary>
       <info-message
         v-if="activeIndex === numberOfSteps"
-        message="Your order has been placed. Thank you for your order!">
+        message="Your order has been placed. Thank you for your order!"
+        v-loading="loading">
       </info-message>
     </el-card>
   </div>
@@ -149,7 +150,8 @@ export default {
           this.countItemsInCart()
           this.cart.items = response.data.value
           this.countItemsInCart()
-          this.setCartItemsQuantities(cart)
+          this.prepareItems(cart)
+          this.calculateSubtotal()
           this.loading = false
         })
         .catch(err => {
@@ -173,12 +175,11 @@ export default {
         console.log(error)
       })
     },
-    setCartItemsQuantities (cart) {
+    prepareItems (cart) {
       if (cart === null) return
       for (var i = 0; i < cart.length; i++) {
         this.cart.items[i]['count'] = cart[i].Count
-        console.log(this.cart.items[i].pictures)
-        this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0]
+        this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0].url
       }
     },
     changeAddress (newAddress) {
@@ -230,16 +231,19 @@ export default {
       })
     },
     performCheckout () {
+      this.loading = true
       this.cardDetails['address'] = this.deliveryAddress
       this.cardDetails.number = this.cardDetails.number.replace(/\s/g, '')
       console.log(this.cardDetails.number)
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
+        this.loading = false
       }).catch(e => {
         this.$notify.error({
             title: 'Error',
             message: e.response.data.message
           })
+        this.loading = false
       })
     },
     setLoading (value) {
