@@ -12,7 +12,7 @@
         <template slot="title">Goods</template>
         <el-submenu v-for="category in categories" :key="category.name" :index="`/home/${category.id}`">
           <template slot="title">
-            <span class="gd-category gd-pr-30px">
+            <span class="gd-category gd-pr-30px gd-width-100" v-on:click="routToCategory(category.id)">
               {{category.name}}
             </span>
           </template>
@@ -67,6 +67,11 @@
     props: {
       categories: { type: Array },
       itemsInCart: { type: Number }
+    },
+    methods: {
+      routToCategory (id) {
+        this.$router.push('/home/' + id)
+      }
     }
   }
 </script>
@@ -78,5 +83,8 @@
     overflow: hidden;
     max-width: 300px;
     display: inline-block;
+  }
+  .gd-width-100{
+    width: 100%;
   }
 </style>
