@@ -18,12 +18,16 @@ export default {
     })
 
     EventBus.$on('onLogin', () => {
+      console.log('Cart merging real merge event')
       var cart = this.$store.getters.localCart
-      if (!cart) {
+      if (!cart || cart.length === 0) {
         return
       }
-      this.axios.post('cart', {Items: cart}).then(response => {
-        this.$store.dispatch('clearCart')
+      this.axios.get('account/renewcsrftoken').then(() => {
+        this.axios.post('cart', {Items: cart}).then(response => {
+          this.$store.dispatch('clearCart')
+          EventBus.$emit('cartMerged')
+        })
       })
       .catch(err => {
         console.log('Error while mergin cart ' + err)

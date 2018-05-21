@@ -1,11 +1,11 @@
 <template>
   <div>
     <info-message
-      v-if="cartItemsCount === 0"
+      v-if="!cart.items || cart.items.length === 0"
       message="Your cart is empty. Please add items to your cart :("
       v-loading="loading">
     </info-message>
-    <el-card v-if="cartItemsCount !== 0">
+    <el-card v-if="cart.items && cart.items.length !== 0">
       <el-steps
         :active="activeIndex"
         finish-status="success"
@@ -16,7 +16,7 @@
         <el-step title="Payment"></el-step>
         <el-step title="Review and place order"></el-step>
       </el-steps>
-      <el-button v-if="cartItemsCount === 0" @click="nextStep">
+      <el-button v-if="!cart.items || cart.items.length === 0" @click="nextStep">
         next
       </el-button>
       <view-cart
@@ -70,6 +70,7 @@ import Delivery from '@/components/Checkout/Delivery.vue'
 import Payment from '@/components/Checkout/Payment.vue'
 import OrderSummary from '@/components/Checkout/OrderSummary.vue'
 import InfoMessage from '@/components/Shared/InfoMessage.vue'
+import EventBus from '@/eventBus'
 export default {
   components: {
     'view-cart': Viewcart,
@@ -85,97 +86,88 @@ export default {
       activeIndex: 0,
       loading: '',
       cart: {},
-      cartItemsCount: 0,
       deliveryAddress: {},
       cardDetails: {}
     }
   },
+  created () {
+    EventBus.$on('cartMerged', this.cartMerged)
+  },
   mounted () {
-    if (this.$store.getters.isAuthenticated) {
-      var cartPromise = this.loadCart()
-      var addressPromise = this.loadAddress()
-      Promise.all([cartPromise, addressPromise]).then(() => {
+    if (this.$store.getters.isAuthenticated && this.$store.getters.localCart && this.$store.getters.localCart.length !== 0) {
+      this.loading = true
+      return
+    }
+
+    this.fetchData(!this.$store.getters.isAuthenticated)
+  },
+  beforeDestroy () {
+    EventBus.$off('cartMerged', this.cartMerged)
+  },
+  methods: {
+    cartMerged () {
+      console.log('Cart Merged Event')
+      this.fetchData(false)
+    },
+    fetchData (local) {
+      this.loading = true
+      if (local) {
+        this.loadLocalCart().then(() => {
+          this.loading = false
+        }).catch((err) => {
+          this.loading = false
+          console.log('something bad happened ' + err)
+        })
+      } else {
+        var cartPromise = this.loadCart()
+        var addressPromise = this.loadAddress()
+        Promise.all([cartPromise, addressPromise]).then(() => {
           this.calculateSubtotal()
           this.loading = false
         }).catch((err) => {
-          console.log(err)
           this.loading = false
+          if (err.cookieExpired) {
+            this.fetchData(true)
+            return
+          }
+          console.log('something bad happend ' + err)
         })
-    } else {
-      this.loadLocalCart()
-    }
-  },
-  methods: {
-    countItemsInCart () {
-      if (this.cart.items) {
-        this.cartItemsCount = this.cart.items.length
-      } else {
-        this.cartItemsCount = 0
       }
     },
     loadCart () {
-      this.loading = true
       return this.axios.get(`Cart`)
       .then(response => {
         this.cart = response.data
-        this.countItemsInCart()
-      })
-      .catch(error => {
-        if (error.response.status !== 404) {
-          this.$notify.error({
-            title: 'Error!',
-            message: 'Could not fetch cart'
-          })
-          console.log(error)
-        }
       })
     },
     loadLocalCart () {
-      this.loading = true
       var cart = this.$store.getters.localCart
-      if (!cart) {
-        this.loading = false
-        return
+      if (!cart || cart.length === 0) {
+        return Promise.resolve()
       }
 
-      var filter
+      var filter = ''
       for (var i = 0; i < cart.length; i++) {
-        filter = `id eq ${cart[i].ItemID} or`
+        filter += `id eq ${cart[i].ItemID} or `
       }
-      filter = filter.slice(0, -3)
+      filter = filter.slice(0, -4)
       var select = 'id,sku,name,price,attributes&$expand=attributes,pictures($select=url)'
 
-      this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`)
-        .then(response => {
-          this.cart.items = response.data.value
-          this.countItemsInCart()
-          this.prepareItems(cart)
-          this.calculateSubtotal()
-          this.loading = false
-        })
-        .catch(err => {
-          console.log(err)
-          this.loading = false
-        })
-      },
+      return this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`).then(response => {
+        this.cart.items = response.data.value
+        this.prepareItems(cart)
+        this.calculateSubtotal()
+      })
+    },
     loadAddress () {
-      this.loading = true
-      return this.axios.get('user/profile')
-      .then(response => {
+      return this.axios.get('user/profile').then(response => {
         if (response.data.address) {
           this.setAddressFields(response.data.address, this.deliveryAddress)
         }
       })
-      .catch(error => {
-        this.$notify.error({
-          title: 'Error!',
-          message: 'Could not fetch address'
-        })
-        console.log(error)
-      })
     },
     prepareItems (cart) {
-      if (cart === null) return
+      if (!cart) return
       for (var i = 0; i < cart.length; i++) {
         this.cart.items[i]['count'] = cart[i].Count
         this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0].url
@@ -233,7 +225,6 @@ export default {
       this.loading = true
       this.cardDetails['address'] = this.deliveryAddress
       this.cardDetails.number = this.cardDetails.number.replace(/\s/g, '')
-      console.log(this.cardDetails.number)
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
         this.loading = false
