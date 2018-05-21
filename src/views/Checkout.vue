@@ -98,15 +98,17 @@ export default {
       this.loading = true
       return
     }
-
     this.fetchData(!this.$store.getters.isAuthenticated)
   },
   beforeDestroy () {
     EventBus.$off('cartMerged', this.cartMerged)
   },
   methods: {
-    cartMerged () {
+    cartMerged (mergeSuccessful) {
       this.fetchData(false)
+      if (!mergeSuccessful) {
+        this.loading = false
+      }
     },
     fetchData (local) {
       this.loading = true
@@ -127,6 +129,10 @@ export default {
           this.loading = false
           if (err.cookieExpired) {
             this.fetchData(true)
+            this.$notify.info({
+              title: 'Logged out',
+              message: 'You were logged out'
+            })
             return
           }
           console.log('something bad happend ' + err)

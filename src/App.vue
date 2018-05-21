@@ -11,7 +11,7 @@ export default {
 
     EventBus.$on('cookieExpired', () => {
       this.$router.push({name: 'login', query: {redirect: this.$router.currentRoute.path}})
-      this.$notify.error({
+      this.$notify.info({
         title: 'Logged out',
         message: 'You were logged out'
       })
@@ -25,11 +25,12 @@ export default {
       this.axios.get('account/renewcsrftoken').then(() => {
         this.axios.post('cart', {Items: cart}).then(response => {
           this.$store.dispatch('clearCart')
-          EventBus.$emit('cartMerged')
+          EventBus.$emit('cartMerged', true)
         })
       })
       .catch(err => {
         console.log('Error while mergin cart ' + err)
+        EventBus.$emit('cartMerged', false)
       })
     })
   }
