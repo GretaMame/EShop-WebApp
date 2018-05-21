@@ -106,7 +106,6 @@ export default {
   },
   methods: {
     cartMerged () {
-      console.log('Cart Merged Event')
       this.fetchData(false)
     },
     fetchData (local) {

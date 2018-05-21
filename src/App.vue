@@ -18,7 +18,6 @@ export default {
     })
 
     EventBus.$on('onLogin', () => {
-      console.log('Cart merging real merge event')
       var cart = this.$store.getters.localCart
       if (!cart || cart.length === 0) {
         return
