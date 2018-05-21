@@ -55,7 +55,7 @@
 							Order history
 						</el-menu-item>
 					</el-submenu>
-					<el-menu-item index="/home" route="/home">
+					<el-menu-item index="/home1" route="/home">
 						<el-row>
 							<el-col :xs="4">
 								<icon name="home"/>
@@ -76,7 +76,7 @@
 								</el-col>
 							</el-row>
 						</template>
-						<el-submenu v-for="category in categories" :key="category.name" :index="category.name">
+						<el-submenu v-for="category in categories" :key="category.name" :index="`/home/${category.id}`">
 							<template slot="title">
 								<span class="gd-category gd-pr-30px">
 									{{category.name}}
@@ -85,7 +85,7 @@
 							<el-menu-item v-if="category.subCategories" 
 							v-for="subcategory in category.subCategories" 
 							:key="subcategory.name" 
-							:index="subcategory.name">
+							:index="`/home/${category.id}/${subcategory.id}`">
 								<template slot="title">
 									<span class="gd-category">
 										{{subcategory.name}}
@@ -94,12 +94,12 @@
 							</el-menu-item>
 						</el-submenu>
 					</el-submenu>
-					<el-menu-item index="/user/signout" v-on:click="signOut" v-if="this.$store.getters.isAuthenticated">
+					<el-menu-item index="/user/signout"  @click="$emit('signOut')" v-if="this.$store.getters.isAuthenticated">
 						Sign out
 					</el-menu-item>
 				</el-menu>
     	</el-submenu>
-			<el-menu-item index="home">
+			<el-menu-item index="/home2" route="/home">
 				<template slot="title">
           <span class="gd-logo">
             Goal Diggers
@@ -118,42 +118,13 @@
   export default {
     data () {
       return {
-        categories: [],
         activeIndex: '1',
-        itemsInCart: 0,
         displayMode: 'horizontal'
       }
     },
-    created () {
-      this.fetchData()
-    },
-    methods: {
-      fetchData () {
-        this.axios.get('Category').then(response => {
-          this.categories = response.data
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      signOut () {
-        this.axios.post('account/logout').then(response => {
-          this.$store.dispatch('logOut')
-          this.$notify.success({
-            title: 'Successful logout'
-          })
-          this.$router.push('/home')
-        }).catch(err => {
-          console.log('error: ', err)
-          if (err.autoLogout) {
-            this.$notify.info('You were logged out')
-            return
-          }
-          this.$notify.error({
-            title: 'Error',
-            message: 'Unable to log out.'
-          })
-        })
-      }
+    props: {
+      categories: { type: Array },
+      itemsInCart: { type: Number }
     }
   }
 </script>
