@@ -32,6 +32,12 @@ const store = new Vuex.Store({
     },
     clearCart ({ commit }) {
       commit('clearCart')
+    },
+    deleteItem ({ commit }, id) {
+      commit('deleteItem', id)
+    },
+    updateItems ({ commit }, items) {
+      commit('updateItems', items)
     }
   },
   mutations: {
@@ -55,6 +61,24 @@ const store = new Vuex.Store({
     },
     clearCart (state) {
       state.cart = null
+    },
+    deleteItem (state, id) {
+      for (var i = 0; i < state.cart.length; i++) {
+        if (state.cart[i].ItemID === id) {
+          state.cart.splice(i, 1)
+          break
+        }
+      }
+    },
+    updateItems (state, items) {
+      for (var newItem of items) {
+        for (var cartItem of state.cart) {
+          if (newItem.ItemID === cartItem.ItemID) {
+            cartItem.count = newItem.Count
+            break
+          }
+        }
+      }
     }
   },
   plugins: [createPersistedState()]

@@ -82,9 +82,7 @@
         })
       },
       postLogin (response) {
-        this.axios.get('account/renewcsrftoken').then(() => {
-          EventBus.$emit('onLogin')
-        })
+        EventBus.$emit('onLogin')
         this.loading = false
         this.$store.dispatch('logIn')
         this.$router.push(this.$route.query.redirect || '/home')

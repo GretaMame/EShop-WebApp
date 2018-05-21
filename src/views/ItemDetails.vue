@@ -94,7 +94,7 @@ export default {
     },
     addToCart () {
       var newItem = {
-        ItemID: this.id,
+        ItemID: this.item.id,
         Count: this.count
       }
       var addPromise = null
