@@ -42,20 +42,29 @@
           this.resolveCategoriesNames(ids, setNames)
         }
       })
-      EventBus.$on('itemAddedToCart', this.onItemAddedToCart)
+      EventBus.$on('cartItemCountChanged', this.loadCartCount)
+      EventBus.$on('cartMerged', this.loadCartCount)
     },
     beforeDestroy () {
-      EventBus.$off('itemAddedToCart', this.onItemAddedToCart)
+      EventBus.$off('cartItemCountChanged', this.loadCartCount)
+      EventBus.$on('cartMerged', this.loadCartCount)
     },
     methods: {
       fetchData () {
-        if (this.$store.getters.isAuthenticated) {
-          this.categoriesPromise = this.axios.get('Category').then(response => {
-            this.categories = response.data
-            this.categoriesPromise = null
-          }).catch(err => {
+          this.loadCategory().catch(err => {
             console.log(err)
           })
+          this.loadCartCount()
+      },
+      loadCategory () {
+        this.categoriesPromise = this.axios.get('Category').then(response => {
+            this.categories = response.data
+            this.categoriesPromise = null
+          })
+        return this.categoriesPromise
+      },
+      loadCartCount () {
+        if (this.$store.getters.isAuthenticated) {
           this.axios.get('/Cart/itemsCount').then(response => {
             this.itemsInCart = response.data
           }).catch(err => {
@@ -79,9 +88,6 @@
             message: 'Unable to log out.'
           })
         })
-      },
-      onItemAddedToCart (count) {
-        this.itemsInCart += count
       },
       calculateCount (cartItems) {
         this.$nextTick(() => {

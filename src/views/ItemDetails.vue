@@ -112,7 +112,7 @@ export default {
           title: 'Success',
           message: 'Item was added to cart.'
         })
-        EventBus.$emit('itemAddedToCart', newItem.Count)
+        EventBus.$emit('cartItemCountChanged')
       })
       .catch(err => {
         // try again if cookie expired, so items will be added to local storage cart
