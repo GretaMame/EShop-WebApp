@@ -57,7 +57,6 @@
       </order-summary>
       <info-message
         v-if="activeIndex === numberOfSteps"
-        message="Thank you for your order! Please check your email for your order details"
         v-loading="loading">
       </info-message>
     </el-card>
