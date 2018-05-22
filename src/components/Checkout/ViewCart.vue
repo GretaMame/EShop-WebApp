@@ -18,6 +18,8 @@
 
 <script>
 import CartItem from '@/components/Cart/CartItem'
+import EventBus from '@/eventBus'
+
 export default {
   data () {
     return {
@@ -72,6 +74,7 @@ export default {
       } else {
         this.axios.put('Cart/updatecartitems', { items: itemsCount }).then(response => {
           this.isUpdated = false
+          EventBus.$emit('cartItemCountChanged')
         }).catch(err => {
           console.log(err)
         })
@@ -80,6 +83,7 @@ export default {
     removeFromCart (id) {
       for (var i = 0; i < this.cart.items.length; i++) {
         if (this.cart.items[i].id === id) {
+          EventBus.$emit('cartItemCountChanged')
           this.cart.items.splice(i, 1)
           break
         }

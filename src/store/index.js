@@ -18,6 +18,15 @@ const store = new Vuex.Store({
     },
     localCart: state => {
       return state.cart
+    },
+    countCartItemsCount: state => {
+      var count = 0
+      if (state.cart !== null) {
+        for (var cartItem of state.cart) {
+          count += cartItem.Count
+        }
+      }
+      return count
     }
   },
   actions: {
