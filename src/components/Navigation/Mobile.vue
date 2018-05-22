@@ -107,8 +107,14 @@
         </template>
 			</el-menu-item>
 			<el-menu-item class="gd-float-right" index="/cart" route="/cart">
-				<i class="el-icon-goods"></i>
-				{{(itemsInCart)}}
+        <el-row>
+          <el-col :span="10">
+            <i class="el-icon-goods"/>
+          </el-col>
+          <el-col :span="14" v-if="itemsInCart != 0">
+            {{(itemsInCart)}}
+          </el-col>
+        </el-row>
 			</el-menu-item>
     </el-menu>
   </div>

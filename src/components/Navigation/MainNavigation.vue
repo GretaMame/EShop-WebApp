@@ -42,15 +42,28 @@
           this.resolveCategoriesNames(ids, setNames)
         }
       })
+      EventBus.$on('itemAddedToCart', this.onItemAddedToCart)
+    },
+    beforeDestroy () {
+      EventBus.$off('itemAddedToCart', this.onItemAddedToCart)
     },
     methods: {
       fetchData () {
-        this.categoriesPromise = this.axios.get('Category').then(response => {
-          this.categories = response.data
-          this.categoriesPromise = null
-        }).catch(err => {
-          console.log(err)
-        })
+        if (this.$store.getters.isAuthenticated) {
+          this.categoriesPromise = this.axios.get('Category').then(response => {
+            this.categories = response.data
+            this.categoriesPromise = null
+          }).catch(err => {
+            console.log(err)
+          })
+          this.axios.get('/Cart/itemsCount').then(response => {
+            this.itemsInCart = response.data
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          this.itemsInCart = this.$store.getters.countCartItemsCount
+        }
       },
       signOut () {
         this.axios.post('account/logout').then(response => {
@@ -65,6 +78,19 @@
             title: 'Error',
             message: 'Unable to log out.'
           })
+        })
+      },
+      onItemAddedToCart (count) {
+        this.itemsInCart += count
+      },
+      calculateCount (cartItems) {
+        this.$nextTick(() => {
+          if (cartItems) {
+            var arrayLength = cartItems.length
+            for (var i = 0; i < arrayLength; i++) {
+              this.itemsInCart += cartItems[i].count
+            }
+          }
         })
       },
       postSignOut () {
