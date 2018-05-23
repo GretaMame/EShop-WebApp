@@ -66,8 +66,9 @@
                     <el-input class="small-input-fix" :controls="false" placeholder="Price" v-model.lazy="newItemForm.price" v-money="money"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="13">
-                  PICTURES/ATTRIBUTES
+                <el-col class="attributes-photos-container" :span="13">
+                  <attributes-manager ref="attributesManager" v-on:attributes-changed="(atts) => attributes = atts" class="attributes-manager"></attributes-manager>
+                  <photos-manager ref="photosManager" v-on:pictures-changed="(pics) => pictures = pics" class="photos-manager"></photos-manager>
                 </el-col>
               </el-row>
           </el-card>
@@ -78,8 +79,13 @@
 </template>
 <script>
 import {VMoney} from 'v-money'
-
+import AttributesManager from '@/components/admin/AttributesManager'
+import PhotosManager from '@/components/admin/PhotosManager'
 export default {
+  components: {
+    AttributesManager,
+    PhotosManager
+  },
   directives: {
     money: VMoney
   },
@@ -92,6 +98,8 @@ export default {
         price: 0.00,
         categoryid: null
       },
+      pictures: [],
+      attributes: [],
       selectedCategoryId: null,
       categories: [],
       subcategories: [],
@@ -158,6 +166,8 @@ export default {
   },
   methods: {
     resetForm (formName) {
+      this.$refs['attributesManager'].reset()
+      this.$refs['photosManager'].reset()
       this.$refs[formName].resetFields()
     },
     submitForm (formName) {
@@ -198,9 +208,26 @@ export default {
     },
     addItem () {
       this.posting = true
-      let formCopy = JSON.parse(JSON.stringify(this.newItemForm))
-      formCopy.price = parseFloat(formCopy.price.split(' ')[1])
-      this.axios.post('admin/items/create', formCopy).then(response => {
+
+      var uploadForm = new FormData()
+      for (let key in this.newItemForm) {
+        uploadForm.append(key, this.newItemForm[key])
+      }
+      uploadForm.set('price', parseFloat(this.newItemForm.price.split(' ')[1]))
+
+      this.attributes.map(x => { return {value: x.value, attributeId: x.id} })
+        .forEach((attribute, index) => {
+          uploadForm.append(`attributes[${index}].attributeId`, attribute.attributeId)
+          uploadForm.append(`attributes[${index}].value`, attribute.value)
+        })
+
+      this.pictures.filter(x => !x.isFile).map(x => x.url)
+        .forEach(picture => uploadForm.append('pictureUrls', picture))
+
+      this.pictures.filter(x => x.isFile).map(x => x.file)
+        .forEach(picture => uploadForm.append('pictureFiles', picture))
+
+      this.axios.post('admin/items/create', uploadForm).then(response => {
         this.resetForm('newItemForm')
         this.$notify.success({
           title: 'Success',
@@ -225,7 +252,16 @@ export default {
   }
   .small-input-fix{
     float: left;
-    margin-left: 8px
   }
+  .attributes-photos-container{
+    height: 100%;
+    padding-bottom: 8px;
+  }
+    .attributes-photos-container .attributes-manager{
+      height: 40%;
+    }
+    .attributes-photos-container .photos-manager{
+      height: 60%;
+    }
 </style>
 
