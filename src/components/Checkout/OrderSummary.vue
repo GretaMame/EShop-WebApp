@@ -114,17 +114,17 @@ export default {
   mounted () {
     var cartPromise = this.loadCart()
     Promise.all([cartPromise]).then(() => {
-        this.calculateSubtotal()
+        this.$emit('calculateSubtotal')
         this.$emit('updateSubtotal')
-        this.loading = false
+        this.$emit('setLoading', false)
       }).catch((err) => {
         console.log(err)
-        this.loading = false
+        this.$emit('setLoading', false)
       })
   },
   methods: {
     loadCart () {
-      this.loading = true
+      this.$emit('setLoading', true)
       return this.axios.get(`Cart`)
       .then(response => {
         this.cart = response.data
