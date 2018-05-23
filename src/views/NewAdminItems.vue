@@ -1,6 +1,6 @@
 <template>
   <div class="main-div">
-    <el-container>
+    <el-container v-loading="posting">
       <el-header>
         <el-row>
           <el-col :span="2">
@@ -91,6 +91,7 @@ export default {
   },
   data () {
     return {
+      posting: false,
       newItemForm: {
         name: '',
         sku: '',
@@ -228,12 +229,14 @@ export default {
         .forEach(picture => uploadForm.append('pictureFiles', picture))
 
       this.axios.post('admin/items/create', uploadForm).then(response => {
+        this.posting = false
         this.resetForm('newItemForm')
         this.$notify.success({
           title: 'Success',
           message: 'Succesfully added item'
         })
       }).catch(err => {
+        this.posting = false
         this.$notify.error({
           title: 'Error',
           message: 'There was a problem while getting the category: ' + err
