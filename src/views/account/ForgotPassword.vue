@@ -76,7 +76,6 @@
     margin: auto;
     max-width: 700px;
     margin-top: 40px;
-    padding: 50px;
   }
 
   form {
