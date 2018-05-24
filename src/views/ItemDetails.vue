@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import EventBus from '@/eventBus'
+
 export default {
   props: ['id'],
   data () {
@@ -94,7 +96,7 @@ export default {
     },
     addToCart () {
       var newItem = {
-        ItemID: this.id,
+        ItemID: this.item.id,
         Count: this.count
       }
       var addPromise = null
@@ -110,6 +112,7 @@ export default {
           title: 'Success',
           message: 'Item was added to cart.'
         })
+        EventBus.$emit('cartItemCountChanged')
       })
       .catch(err => {
         // try again if cookie expired, so items will be added to local storage cart
