@@ -20,7 +20,7 @@
         </div>
         <div v-if="items && items[0]">
           <el-row>
-            <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="8" :md="6" :lg="4">
+            <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="12" :md="8" :lg="6">
               <div class="gd-clickable" @click="onItemClicked(item)">
                 <ItemCard :item="item"></ItemCard>
               </div>
