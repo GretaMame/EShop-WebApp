@@ -4,14 +4,9 @@
       <el-header>
         <el-row>
           <el-col :span="3">
-            <router-link :to="{ name: 'adminItemsAdd' }">
-              <el-button>Add new item</el-button>
-            </router-link>
+            <el-button :disabled="selectedItems.length === 0" type="danger" @click="unarchiveSelected">Unarchive selected</el-button>
           </el-col>
-          <el-col :span="3">
-            <el-button :disabled="selectedItems.length === 0" type="danger" @click="deleteSelected">Archive selected</el-button>
-          </el-col>
-          <el-col :span="18">
+          <el-col :span="21">
             <el-input placeholder="Search" v-model="searchText">
               <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
                 <el-option label="Name" value="Name"></el-option>
@@ -67,14 +62,6 @@
             label="Category"
             prop="Category"
             width="130px"/>
-          <el-table-column
-            label="Archived"
-            prop="IsDeleted"
-            width="80px">
-            <template slot-scope="scope">
-              {{ scope.row.IsDeleted ? 'Yes' : 'No' }}
-            </template>
-          </el-table-column>
           <el-table-column
             fixed="right"
             label="Operations"
@@ -135,7 +122,7 @@ export default{
     handleSelectionChange (val) {
       this.selectedItems = val
     },
-    deleteSelected () {
+    unarchiveSelected () {
       if (this.selectedItems.length === 0) {
         return
       }
@@ -147,8 +134,8 @@ export default{
         type: 'Warning'
       }).then(() => {
         this.loading = true
-        let idsToArchive = this.selectedItems.map(x => x.ID)
-        this.axios.post('admin/Items/archive', idsToArchive)
+        let idsToUnarchive = this.selectedItems.map(x => x.ID)
+        this.axios.post('admin/Items/unarchive', idsToUnarchive)
           .then(() => {
             this.loading = false
             this.fetchData()
@@ -158,7 +145,7 @@ export default{
             console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while archiving the items: ' + err
+              message: 'There was a problem while unarchiving the items: ' + err
             })
           })
       })
@@ -173,6 +160,8 @@ export default{
       // build filter
 
       let filters = []
+
+      filters.push('IsDeleted eq true')
 
       if (this.searchText) {
         filters.push(`contains(${this.searchBy},'${this.searchText}')`)

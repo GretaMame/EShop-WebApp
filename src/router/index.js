@@ -16,6 +16,7 @@ import Checkout from '@/views/Checkout'
 import Store from '@/store'
 import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
+import ArchivedAdminItems from '@/views/AdminArchivedItems'
 Vue.use(Router)
 
 const isAuthenticated = (to, from, next) => {
@@ -125,6 +126,11 @@ export default new Router({
           path: '/admin/categories',
           name: 'adminCategories',
           component: AdminCategories
+        },
+        {
+          path: '/admin/archiveditems',
+          name: 'adminArchivedItems',
+          component: ArchivedAdminItems
         }
       ]
     }
