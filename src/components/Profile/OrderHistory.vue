@@ -53,7 +53,7 @@
             <div v-for="item in order.items" :key="item.itemID" :item="item">
             <el-row class="gd_item_name_row">
               <el-col :span="19">
-              {{item.Name}}
+              {{item.name}}
               </el-col>
               <el-col :span="5" align="right">
                 <el-tooltip
@@ -230,10 +230,6 @@ export default {
 </script>
 
 <style scoped>
-  .el-card__header {
-    padding: 0px !important;
-    background-color:#F5F5F5;
-  }
   .gd_order {
     max-width: 600px;;
     margin: 20px auto;
@@ -266,4 +262,3 @@ export default {
     margin-left: 1px;
   }
 </style>
-

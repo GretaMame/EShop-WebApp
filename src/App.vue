@@ -58,10 +58,9 @@ export default {
   .gd-body {
     height: calc(100vh - 60px);
   }
-    .gd-body > * {
-      margin-bottom: 20px;
-    }
-
+  .gd-body > * {
+    margin-bottom: 20px;
+  }
   .gd-logo {
 		font: italic bold 20px Georgia, serif;
 		color:peru;
@@ -80,5 +79,10 @@ export default {
   }
   .gd-text-align-right{
     text-align: right;
+  }
+  .el-card__header {
+    padding: 0px !important;
+    padding-left: 5px !important;
+    background-color:#F5F5F5 !important;
   }
 </style>

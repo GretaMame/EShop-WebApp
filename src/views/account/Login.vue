@@ -99,7 +99,7 @@
     margin: auto;
     max-width: 600px;
     margin-top: 40px;
-    padding: 40px 60px 20px 60px;
+    padding: 10px;
   }
   form {
     margin: 0 auto;
