@@ -145,7 +145,7 @@ export default {
   .box-card {
     margin: auto;
     margin-top: 16px;
-    padding: 40px 60px 20px 60px;
+    padding: 30px;
     max-width: 1376px;
   }
 
