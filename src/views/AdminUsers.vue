@@ -95,7 +95,6 @@
       <el-header>
         <el-input placeholder="Search" v-model="searchText">
           <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
-            <el-option label="Name" value="fullName"></el-option>
             <el-option label="Email" value="email"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
@@ -176,7 +175,7 @@ export default{
       items: null,
       totalRows: 0,
       searchText: '',
-      searchBy: 'Name',
+      searchBy: 'name',
       selectedUser: {},
       showUserDetails: false,
       userDetailsLoading: false,
