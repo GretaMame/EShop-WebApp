@@ -1,6 +1,6 @@
 <template>
   <el-card class="main-card">
-    <h4 class="title-text">Attributes selector</h4>
+    <h4 class="title-text">Attributes</h4>
     <el-row v-for="attribute in attributes" :key="attribute.id">
       <el-col :span="10">{{ attribute.key }}</el-col>
       <el-col :span="2"><i class="el-icon-arrow-right"></i></el-col>
@@ -159,7 +159,7 @@ export default {
       return this.newAttributeNames.filter(x => !x.selected)
     },
     deleteAttribute (attribute) {
-      this.$confirm(`Are you sure you want to create this attribute?`,
+      this.$confirm(`Are you sure you want to delete this attribute?`,
       {
         confirmButtonText: 'Yes',
         cancelButtonText: 'No',

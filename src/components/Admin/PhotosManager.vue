@@ -72,7 +72,7 @@ export default {
       this.uploadPictureDialogVisible = false
     },
     deletePicture (picture) {
-      this.$confirm(`Are you sure you want to create this picture?`,
+      this.$confirm(`Are you sure you want to delete this picture?`,
       {
         confirmButtonText: 'Yes',
         cancelButtonText: 'No',

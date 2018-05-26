@@ -4,8 +4,8 @@
       <el-header>
         <el-input placeholder="Search" v-model="searchText">
           <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
-            <el-option label="Name" value="Name"></el-option>
-            <el-option label="Email" value="Email"></el-option>
+            <el-option label="Name" value="name"></el-option>
+            <el-option label="Email" value="email"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
         </el-input>
@@ -20,13 +20,13 @@
           :header-cell-style="headerCellStyle()">
           <el-table-column
             label="Email"
-            prop="Email"/>
+            prop="email"/>
           <el-table-column
             label="Name"
-            prop="Name"/>
+            prop="fullName"/>
           <el-table-column
             label="Role"
-            prop="Role"
+            prop="role"
             width="100px"/>
           <el-table-column
             fixed="right"
@@ -75,7 +75,7 @@ export default{
       items: null,
       totalRows: 0,
       searchText: '',
-      searchBy: 'Name'
+      searchBy: 'name'
     }
   },
   created () {
@@ -101,7 +101,7 @@ export default{
 
         this.axios.post('admin/users/changerole', {
           Role: role,
-          Email: user.Email
+          Email: user.email
         })
         .then(() => this.fetchData())
         .catch((err) => {
@@ -114,7 +114,7 @@ export default{
     buildPossibleRoles (user) {
       var possibleValues = ['Admin', 'User', 'Blocked']
 
-      return possibleValues.filter(val => val !== user.Role)
+      return possibleValues.filter(val => val !== user.role)
     },
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length
