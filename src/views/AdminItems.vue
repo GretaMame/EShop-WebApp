@@ -11,7 +11,7 @@
           <el-col :span="3">
             <el-button :disabled="selectedItems.length === 0" type="danger" @click="deleteSelected">Delete selected</el-button>
           </el-col>
-          <el-col :span="18">
+          <el-col :span="8">
             <el-input placeholder="Search" v-model="searchText">
               <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
                 <el-option label="Name" value="name"></el-option>
@@ -19,6 +19,9 @@
               </el-select>
               <el-button slot="append" icon="el-icon-search" @click="fetchData()"></el-button>
             </el-input>
+          </el-col>
+          <el-col :span="8">
+            <ExportButton />
           </el-col>
         </el-row>
       </el-header>
@@ -95,7 +98,9 @@
   </div>
 </template>
 <script>
+import ExportButton from '@/components/ExportComponent'
 export default{
+  components: { ExportButton },
   data () {
     return {
       loading: false,
