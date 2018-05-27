@@ -7,17 +7,16 @@
       width="60%">
       <el-container v-loading="orderDataLoading">
         <el-header>
-          Delivery address: {{buildDeliveryAddress()}}
+          <div class="delivery-address">{{buildDeliveryAddress()}}</div>
         </el-header>
         <el-main class="dialog-main">
           <el-table
-            title="Items"
             class="table"
             :data="openOrder.items"
             :stripe="true"
             size="medium"
             :fit="true"
-            :header-cell-style="headerCellStyle()">
+            :header-cell-style="() => { return {'text-align': 'center'} }">
             <el-table-column
               label="SKU"
               prop="item.sku"/>
@@ -27,6 +26,9 @@
             <el-table-column
               label="Price"
               prop="price"/>
+            <el-table-column
+              label="Count"
+              prop="count"/>
           </el-table>
         </el-main>
       </el-container>
@@ -49,7 +51,7 @@
           :stripe="true"
           size="medium"
           :fit="true"
-          :header-cell-style="headerCellStyle()">
+          :header-cell-style="() => { return {'text-align': 'center'} }">
           <el-table-column
             label="Order no."
             prop="orderNumber">
@@ -111,7 +113,7 @@ export default{
     return {
       loading: false,
       pageOptions: [5, 10, 25, 50],
-      perPage: 5,
+      perPage: 10,
       currentPage: 1,
       filter: null,
       items: null,
@@ -209,11 +211,6 @@ export default{
         this.loading = false
       })
     },
-    headerCellStyle () {
-      return {
-        'text-align': 'center'
-      }
-    },
     openData (order) {
       this.loadOrderData(order)
       this.orderDataVisible = true
@@ -244,7 +241,7 @@ export default{
 
       let deliveryAddress = this.openOrder.deliveryAddress
 
-      return `${deliveryAddress.Name} ${deliveryAddress.Surname} \u00A0\u00A0\u00A0${deliveryAddress.Street} \u00A0\u00A0\u00A0${deliveryAddress.City} \u00A0\u00A0\u00A0${deliveryAddress.Country} ${deliveryAddress.Postcode}`
+      return `${deliveryAddress.Name} ${deliveryAddress.Surname}\n${deliveryAddress.Street}, ${deliveryAddress.City} ${deliveryAddress.Country} \n${deliveryAddress.Postcode}`
     }
   }
 }
@@ -272,5 +269,10 @@ export default{
   }
   .dialog-main {
     height: 50vh;
+  }
+  .delivery-address {
+    white-space: pre-line;
+    line-height: 16px;
+    height: 50px;
   }
 </style>
