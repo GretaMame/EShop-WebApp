@@ -27,6 +27,7 @@
           v-model="newAttribute.key"
           size="mini"
           filterable
+          allow-create
           placeholder="Please enter a keyword"
           v-loading="newAttribute.namesLoading"
           @change="loadAttributeValues"
@@ -46,12 +47,13 @@
           size="mini"
           filterable
           remote
+          allow-create
           reserve-keyword
           placeholder="Please enter a keyword"
           v-loading="newAttribute.valuesLoading"
           @change="buildAttribute">
           <el-option
-            v-for="item in selectedAttribute.values"
+            v-for="item in getAvailableValues()"
             :key="item.id"
             :label="item.value"
             :value="item.value">
@@ -118,7 +120,7 @@ export default {
     loadAttributeValues (attributeName) {
       this.selectedAttribute = this.newAttributeNames.find(x => x.name === attributeName)
 
-      if (this.selectedAttribute.values) {
+      if (!this.selectedAttribute || this.selectedAttribute.values) {
         return
       }
 
@@ -141,11 +143,13 @@ export default {
       this.attributes.push({
         key: this.newAttribute.key,
         value: this.newAttribute.value,
-        id: this.selectedAttribute.id,
-        values: this.selectedAttribute.values
+        id: this.selectedAttribute ? this.selectedAttribute.id : -1,
+        values: this.selectedAttribute ? this.selectedAttribute.values : [this.newAttribute.value]
       })
 
-      this.newAttributeNames.find(x => x.id === this.selectedAttribute.id).selected = true
+      if (this.selectedAttribute) {
+        this.newAttributeNames.find(x => x.id === this.selectedAttribute.id).selected = true
+      }
 
       this.selectedAttribute = {}
       this.newAttribute = {
@@ -177,6 +181,13 @@ export default {
       this.$nextTick(() => {
         this.reloadAttributeNames = false
       })
+    },
+    getAvailableValues () {
+      if (!this.selectedAttribute) {
+        return []
+      }
+
+      return this.selectedAttribute.values
     }
   }
 }

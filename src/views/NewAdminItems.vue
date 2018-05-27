@@ -216,10 +216,11 @@ export default {
       }
       uploadForm.set('price', parseFloat(this.newItemForm.price.split(' ')[1]))
 
-      this.attributes.map(x => { return {value: x.value, attributeId: x.id} })
+      this.attributes
         .forEach((attribute, index) => {
-          uploadForm.append(`attributes[${index}].attributeId`, attribute.attributeId)
+          uploadForm.append(`attributes[${index}].attributeId`, attribute.id)
           uploadForm.append(`attributes[${index}].value`, attribute.value)
+          uploadForm.append(`attributes[${index}].key`, attribute.key)
         })
 
       this.pictures.filter(x => !x.isFile).map(x => x.url)
