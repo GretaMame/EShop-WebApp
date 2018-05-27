@@ -36,16 +36,16 @@
               <el-col v-else :push="1" :xs="15" :sm="15" :md="11" :lg="19">
                 &nbsp;
               </el-col>
-              <el-col class="item-price hidden-md-and-up" :push="1" :xs="6" :sm="6">
-                <span>{{item.price}} €</span>
-              </el-col>
-            </el-row>
+                <el-col class="item-price hidden-md-and-up" :push="1" :xs="6" :sm="6">
+                  <span>{{item.price}} €</span>
+                </el-col>
+              </el-row>
           </el-col>
         </el-row>
         <el-row v-if="editable">
           <el-col :xs="24" :sm="24" :md="18" :lg="18">
             <el-row class="item-font-size-10pt item-grey-color">
-              <el-col class="quantity" :xs="16" :sm="16" :md="16" :lg="16">
+              <el-col class="quantity" :xs="8" :sm="8" :md="16" :lg="16">
                 <span>Quantity: </span>
               </el-col>
               <el-col :push="1" :xs="5" :sm="5" :md="7" :lg="7">
@@ -138,6 +138,8 @@ export default {
     color: midnightblue;
     font-weight: bold;
     text-align: right;
+    display: flex;
+    justify-content: center;
   }
   .item-delete{
     justify-content: flex-end;
@@ -163,5 +165,9 @@ export default {
       padding-bottom: 5px;
       margin-left: 20%;
     }
+
+  .item-price{
+    width: 100%;
+  }
   }
 </style>

@@ -1,10 +1,12 @@
 <template>
   <div>
-    <info-message
-      v-if="!cart.items || cart.items.length === 0"
-      message="Your cart is empty. Please add items to your cart :("
-      v-loading="loading">
-    </info-message>
+    <div v-if="!cart.items || cart.items.length === 0" v-loading="loading">
+        <el-card v-loading="loading">
+          <h2>
+            Your cart is empty. Please add items to your cart.
+          </h2>
+        </el-card>
+    </div>
     <el-card v-if="cart.items && cart.items.length !== 0">
       <el-steps
         :active="activeIndex"
@@ -14,7 +16,7 @@
         <el-step title="View cart"></el-step>
         <el-step title="Delivery"></el-step>
         <el-step title="Payment"></el-step>
-        <el-step title="Review and place order"></el-step>
+        <el-step title="Review order"></el-step>
       </el-steps>
       <el-button v-if="!cart.items || cart.items.length === 0" @click="nextStep">
         next
@@ -56,7 +58,7 @@
         v-on:calcluateSubtotal="calculateSubtotal">
       </order-summary>
       <info-message
-        v-if="activeIndex === numberOfSteps"
+        v-if="activeIndex === 4"
         v-loading="loading">
       </info-message>
     </el-card>
@@ -264,5 +266,18 @@ export default {
   }
   .gd_step_buttons {
     margin: 20px;
+  }
+
+  @media screen and (min-width: 100px) and (max-width: 680px) {
+    .el-card {
+      margin: 0px;
+    }
+    .el-card__body {
+      padding: 10px;
+    }
+  .el-steps {
+    margin: 0px;
+    margin-top: 0px;
+  }
   }
 </style>
