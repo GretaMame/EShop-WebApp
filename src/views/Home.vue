@@ -26,15 +26,42 @@
               </div>
             </el-col>
           </el-row>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :page-sizes="pageOptions"
-            :page-size="perPage"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalItems">
-          </el-pagination>
+          <el-row>
+            <el-col class="hidden-xs-only">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-sizes="pageOptions"
+                :page-size="perPage"
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalItems">
+              </el-pagination>
+            </el-col>
+            <el-col class="hidden-sm-and-up">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :page-sizes="pageOptions"
+                :page-size="perPage"
+                small
+                layout="total, sizes"
+                :total="totalItems">
+              </el-pagination>
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-size="perPage"
+                :pager-count="5"
+                background
+                small
+                layout="prev, pager, next"
+                :total="totalItems">
+              </el-pagination>
+            </el-col>
+          </el-row>
         </div>
         <div v-if="items.length === 0 && !loading" class="gd-no-items">
           <icon name="folder-open-o" class="gd-folder-icon"/>
@@ -58,7 +85,7 @@ export default {
       loadingFilters: false,
       perPage: 20,
       totalItems: 0,
-      pageOptions: [20, 40, 100, 200],
+      pageOptions: [10, 20, 40, 100, 200],
       currentPage: 1,
       categoryName: null,
       subcategoryName: null,
