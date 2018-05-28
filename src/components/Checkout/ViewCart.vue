@@ -7,7 +7,8 @@
       v-bind:item="item"
       v-bind:editable="true"
       v-on:updated="updateCartItem"
-      v-on:delete="deleteCartItem">
+      v-on:delete="deleteCartItem"
+      v-bind:quantiySum="quantitySum">
     </cart-item>
     <h3><b>Subtotal:</b> {{(subtotal.toFixed(2))}} €</h3>
     <div class="gd_step_buttons">
