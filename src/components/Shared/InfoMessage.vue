@@ -9,10 +9,11 @@
         <div class="feedback-content">
           <p>How was your shopping experience? Please rate it below and leave your feedback.</p>
           <div class="rating-container">
-            <h4>Poor</h4>
-            <el-rate class="rate-content" @change="rateChanged" v-model="form.rating">
-            </el-rate>
-            <h4>Great</h4>
+            <el-col class="hidden-xs-only" :push="1" :sm="3" :md="3" :lg="3"><h4>Poor</h4></el-col>
+            <el-col :sm="8" :md="8" :lg="8">
+              <el-rate class="rate-content" @change="rateChanged" v-model="form.rating"/>
+            </el-col>
+            <el-col class="hidden-xs-only" :pull="1" :sm="3" :md="3" :lg="3"><h4>Great</h4></el-col>
           </div>
           <el-form :model="form" :rules="rules" ref="feedbackForm">
             <el-form-item prop="message">
@@ -24,7 +25,7 @@
             </el-form-item>
             <div class="buttons" align="center">
               <el-form-item>
-                <el-button class="btn" @click="$router.push('/home')">Continue shopping</el-button>
+                <el-button class="btn" type="primary" @click="$router.push('/home')">Continue shopping</el-button>
               </el-form-item>
               <el-form-item>
                 <el-button class="btn" @click="submitFeedback('feedbackForm')">Submit</el-button>
@@ -36,7 +37,7 @@
     </div>
     <div v-else>
       <h1>Thank your for your feedback!</h1>
-      <el-button class="btn" @click="$router.push('/home')">Continue shopping</el-button>
+      <el-button class="btn" type="primary" @click="$router.push('/home')">Continue shopping</el-button>
     </div>
   </el-card>
 </template>
