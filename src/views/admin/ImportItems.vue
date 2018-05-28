@@ -4,7 +4,7 @@
     <h1>Import items</h1>
   </el-header>
   <el-main>
-    <div v-if="importInProgress">
+    <div v-if="this.$store.getters.isImportInProgress">
       <span>Import is in progress... Please wait</span>
     </div>
     <div v-else class="gd_container">
@@ -13,13 +13,13 @@
         :file-list="file"
         :auto-upload="false">
         <el-button size="medium">Select file</el-button>
-        <el-button @click="importItems" size="medium"  type="primary">Import</el-button>
-      </el-upload>
 
-      <div v-if="importErrors && importErrors.length > 0" class="gd_left_text">
-        <h2 class="gd_title">Errors</h2>
+      </el-upload>
+      <el-button @click="importItems" size="medium"  type="primary">Import</el-button>
+      <div v-if="this.$store.getters.importErrors && this.$store.getters.importErrors.length > 0" class="gd_left_text">
+        <h2 class="gd_title">Last import errors</h2>
         <el-table
-          :data="importErrors"
+          :data="this.$store.getters.importErrors"
           :stripe="true"
           size="medium"
           :fit="true"
@@ -43,45 +43,21 @@
 </template>
 
 <script>
+import EventBus from '@/eventBus/index.js'
+
 export default {
   data () {
     return {
-      importInProgress: false,
       importErrors: [],
       file: []
     }
   },
   mounted () {
-
+    console.log(this.$store.getters.importErrors)
   },
   methods: {
     importItems () {
-      this.importInProgress = true
-      this.axios.get('/admin/items/import')
-        .then(Response => {
-          console.log(Response.data)
-          if (Response.data.errors && Response.data.errors.length > 0) {
-            this.importErrors = Response.data.errors
-            this.$notify({
-              message: 'Import completed with errors',
-              type: 'warning'
-            })
-          } else {
-            this.$notify({
-              message: 'Import completed successfully',
-              type: 'suuccess'
-            })
-          }
-          this.importInProgress = false
-        })
-        .catch(error => {
-          this.$notify({
-            message: 'Oops! :(',
-            type: 'error'
-          })
-          console.log(error)
-          this.importInProgress = false
-        })
+      EventBus.$emit('beginImport', this.file)
     }
   }
 }

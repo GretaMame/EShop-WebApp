@@ -10,7 +10,9 @@ const store = new Vuex.Store({
       authenticated: false,
       profile: null
     },
-    cart: null
+    cart: null,
+    importInProgress: false,
+    importErrors: null
   },
   getters: {
     isAuthenticated: state => {
@@ -27,6 +29,12 @@ const store = new Vuex.Store({
         }
       }
       return count
+    },
+    isImportInProgress: state => {
+      return state.importInProgress
+    },
+    importErrors: state => {
+      return state.importErrors
     }
   },
   actions: {
@@ -47,6 +55,15 @@ const store = new Vuex.Store({
     },
     updateItems ({ commit }, items) {
       commit('updateItems', items)
+    },
+    startImport ({commit}) {
+      commit('startImport')
+    },
+    endImport ({commit}, errors) {
+      commit('endImport')
+    },
+    setImportErrors ({commit}, errors) {
+      commit('setImportErrors', errors)
     }
   },
   mutations: {
@@ -88,6 +105,16 @@ const store = new Vuex.Store({
           }
         }
       }
+    },
+    startImport (state) {
+      state.importInProgress = true
+    },
+    endImport (state) {
+      state.importInProgress = false
+    },
+    setImportErrors (state, errors) {
+      console.log(errors)
+      state.importErrors = errors
     }
   },
   plugins: [createPersistedState()]
