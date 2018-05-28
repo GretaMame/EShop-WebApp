@@ -88,7 +88,7 @@ const store = new Vuex.Store({
       for (var newItem of items) {
         for (var cartItem of state.cart) {
           if (newItem.ItemID === cartItem.ItemID) {
-            cartItem.count = newItem.Count
+            cartItem.Count = newItem.Count
             break
           }
         }
