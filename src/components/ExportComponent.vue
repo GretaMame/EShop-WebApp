@@ -1,8 +1,8 @@
 <template>
   <div class="export-container">
     <div>
-      <el-cascader @blur="left" v-model="exportCategoryObj" placeholder="Select Category/Subcategory" class="select-class" v-loading="categoriesLoading"
-        :options="options" change-on-select></el-cascader>
+      <el-cascader @blur="left" :disabled="exportStarted" v-model="exportCategoryObj" placeholder="Select Category/Subcategory"
+        class="select-class" v-loading="categoriesLoading" :options="options" change-on-select></el-cascader>
       </el-select>
       <div v-if="noCategorySelected" class="gd-err-msg">
         Select category or subcategory first.
@@ -16,6 +16,7 @@
   </div>
 </template>
 <script>
+  import EventBus from '@/eventBus'
   export default {
     data () {
       return {
@@ -36,7 +37,7 @@
           this.noCategorySelected = true
           return
         }
-
+        EventBus.$emit('exportStarted')
         if (this.exportCategoryObj.length > 1) { // export subcategory
           var subcategoryId = this.exportCategoryObj[1]
           this.exportSubCategory(subcategoryId)
@@ -60,6 +61,7 @@
         }).then((response) => {
           this.generateDownload(response.data)
           this.exportStarted = false
+          EventBus.$emit('exportFinished')
         }).catch(e => {
           console.log(e)
           this.exportStarted = false
@@ -80,12 +82,13 @@
         }).then((response) => {
           this.generateDownload(response.data)
           this.exportStarted = false
+          EventBus.$emit('exportFinished')
         }).catch(e => {
           this.exportStarted = false
           if (e.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
-              message: 'No files were found for this category.'
+              message: 'No item were found for this category.'
             })
           } else {
             this.$notify.error({
@@ -106,12 +109,13 @@
         }).then((response) => {
           this.generateDownload(response.data)
           this.exportStarted = false
+          EventBus.$emit('exportFinished')
         }).catch(e => {
           this.exportStarted = false
           if (e.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
-              message: 'No files were found for this category.'
+              message: 'No items were found for this category.'
             })
           } else {
             this.$notify.error({
@@ -143,11 +147,11 @@
             }
           })
           Promise.all(promises).then((result) => {
-            this.options = result
             this.options.push({
               label: 'Export all',
               value: -1
             })
+            this.options = this.options.concat(result)
             this.categoriesLoading = false
           })
         }).catch(err => {
@@ -170,6 +174,7 @@
         link.setAttribute('download', new Date().toLocaleString() + '_ItemsExport.xlsx')
         document.body.appendChild(link)
         link.click()
+        document.body.removeChild(link)
         this.$notify.info({
           title: 'Export successfully finished',
           message: 'Export file should start downloading in a moment.'

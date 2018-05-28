@@ -2,10 +2,7 @@
   <div style="float: left">
     <br>
     <div class="el-menu-vertical-demo">
-      <el-menu
-        mode="vertical"
-        default-active="3"
-        :router="true">
+      <el-menu mode="vertical" default-active="3" :router="true">
         <span>ADMIN PANEL</span>
         <el-menu-item index="1">
           <i class="el-icon-document"></i>
@@ -28,12 +25,27 @@
   </div>
 </template>
 <script>
-export default{
-}
+  import EventBus from '@/eventBus'
+  export default {
+    mounted () {
+      EventBus.$on('exportStarted', () => {
+        console.log('im working')
+        window.onbeforeunload = () => {
+          return 'export running'
+        }
+      })
+      EventBus.$on('exportFinished', () => {
+        console.log('im working nooot')
+        window.onbeforeunload = undefined
+      })
+    }
+  }
+
 </script>
 <style>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
     min-height: 300px;
   }
+
 </style>
