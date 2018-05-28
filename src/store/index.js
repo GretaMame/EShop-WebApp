@@ -18,8 +18,6 @@ const store = new Vuex.Store({
       return state.user.authenticated
     },
     isAdminAuthenticated: state => {
-      console.log('Admin authenticated')
-      console.log('Role = ' + state.user.role)
       return state.user.authenticated && state.user.role === 'Admin'
     },
     localCart: state => {
