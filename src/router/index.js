@@ -16,6 +16,7 @@ import Checkout from '@/views/Checkout'
 import Store from '@/store'
 import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
+import AdminOrders from '@/views/AdminOrders'
 import AdminFeedback from '@/views/AdminFeedback'
 Vue.use(Router)
 
@@ -110,7 +111,7 @@ export default new Router({
     {
       path: '/admin',
       component: AdminView,
-      redirect: {name: 'adminUsers'},
+      redirect: {name: 'adminOrders'},
       children: [
         {
           path: '/admin/users',
@@ -131,6 +132,11 @@ export default new Router({
           path: '/admin/categories',
           name: 'adminCategories',
           component: AdminCategories
+        },
+        {
+          path: '/admin/orders',
+          name: 'adminOrders',
+          component: AdminOrders
         },
         {
           path: '/admin/feedback',
