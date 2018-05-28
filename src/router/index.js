@@ -17,6 +17,7 @@ import Store from '@/store'
 import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
 import AdminOrders from '@/views/AdminOrders'
+import AdminFeedback from '@/views/AdminFeedback'
 Vue.use(Router)
 
 const isAuthenticated = (to, from, next) => {
@@ -136,6 +137,11 @@ export default new Router({
           path: '/admin/orders',
           name: 'adminOrders',
           component: AdminOrders
+        },
+        {
+          path: '/admin/feedback',
+          name: 'adminFeedback',
+          component: AdminFeedback
         }
       ]
     }

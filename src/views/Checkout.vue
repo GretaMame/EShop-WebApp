@@ -147,21 +147,21 @@ export default {
       })
     },
     loadLocalCart () {
-      var cart = this.$store.getters.localCart
-      if (!cart || cart.length === 0) {
+      var localCart = this.$store.getters.localCart
+      if (!localCart || localCart.length === 0) {
         return Promise.resolve()
       }
 
       var filter = ''
-      for (var i = 0; i < cart.length; i++) {
-        filter += `id eq ${cart[i].ItemID} or `
+      for (var i = 0; i < localCart.length; i++) {
+        filter += `id eq ${localCart[i].ItemID} or `
       }
       filter = filter.slice(0, -4)
       var select = 'id,sku,name,price,attributes&$expand=attributes,pictures($select=url)'
 
       return this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`).then(response => {
         this.cart.items = response.data.value
-        this.prepareItems(cart)
+        this.prepareItems(localCart)
         this.calculateSubtotal()
       })
     },
@@ -172,10 +172,10 @@ export default {
         }
       })
     },
-    prepareItems (cart) {
-      if (!cart) return
-      for (var i = 0; i < cart.length; i++) {
-        this.cart.items[i]['count'] = cart[i].Count
+    prepareItems (localCart) {
+      if (!localCart) return
+      for (var i = 0; i < localCart.length; i++) {
+        this.cart.items[i]['count'] = localCart[i].Count
         this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0].url
       }
     },
