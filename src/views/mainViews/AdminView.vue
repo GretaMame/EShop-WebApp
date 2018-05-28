@@ -13,7 +13,7 @@
   </el-container>
 </template>
 <script>
-import AdminNavigation from '@/components/Navigation/Admin'
+import AdminNavigation from '@/components/Navigation/AdminNavigation'
 import StatusBar from '@/components/Import/StatusBar'
 import EventBus from '@/eventBus/index.js'
 
@@ -24,7 +24,6 @@ export default{
   },
   data () {
     return {
-      importErrors: [],
       file: []
     }
   },
@@ -51,7 +50,7 @@ export default{
         .then(Response => {
           console.log(Response.data)
           if (Response.data.errors && Response.data.errors.length > 0) {
-            this.importErrors = Response.data.errors
+            this.$store.dispatch('setImportErrors', Response.data.errors)
             this.$notify({
               message: 'Import completed with errors',
               type: 'warning'
@@ -62,9 +61,10 @@ export default{
               type: 'success'
             })
           }
+          console.log(Response.data.items)
+          this.$store.dispatch('setImportedItems', Response.data.items)
           window.onbeforeunload = undefined
           this.$store.dispatch('endImport')
-          this.$store.dispatch('setImportErrors', this.importErrors)
         })
         .catch(error => {
           this.$notify({

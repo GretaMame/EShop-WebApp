@@ -32,24 +32,10 @@
     </div>
   </div>
 </template>
-<script>
-  import EventBus from '@/eventBus'
-  export default {
-    mounted () {
-      EventBus.$on('exportStarted', () => {
-        console.log('im working')
-        window.onbeforeunload = () => {
-          return 'export running'
-        }
-      })
-      EventBus.$on('exportFinished', () => {
-        console.log('im working nooot')
-        window.onbeforeunload = undefined
-      })
-    }
-  }
 
+<script>
 </script>
+
 <style>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
