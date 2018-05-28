@@ -13,12 +13,12 @@
             <i class="el-icon-goods"></i>
             Items
           </template>
-        <el-menu-item index="2-1" :route="{name:'adminItems'}">
-          <span slot="title">View items</span>
-        </el-menu-item>
-        <el-menu-item index="2-2" :route="{name: 'adminImportItems'}">
-        <span slot="title">Import</span>
-        </el-menu-item>
+          <el-menu-item index="2-1" :route="{name:'adminItems'}">
+            <span slot="title">View items</span>
+          </el-menu-item>
+          <el-menu-item index="2-2" :route="{name: 'adminImportItems'}">
+            <span slot="title">Import</span>
+          </el-menu-item>
         </el-submenu>
         <el-menu-item index="3" :route="{name:'adminUsers'}">
           <i class="el-icon-service"></i>
@@ -37,13 +37,11 @@
   export default {
     mounted () {
       EventBus.$on('exportStarted', () => {
-        console.log('im working')
         window.onbeforeunload = () => {
           return 'export running'
         }
       })
       EventBus.$on('exportFinished', () => {
-        console.log('im working nooot')
         window.onbeforeunload = undefined
       })
     }
@@ -55,10 +53,13 @@
     width: 200px;
     min-height: 300px;
   }
+
   .el-menu {
     text-align: start;
   }
+
   .gd_title {
     padding-left: 20px;
   }
+
 </style>

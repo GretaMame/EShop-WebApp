@@ -3,7 +3,6 @@
     <div>
       <el-cascader @blur="left" :disabled="exportStarted" v-model="exportCategoryObj" placeholder="Select Category/Subcategory"
         class="select-class" v-loading="categoriesLoading" :options="options" change-on-select></el-cascader>
-      </el-select>
       <div v-if="noCategorySelected" class="gd-err-msg">
         Select category or subcategory first.
       </div>
