@@ -13,12 +13,12 @@
             <i class="el-icon-goods"></i>
             Items
           </template>
-        <el-menu-item index="2-1" :route="{name:'adminItems'}">
-          <span slot="title">View items</span>
-        </el-menu-item>
-        <el-menu-item index="2-2" :route="{name: 'adminImportItems'}">
-        <span slot="title">Import</span>
-        </el-menu-item>
+          <el-menu-item index="2-1" :route="{name:'adminItems'}">
+            <span slot="title">View items</span>
+          </el-menu-item>
+          <el-menu-item index="2-2" :route="{name: 'adminImportItems'}">
+            <span slot="title">Import</span>
+          </el-menu-item>
         </el-submenu>
         <el-menu-item index="3" :route="{name:'adminUsers'}">
           <i class="el-icon-service"></i>
@@ -32,6 +32,23 @@
     </div>
   </div>
 </template>
+<<<<<<< HEAD:src/components/Navigation/AdminNavigation.vue
+=======
+<script>
+  import EventBus from '@/eventBus'
+  export default {
+    mounted () {
+      EventBus.$on('exportStarted', () => {
+        window.onbeforeunload = () => {
+          return 'export running'
+        }
+      })
+      EventBus.$on('exportFinished', () => {
+        window.onbeforeunload = undefined
+      })
+    }
+  }
+>>>>>>> 4a98393b1af0df41776ca4cc3a0534a2a62545b6:src/components/Navigation/Admin.vue
 
 <script>
 </script>
@@ -41,10 +58,13 @@
     width: 200px;
     min-height: 300px;
   }
+
   .el-menu {
     text-align: start;
   }
+
   .gd_title {
     padding-left: 20px;
   }
+
 </style>
