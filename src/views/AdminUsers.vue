@@ -210,7 +210,7 @@ export default{
 
         this.axios.post('admin/users/changerole', {
           Role: role,
-          Email: user.Email
+          Email: user.email
         })
         .then(() => this.fetchData())
         .catch((err) => {
