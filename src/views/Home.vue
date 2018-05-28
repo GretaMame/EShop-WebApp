@@ -63,15 +63,14 @@ export default {
       categoryName: null,
       subcategoryName: null,
       filterAttributes: [],
-      checkBoxesStates: [],
-      filtersBefore: 0
+      checkBoxesStates: []
     }
   },
   components: {
     ItemCard
   },
   created () {
-    this.fetchData()
+    this.fetchData(true)
   },
   watch: {
     // call again the method if the route changes
@@ -87,11 +86,9 @@ export default {
       this.fetchData()
     },
     routeChanged () {
-      this.checkBoxesStates = []
-      this.filtersBefore = 0
-      this.fetchData()
+      this.fetchData(true)
     },
-    fetchData () {
+    fetchData (loadFilters) {
       this.loading = true
       this.items = []
       this.categoryName = null
@@ -128,11 +125,11 @@ export default {
         console.log(err)
         this.loading = false
       })
-      if (this.categoryID) {
+      if (this.categoryID && loadFilters) {
         setTimeout(() => {
           this.filterAttributes = []
           this.loadingFilters = true
-          this.axios.get(`odata/Items?$select=attributes&$expand=attributes${filter ? `&$filter=${filter}` : ''}`).then(response => {
+          this.axios.get(`odata/Items?$select=attributes&$expand=attributes&$filter=${this.getCategoryFilter()}`).then(response => {
             this.formatFilters(response)
             this.loadingFilters = false
             })
@@ -191,12 +188,31 @@ export default {
     },
     getFiltersFilter () {
       let filter = ''
+      let attributes = []
       for (let i = 0; i < this.checkBoxesStates.length; i++) {
         let attrParts = this.checkBoxesStates[i].split('::')
         let id = attrParts[0]
         let value = attrParts[1]
-        filter += `attributes/any(a: a/attributeID eq ${id} and a/value eq '${value}')`
-        if ((i + 1) !== this.checkBoxesStates.length) {
+        let existingAttribute = attributes.find(a => a.id === id)
+        if (existingAttribute) {
+          existingAttribute.values.push(value)
+        } else {
+          attributes.push({id: id, values: [value]})
+        }
+      }
+
+      for (let i = 0; i < attributes.length; i++) {
+        filter += `attributes/any(a: a/attributeID eq ${attributes[i].id} and (`
+        for (let j = 0; j < attributes[i].values.length; j++) {
+          filter += `a/value eq '${attributes[i].values[j].replace(/'/g, "''")}'`
+          if ((j + 1) !== attributes[i].values.length) {
+            filter += ' or '
+          } else {
+            filter += ')'
+          }
+        }
+        filter += ')'
+        if ((i + 1) !== attributes.length) {
           filter += ' and '
         }
       }
@@ -212,10 +228,7 @@ export default {
       return filter
     },
     onFilterApplied (filters) {
-      if ((this.filtersBefore < filters.length && this.items.length > 1) || this.filtersBefore > filters.length) {
-        this.fetchData()
-      }
-      this.filtersBefore = filters.length
+      this.fetchData()
     }
   }
 }
@@ -253,7 +266,7 @@ export default {
     box-sizing: border-box;
     padding-left: 10px;
   }
-  .filterCheckBox {
+  .el-checkbox.filterCheckBox {
     display: block;
     margin: 0;
   }

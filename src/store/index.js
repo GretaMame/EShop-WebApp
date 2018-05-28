@@ -8,13 +8,17 @@ const store = new Vuex.Store({
   state: {
     user: {
       authenticated: false,
-      profile: null
+      profile: null,
+      role: ''
     },
     cart: null
   },
   getters: {
     isAuthenticated: state => {
       return state.user.authenticated
+    },
+    isAdminAuthenticated: state => {
+      return state.user.authenticated && state.user.role === 'Admin'
     },
     localCart: state => {
       return state.cart
@@ -30,8 +34,8 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    logIn ({ commit }) {
-      commit('login')
+    logIn ({ commit }, role) {
+      commit('login', role)
     },
     logOut ({ commit }) {
       commit('logout')
@@ -50,8 +54,9 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    login (state) {
+    login (state, role) {
       state.user.authenticated = true
+      state.user.role = role
     },
     logout (state) {
       state.user.authenticated = false

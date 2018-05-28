@@ -84,7 +84,7 @@
       postLogin (response) {
         EventBus.$emit('onLogin')
         this.loading = false
-        this.$store.dispatch('logIn')
+        this.$store.dispatch('logIn', response.data)
         this.$router.push(this.$route.query.redirect || '/home')
       },
       redirect (windowName) {
