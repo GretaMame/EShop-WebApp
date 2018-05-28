@@ -55,14 +55,10 @@
     width: 200px;
     min-height: 300px;
   }
-<<<<<<< HEAD
-
-=======
   .el-menu {
     text-align: start;
   }
   .gd_title {
     padding-left: 20px;
   }
->>>>>>> 4429f5e4af7d8de59108f37f979a83bca10701e6
 </style>
