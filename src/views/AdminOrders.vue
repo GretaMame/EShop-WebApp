@@ -241,7 +241,7 @@ export default{
 
       let deliveryAddress = this.openOrder.deliveryAddress
 
-      return `${deliveryAddress.Name} ${deliveryAddress.Surname}\n${deliveryAddress.Street}, ${deliveryAddress.City} ${deliveryAddress.Country} \n${deliveryAddress.Postcode}`
+      return `${deliveryAddress.Name} ${deliveryAddress.Surname}\n${deliveryAddress.Street}\n${deliveryAddress.Postcode} ${deliveryAddress.City}\n${deliveryAddress.Country}`
     }
   }
 }
