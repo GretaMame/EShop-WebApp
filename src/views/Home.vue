@@ -19,7 +19,7 @@
           <span v-if="subcategoryID">/ {{subcategoryName}}</span>
         </div>
         <div v-if="items && items[0]">
-          <el-row>
+          <el-row class="gd-min-height-70vh">
             <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="12" :md="8" :lg="6">
               <div class="gd-clickable" @click="onItemClicked(item)">
                 <ItemCard :item="item"></ItemCard>
@@ -83,9 +83,9 @@ export default {
       items: [],
       loading: false,
       loadingFilters: false,
-      perPage: 20,
+      perPage: 2,
       totalItems: 0,
-      pageOptions: [10, 20, 40, 100, 200],
+      pageOptions: [2, 10, 20, 40, 100, 200],
       currentPage: 1,
       categoryName: null,
       subcategoryName: null,
@@ -263,7 +263,6 @@ export default {
 <style scoped>
   .gd-homeBread {
     font-size: 24px;
-    padding-bottom: 20px;
     width: 100%;
     text-align: left;
   }

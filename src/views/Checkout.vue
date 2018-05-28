@@ -2,12 +2,12 @@
   <div>
     <div v-if="!cart.items || cart.items.length === 0" v-loading="loading">
         <el-card v-loading="loading">
-          <h2>
+          <h2 class="gd-min-height-70vh">
             Your cart is empty. Please add items to your cart.
           </h2>
         </el-card>
     </div>
-    <el-card v-if="cart.items && cart.items.length !== 0">
+    <el-card v-if="cart.items && cart.items.length !== 0" class="gd-min-height-77vh">
       <el-steps
         :active="activeIndex"
         finish-status="success"
