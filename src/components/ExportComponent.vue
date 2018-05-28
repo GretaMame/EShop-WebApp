@@ -213,9 +213,6 @@
   .disabled:hover {
     cursor: wait;
   }
-
-  .select-class {}
-
   ul {
     list-style-type: none;
   }

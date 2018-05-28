@@ -29,14 +29,24 @@ export default{
     }
   },
   mounted () {
-    EventBus.$on('beginImport', file => {
-      console.log()
+    EventBus.$on('importStarted', file => {
       this.importItems(file)
+    })
+    EventBus.$on('exportStarted', () => {
+      window.onbeforeunload = () => {
+        return 'export running'
+      }
+    })
+    EventBus.$on('exportFinished', () => {
+      window.onbeforeunload = undefined
     })
   },
   methods: {
     importItems (file) {
       this.$store.dispatch('startImport')
+      window.onbeforeunload = () => {
+        return 'export running'
+      }
       this.axios.get('/admin/items/import')
         .then(Response => {
           console.log(Response.data)
@@ -52,17 +62,18 @@ export default{
               type: 'success'
             })
           }
+          window.onbeforeunload = undefined
           this.$store.dispatch('endImport')
           this.$store.dispatch('setImportErrors', this.importErrors)
-          // EventBus.$emit('importCompleted', this.importErrors)
         })
         .catch(error => {
           this.$notify({
-            message: 'Oops! :(',
+            message: 'Oops! Import could not be completed',
             type: 'error'
           })
           console.log(error)
-          this.$store.dispatch('endImport', null)
+          window.onbeforeunload = undefined
+          this.$store.dispatch('endImport')
         })
     }
   }
@@ -78,4 +89,3 @@ export default{
     height: 26px !important;
   }
 </style>
-

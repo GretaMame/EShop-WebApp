@@ -52,12 +52,9 @@ export default {
       file: []
     }
   },
-  mounted () {
-    console.log(this.$store.getters.importErrors)
-  },
   methods: {
     importItems () {
-      EventBus.$emit('beginImport', this.file)
+      EventBus.$emit('importStarted', this.file)
     }
   }
 }
