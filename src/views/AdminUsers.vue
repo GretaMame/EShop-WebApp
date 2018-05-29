@@ -223,7 +223,7 @@ export default{
     buildPossibleRoles (user) {
       var possibleValues = ['Admin', 'User', 'Blocked']
 
-      return possibleValues.filter(val => val !== user.Role)
+      return possibleValues.filter(val => val !== user.role)
     },
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length

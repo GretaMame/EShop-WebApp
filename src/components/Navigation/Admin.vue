@@ -15,11 +15,15 @@
           <i class="el-icon-goods"></i>
           <span slot="title">Items</span>
         </el-menu-item>
-        <el-menu-item index="3" :route="{name:'adminUsers'}">
+        <el-menu-item index="3" :route="{name:'adminArchivedItems'}">
+          <i class="el-icon-delete"></i>
+          <span slot="title">Archived Items</span>
+        </el-menu-item>
+        <el-menu-item index="4" :route="{name:'adminUsers'}">
           <i class="el-icon-service"></i>
           <span slot="title">Users</span>
         </el-menu-item>
-        <el-menu-item index="4" :route="{name:'adminCategories'}">
+        <el-menu-item index="5" :route="{name:'adminCategories'}">
           <i class="el-icon-d-caret"></i>
           <span slot="title">Categories</span>
         </el-menu-item>
