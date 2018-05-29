@@ -1,11 +1,11 @@
 <template>
   <el-row type="flex">
-    <el-col :span="6" class="gd-filters hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
+    <el-col :span="6" class="hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
       <h2>Filters</h2>
-      <el-collapse>
+      <el-collapse class=gd-filters>
         <el-collapse-item class="gd-filterName" :title="attribute.name" v-for="attribute in filterAttributes" :key="attribute.id">
           <el-checkbox-group class="filterCheckBoxGroup" v-model="checkBoxesStates" @change="onFilterApplied">
-              <el-checkbox class="filterCheckBox" :label="`${attribute.id}::${value.value}`"
+              <el-checkbox class="filterCheckBox" :label="`${attribute.id}::${value.value}`" :disabled="loading"
                 v-for="value in attribute.values" :key="value.value">{{`${value.value} (${value.count})`}}</el-checkbox>
           </el-checkbox-group>
         </el-collapse-item>
@@ -113,6 +113,7 @@ export default {
       this.fetchData()
     },
     routeChanged () {
+      this.checkBoxesStates = []
       this.fetchData(true)
     },
     fetchData (loadFilters) {
@@ -288,7 +289,6 @@ export default {
   }
   .gd-filters {
     min-height: 85vh;
-    overflow-y:auto;
     overflow-x: hidden;
     box-sizing: border-box;
     padding-left: 10px;
