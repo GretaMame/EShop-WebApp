@@ -2,7 +2,7 @@
   <el-card class="gd_wrapper" v-loading="loading">
     <h2>Order history</h2>
     <el-card
-      class="gd_order"
+      class="gd_order gd-min-height-70vh"
       v-for="order in orders"
       :key="order.id"
       shadow="hover">
@@ -113,42 +113,45 @@
           </el-collapse-item>
         </el-collapse>
       </el-card>
-       <el-row>
-            <el-col class="hidden-xs-only">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
-                :page-sizes="pageOptions"
-                :page-size="perPage"
-                background
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalOrders">
-              </el-pagination>
-            </el-col>
-            <el-col class="hidden-sm-and-up">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :page-sizes="pageOptions"
-                :page-size="perPage"
-                small
-                layout="total, sizes"
-                :total="totalOrders">
-              </el-pagination>
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
-                :page-size="perPage"
-                :pager-count="5"
-                background
-                small
-                layout="prev, pager, next"
-                :total="totalOrders">
-              </el-pagination>
-            </el-col>
-          </el-row>
+      <el-row v-if="order">
+        <el-col class="hidden-xs-only">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="pageOptions"
+            :page-size="perPage"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalOrders">
+          </el-pagination>
+        </el-col>
+        <el-col class="hidden-sm-and-up">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-sizes="pageOptions"
+            :page-size="perPage"
+            small
+            layout="total, sizes"
+            :total="totalOrders">
+          </el-pagination>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="perPage"
+            :pager-count="5"
+            background
+            small
+            layout="prev, pager, next"
+            :total="totalOrders">
+          </el-pagination>
+        </el-col>
+      </el-row>
+      <el-row v-else>
+        <h1 style="padding-top: 10%">Your order history is empty</h1>
+      </el-row>
   </el-card>
 </template>
 
