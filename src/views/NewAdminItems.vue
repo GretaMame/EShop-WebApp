@@ -1,6 +1,6 @@
 <template>
   <div class="main-div">
-    <el-container>
+    <el-container v-loading="posting">
       <el-header>
         <el-row>
           <el-col :span="2">
@@ -63,11 +63,14 @@
                     <el-input type="textarea" v-model="newItemForm.description"></el-input>
                   </el-form-item>
                   <el-form-item label="Price" prop="price">
-                    <el-input class="small-input-fix" :controls="false" placeholder="Price" v-model.lazy="newItemForm.price" v-money="money"></el-input>
+                    <el-input v-if="!reloadMoney" class="small-input-fix" :controls="false" placeholder="Price" v-model.lazy="newItemForm.price" v-money="money"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="13">
-                  PICTURES/ATTRIBUTES
+                <el-col class="attributes-photos-container" :span="13">
+                  <el-tabs v-model="activeManagerName">
+                    <el-tab-pane label="Attributes" name="first"><attributes-manager ref="attributesManager" v-on:attributes-changed="(atts) => attributes = atts" class="attributes-manager"></attributes-manager></el-tab-pane>
+                    <el-tab-pane label="Pictures" name="second"><photos-manager ref="photosManager" v-on:pictures-changed="(pics) => pictures = pics" class="photos-manager"></photos-manager></el-tab-pane>
+                  </el-tabs>
                 </el-col>
               </el-row>
           </el-card>
@@ -78,13 +81,19 @@
 </template>
 <script>
 import {VMoney} from 'v-money'
-
+import AttributesManager from '@/components/admin/AttributesManager'
+import PhotosManager from '@/components/admin/PhotosManager'
 export default {
+  components: {
+    AttributesManager,
+    PhotosManager
+  },
   directives: {
     money: VMoney
   },
   data () {
     return {
+      posting: false,
       newItemForm: {
         name: '',
         sku: '',
@@ -92,6 +101,8 @@ export default {
         price: 0.00,
         categoryid: null
       },
+      pictures: [],
+      attributes: [],
       selectedCategoryId: null,
       categories: [],
       subcategories: [],
@@ -150,7 +161,9 @@ export default {
         prefix: '€ ',
         suffix: '',
         precision: 2
-      }
+      },
+      activeMangaerName: 'first',
+      reloadMoney: false
     }
   },
   created () {
@@ -158,7 +171,15 @@ export default {
   },
   methods: {
     resetForm (formName) {
+      this.$refs['attributesManager'].reset()
+      this.$refs['photosManager'].reset()
       this.$refs[formName].resetFields()
+      this.selectedCategoryId = null
+      this.reloadMoney = true
+      this.$nextTick(() => {
+        this.newItemForm.price = 0.00
+        this.reloadMoney = false
+      })
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -198,15 +219,35 @@ export default {
     },
     addItem () {
       this.posting = true
-      let formCopy = JSON.parse(JSON.stringify(this.newItemForm))
-      formCopy.price = parseFloat(formCopy.price.split(' ')[1])
-      this.axios.post('admin/items/create', formCopy).then(response => {
+
+      var uploadForm = new FormData()
+      for (let key in this.newItemForm) {
+        uploadForm.append(key, this.newItemForm[key])
+      }
+      uploadForm.set('price', parseFloat(this.newItemForm.price.split(' ')[1]))
+
+      this.attributes
+        .forEach((attribute, index) => {
+          uploadForm.append(`attributes[${index}].attributeId`, attribute.id)
+          uploadForm.append(`attributes[${index}].value`, attribute.value)
+          uploadForm.append(`attributes[${index}].key`, attribute.key)
+        })
+
+      this.pictures.filter(x => !x.isFile).map(x => x.url)
+        .forEach(picture => uploadForm.append('pictureUrls', picture))
+
+      this.pictures.filter(x => x.isFile).map(x => x.file)
+        .forEach(picture => uploadForm.append('pictureFiles', picture))
+
+      this.axios.post('admin/items/create', uploadForm).then(response => {
+        this.posting = false
         this.resetForm('newItemForm')
         this.$notify.success({
           title: 'Success',
           message: 'Succesfully added item'
         })
       }).catch(err => {
+        this.posting = false
         this.$notify.error({
           title: 'Error',
           message: 'There was a problem while getting the category: ' + err
@@ -225,7 +266,17 @@ export default {
   }
   .small-input-fix{
     float: left;
-    margin-left: 8px
   }
+  .attributes-photos-container{
+    height: 100%;
+    padding-bottom: 8px;
+    padding-left: 8px;
+  }
+    .attributes-photos-container .attributes-manager{
+      height: 40%;
+    }
+    .attributes-photos-container .photos-manager{
+      height: 60%;
+    }
 </style>
 

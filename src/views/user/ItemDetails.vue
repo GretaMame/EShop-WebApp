@@ -2,12 +2,12 @@
   <el-row>
     <el-card v-loading="loading" class="box-card" >
       <el-row>
-        <el-breadcrumb v-if="item.itemCategory" class="gd-itemDetailsBread">
-          <el-breadcrumb-item :to="`/home/${item.itemCategory.id}`">
-            {{item.itemCategory.name}}
+        <el-breadcrumb class="gd-itemDetailsBread">
+          <el-breadcrumb-item v-if="item.category" :to="`/home/${item.category.id}`">
+            {{item.category.name}}
           </el-breadcrumb-item>
-          <el-breadcrumb-item :to="`/home/${item.itemCategory.id}/${item.itemCategory.subCategory.id}`">
-            {{item.itemCategory.subCategory.name}}
+          <el-breadcrumb-item v-if="item.subCategory" :to="`/home/${item.subCategory.id}/${item.subCategory.id}`">
+            {{item.subCategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
             {{item.name}}
@@ -41,7 +41,11 @@
               </el-col>
             </el-row>
             <el-row class="gd-itemPrice">
-              <span>{{item.price}} €</span>
+              <span v-if="item.discount === 0">{{item.price}} €</span>
+              <span v-else>
+                <el-row class="gd-itemPrice-strike">{{item.price}} €</el-row>
+                <el-row class="gd-discount-price">{{item.discount}} €</el-row>
+              </span>
             </el-row>
             <el-row class="gd-addToCard">
               <el-input-number size="medium" :min="1" v-model="count"/>
@@ -79,7 +83,7 @@ export default {
   methods: {
     loadItemDetails () {
       this.loading = true
-      this.axios.get(`odata/Items?$expand=attributes,pictures,itemCategory($expand=subCategory)&$filter=id eq ${this.id}`).then(response => {
+      this.axios.get(`odata/Items?$expand=attributes,pictures,category,subCategory&$filter=id eq ${this.id}`).then(response => {
         if (response.data.value && response.data.value[0]) {
           this.item = response.data.value[0]
         }
@@ -200,6 +204,11 @@ export default {
   .gd-itemPrice {
     font-size: 24px;
     padding-top: 24px;
+    color: midnightblue;
+  }
+
+  .gd-itemPrice-strike{
+    text-decoration: line-through solid;
   }
 
   .gd-addToCard {
@@ -218,4 +227,10 @@ export default {
     .gd-description h2 {
       padding-top: 24px;
     }
+  
+  .gd-discount-price{
+    font-size: 24px;
+    color:brown;
+    font-weight: bold;
+  }
 </style>
