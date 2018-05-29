@@ -28,12 +28,13 @@
           class="gd_left_text"
           max-height="400">
           <el-table-column label="SKU" prop="sku" width="100px" />
-          <el-table-column label="Name" prop="name" width="200px" />
+          <el-table-column label="Name" prop="name" width="170px" />
           <el-table-column label="Description" prop="description">
             <template slot-scope="scope">
               <el-popover placement="top-start" title="Description" width="400" trigger="hover" :content="scope.row.description">
                 <div slot="reference" class="description-cell">
-                  {{scope.row.description}}
+                    <span v-if="scope.row.description.length>100">{{scope.row.description.substring(0, 100)}}...</span>
+                    <span v-else>{{scope.row.description}}</span>
                 </div>
               </el-popover>
             </template>
@@ -43,23 +44,24 @@
               {{scope.row.price}} €
             </template>
           </el-table-column>
-          <el-table-column label="Category" prop="itemCategory" width="130px">
+          <el-table-column label="Category" prop="category" width="130px">
             <template slot-scope="scope">
-              {{scope.row.itemCategory.name}} / {{scope.row.itemCategory.subCategory.name}}
+              {{scope.row.category.name}} / {{scope.row.subCategory.name}}
             </template>
           </el-table-column>
-          <!-- <el-table-column label="Attributes" prop="attributes">
+          <el-table-column label="Attributes" prop="attributes">
             <template slot-scope="scope">
-              <el-popover placement="top-start" title="Attributes" width="400" trigger="hover" :content="scope.row.attributes">
+              <el-popover placement="top-start" title="Attributes" width="400" trigger="hover" :content="concatinateAttributes(scope.row.attributes)">
                 <div slot="reference" class="description-cell">
-                  {{scope.row.attributes}}
+                  <span v-if="concatinateAttributes(scope.row.attributes).length > 100">{{concatinateAttributes(scope.row.attributes).substring(0, 100)}}...</span>
+                  <span v-else>{{concatinateAttributes(scope.row.attributes)}}</span>
                 </div>
               </el-popover>
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column label="Pictures" prop="pictures" width="130px">
             <template slot-scope="scope">
-              <el-carousel height="150px" :autoplay="false" indicator-position="none">
+              <el-carousel height="150px" :autoplay="false" indicator-position="none" v-if="scope.row.pictures">
                 <el-carousel-item v-for="picture in scope.row.pictures" :key="picture.id">
                   <img class="gd_picture" :src="picture.url">
                 </el-carousel-item>
@@ -101,13 +103,14 @@ export default {
       EventBus.$emit('importStarted', this.file)
     },
     concatinateAttributes (attributeList) {
-      var attributes
+      var attributes = ''
       if (attributeList) {
         for (var i = 0; i < attributeList.length; i++) {
-          attributes = attributes + attributeList[i].name + ' : ' + attributeList[i].value + ', '
+          attributes = attributes + attributeList[i].name + ': ' + attributeList[i].value + ', '
         }
-        attributes = attributes.slice(0, -2)
+        attributes = attributes.substring(0, attributes.length - 2)
       }
+      return attributes
     },
     getFile () {
 

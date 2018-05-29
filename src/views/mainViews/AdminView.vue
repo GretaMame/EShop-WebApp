@@ -72,6 +72,8 @@ export default{
             type: 'error'
           })
           console.log(error)
+          this.$store.dispatch('setImportedItems', null)
+          this.$store.dispatch('setImportErrors', error.data.error.message)
           window.onbeforeunload = undefined
           this.$store.dispatch('endImport')
         })
