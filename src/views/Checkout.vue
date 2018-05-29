@@ -160,7 +160,7 @@ export default {
       var select = 'id,sku,name,price,attributes&$expand=attributes,pictures($select=url)'
 
       return this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`).then(response => {
-        this.cart.items = response.data.value
+        this.cart = {items: response.data.value}
         this.prepareItems(localCart)
         this.calculateSubtotal()
       })
@@ -173,10 +173,14 @@ export default {
       })
     },
     prepareItems (localCart) {
-      if (!localCart) return
-      for (var i = 0; i < localCart.length; i++) {
-        this.cart.items[i]['count'] = localCart[i].Count
-        this.cart.items[i]['mainPicture'] = this.cart.items[i].pictures[0].url
+      if (!localCart && !this.cart.items) return
+      for (let i = 0; i < this.cart.items.length; i++) {
+        let currItem = this.cart.items[i]
+        let itemInLocal = localCart.find(i => i.ItemID === currItem.id)
+        if (itemInLocal) {
+          this.$set(this.cart.items[i], 'count', itemInLocal.Count)
+        }
+        this.$set(this.cart.items[i], 'mainPicture', this.cart.items[i].pictures[0].url)
       }
     },
     changeAddress (newAddress) {
