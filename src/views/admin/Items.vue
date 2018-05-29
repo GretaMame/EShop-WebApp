@@ -9,7 +9,7 @@
             </router-link>
           </el-col>
           <el-col :span="3">
-            <el-button :disabled="selectedItems.length === 0" type="danger" @click="deleteSelected">Delete selected</el-button>
+            <el-button :disabled="selectedItems.length === 0" type="danger" @click="deleteSelected">Archive selected</el-button>
           </el-col>
           <el-col :span="10">
             <el-input placeholder="Search" v-model="searchText">
@@ -42,9 +42,13 @@
           </el-table-column>
           <el-table-column label="Price" prop="price" width="100px" />
           <el-table-column label="Category" prop="category" width="130px" />
+          <el-table-column label="Archived" prop="isDeleted" width="80px">
+            <template slot-scope="scope">
+              {{ scope.row.isDeleted ? 'Yes' : 'No' }}
+            </template>
+          </el-table-column>
           <el-table-column fixed="right" label="Operations" width="120" class="table-actions">
             <template slot-scope="scope">
-              <el-button class="table-action-button" @click="managePictures(scope.row)" type="text" size="small">Manage pictures</el-button>
               <router-link :to="{ name: 'adminItemsAdd' }">
                 <el-button class="table-action-button" type="text" size="small">Edit item</el-button>
               </router-link>
@@ -108,7 +112,21 @@
           cancelButtonText: 'No',
           type: 'Warning'
         }).then(() => {
-
+          this.loading = true
+          let idsToArchive = this.selectedItems.map(x => x.id)
+          this.axios.post('admin/Items/archive', idsToArchive)
+            .then(() => {
+              this.loading = false
+              this.fetchData()
+            })
+            .catch(err => {
+              this.loading = false
+              console.log(err)
+              this.$notify.error({
+                title: 'Error',
+                message: 'There was a problem while archiving the items: ' + err
+              })
+            })
         })
       },
       headerCellStyle () {
