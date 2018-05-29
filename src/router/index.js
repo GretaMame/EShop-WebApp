@@ -148,6 +148,13 @@ export default new Router({
           beforeEnter: isAdminAuthenticated
         },
         {
+          path: '/admin/items/edit/:itemid',
+          name: 'adminItemsEdit',
+          component: NewAdminItems,
+          beforeEnter: isAdminAuthenticated,
+          props: true
+        },
+        {
           path: '/admin/items/import',
           name: 'adminImportItems',
           component: AdminImportItems

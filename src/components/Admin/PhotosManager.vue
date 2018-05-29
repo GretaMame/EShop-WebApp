@@ -55,12 +55,14 @@ export default {
       deep: true
     }
   },
-  mounted () {
-    if (this.itemId) {
-      // implement load on item id
-    }
-  },
   methods: {
+    loadInitial (initialPictures) {
+      if (!initialPictures) {
+        return
+      }
+
+      this.pictures = initialPictures
+    },
     reset () {
       this.pictures = []
       this.selectedPictureIndex = 0
