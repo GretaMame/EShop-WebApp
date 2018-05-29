@@ -11,7 +11,10 @@ const store = new Vuex.Store({
       profile: null,
       role: ''
     },
-    cart: null
+    cart: null,
+    importInProgress: false,
+    importErrors: null,
+    importedItems: null
   },
   getters: {
     isAuthenticated: state => {
@@ -31,6 +34,15 @@ const store = new Vuex.Store({
         }
       }
       return count
+    },
+    isImportInProgress: state => {
+      return state.importInProgress
+    },
+    importErrors: state => {
+      return state.importErrors
+    },
+    importedItems: state => {
+      return state.importedItems
     }
   },
   actions: {
@@ -51,6 +63,18 @@ const store = new Vuex.Store({
     },
     updateItems ({ commit }, items) {
       commit('updateItems', items)
+    },
+    startImport ({commit}) {
+      commit('startImport')
+    },
+    endImport ({commit}, errors) {
+      commit('endImport')
+    },
+    setImportErrors ({commit}, errors) {
+      commit('setImportErrors', errors)
+    },
+    setImportedItems ({commit}, items) {
+      commit('setImportedItems', items)
     }
   },
   mutations: {
@@ -88,11 +112,24 @@ const store = new Vuex.Store({
       for (var newItem of items) {
         for (var cartItem of state.cart) {
           if (newItem.ItemID === cartItem.ItemID) {
-            cartItem.count = newItem.Count
+            cartItem.Count = newItem.Count
             break
           }
         }
       }
+    },
+    startImport (state) {
+      state.importInProgress = true
+    },
+    endImport (state) {
+      state.importInProgress = false
+    },
+    setImportErrors (state, errors) {
+      state.importErrors = errors
+    },
+    setImportedItems (state, items) {
+      console.log(items)
+      state.importedItems = items
     }
   },
   plugins: [createPersistedState()]

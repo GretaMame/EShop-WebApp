@@ -223,7 +223,7 @@ export default{
     buildPossibleRoles (user) {
       var possibleValues = ['Admin', 'User', 'Blocked']
 
-      return possibleValues.filter(val => val !== user.Role)
+      return possibleValues.filter(val => val !== user.role)
     },
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length
@@ -277,10 +277,10 @@ export default{
     loadUserDetails (user) {
       this.userDetailsLoading = true
 
-      this.axios.get(`admin/orders/single?email=${this.selectedUser.email}`)
+      this.axios.get(`odata/AdminOrders?$filter=userEmail eq '${this.selectedUser.email}'`)
         .then(response => {
           this.userDetailsLoading = false
-          this.selectedUserOrders = response.data.result
+          this.selectedUserOrders = response.data.value
         })
         .catch(err => {
           this.userDetailsLoading = false

@@ -1,11 +1,11 @@
 <template>
   <el-row type="flex">
-    <el-col :span="6" class="gd-filters hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
+    <el-col :span="6" class="hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
       <h2>Filters</h2>
-      <el-collapse>
+      <el-collapse class=gd-filters>
         <el-collapse-item class="gd-filterName" :title="attribute.name" v-for="attribute in filterAttributes" :key="attribute.id">
           <el-checkbox-group class="filterCheckBoxGroup" v-model="checkBoxesStates" @change="onFilterApplied">
-              <el-checkbox class="filterCheckBox" :label="`${attribute.id}::${value.value}`"
+              <el-checkbox class="filterCheckBox" :label="`${attribute.id}::${value.value}`" :disabled="loading"
                 v-for="value in attribute.values" :key="value.value">{{`${value.value} (${value.count})`}}</el-checkbox>
           </el-checkbox-group>
         </el-collapse-item>
@@ -19,7 +19,7 @@
           <span v-if="subcategoryID">/ {{subcategoryName}}</span>
         </div>
         <div v-if="items && items[0]">
-          <el-row>
+          <el-row class="gd-min-height-70vh">
             <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="12" :md="8" :lg="6">
               <div class="gd-clickable" @click="onItemClicked(item)">
                 <ItemCard :item="item"></ItemCard>
@@ -113,6 +113,7 @@ export default {
       this.fetchData()
     },
     routeChanged () {
+      this.checkBoxesStates = []
       this.fetchData(true)
     },
     fetchData (loadFilters) {
@@ -136,15 +137,13 @@ export default {
       var itemsCountPromise = this.axios.get(`odata/Items?$count=true&$top=0${filter ? `&$filter=${filter}` : ''}`)
       itemsCountPromise.then(response => {
         this.totalItems = response.data['@odata.count']
-      }).catch(err => {
-        console.log(err)
       })
 
       var select = 'id,name,price,attributes&$expand=attributes,pictures($select=url)'
       var itemsPromise = this.axios.get(`odata/Items?$select=${select}&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filter ? `&$filter=${filter}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
-      }).catch(err => console.log(err))
+      })
 
       Promise.all([itemsCountPromise, itemsPromise]).then(() => {
         this.loading = false
@@ -248,9 +247,9 @@ export default {
     getCategoryFilter () {
       let filter
       if (this.subcategoryID) {
-        filter = `itemCategory/subCategory/id eq ${this.subcategoryID}`
+        filter = `subCategory/id eq ${this.subcategoryID}`
       } else if (this.categoryID) {
-        filter = `itemCategory/id eq ${this.categoryID}`
+        filter = `category/id eq ${this.categoryID}`
       }
       return filter
     },
@@ -263,7 +262,6 @@ export default {
 <style scoped>
   .gd-homeBread {
     font-size: 24px;
-    padding-bottom: 20px;
     width: 100%;
     text-align: left;
   }
@@ -288,7 +286,6 @@ export default {
   }
   .gd-filters {
     min-height: 85vh;
-    overflow-y:auto;
     overflow-x: hidden;
     box-sizing: border-box;
     padding-left: 10px;

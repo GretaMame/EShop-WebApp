@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Profile from '@/views/account/Profile'
-import Home from '@/views/Home'
-import Login from '@/views/account/Login'
-import Register from '@/views/account/Register'
-import ForgotPassword from '@/views/account/ForgotPassword'
-import AdminUsers from '@/views/AdminUsers'
-import ResetPassword from '@/views/account/ResetPassword'
-import ConfirmAccount from '@/views/account/ConfirmAccount'
-import AdminItems from '@/views/AdminItems'
-import NewAdminItems from '@/views/NewAdminItems'
-import AdminCategories from '@/views/AdminCategories'
-import ItemDetails from '@/views/ItemDetails'
-import Checkout from '@/views/Checkout'
+import Profile from '@/views/user/account/Profile'
+import Home from '@/views/user/Home'
+import Login from '@/views/user/account/Login'
+import Register from '@/views/user/account/Register'
+import ForgotPassword from '@/views/user/account/ForgotPassword'
+import AdminUsers from '@/views/admin/Users'
+import ResetPassword from '@/views/user/account/ResetPassword'
+import ConfirmAccount from '@/views/user/account/ConfirmAccount'
+import AdminItems from '@/views/admin/Items'
+import NewAdminItems from '@/views/admin/NewItems'
+import AdminCategories from '@/views/admin/Categories'
+import ItemDetails from '@/views/user/ItemDetails'
+import Checkout from '@/views/user/Checkout'
 import Store from '@/store'
 import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
+import AdminImportItems from '@/views/admin/ImportItems'
+
+import ArchivedAdminItems from '@/views/AdminArchivedItems'
 import AdminOrders from '@/views/AdminOrders'
 import AdminFeedback from '@/views/AdminFeedback'
 Vue.use(Router)
@@ -145,9 +148,20 @@ export default new Router({
           beforeEnter: isAdminAuthenticated
         },
         {
+          path: '/admin/items/import',
+          name: 'adminImportItems',
+          component: AdminImportItems
+        },
+        {
           path: '/admin/categories',
           name: 'adminCategories',
           component: AdminCategories,
+          beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/archiveditems',
+          name: 'adminArchivedItems',
+          component: ArchivedAdminItems,
           beforeEnter: isAdminAuthenticated
         },
         {

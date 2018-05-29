@@ -1,24 +1,24 @@
 <template>
   <div>
     <el-row class="hidden-sm-and-up">
-      <NavigationMobile 
-        :categories="categories" 
-        :itemsInCart="itemsInCart" 
+      <NavigationMobile
+        :categories="categories"
+        :itemsInCart="itemsInCart"
         v-on:signOut="signOut"/>
     </el-row>
     <el-row class="hidden-xs-only">
-      <Navigation 
-        :categories="categories" 
-        :itemsInCart="itemsInCart" 
+      <Navigation
+        :categories="categories"
+        :itemsInCart="itemsInCart"
         v-on:signOut="signOut"/>
     </el-row>
   </div>
 </template>
 <script>
-  import Navigation from '@/components/Navigation/Desktop'
-  import NavigationMobile from '@/components/Navigation/Mobile'
+  import Navigation from '@/components/Navigation/DesktopNavigation'
+  import NavigationMobile from '@/components/Navigation/MobileNavigation'
   import EventBus from '@/eventBus'
-  
+
   export default {
     components: {
     Navigation,
