@@ -81,7 +81,7 @@
             width="120"
             class="table-actions">
             <template slot-scope="scope">
-              <router-link :to="{ name: 'adminItemsAdd' }">
+              <router-link :to="{ name: 'adminItemsEdit', params: {itemid: scope.row.id} }">
                 <el-button class="table-action-button" type="text" size="small">Edit item</el-button>
               </router-link>
             </template>
