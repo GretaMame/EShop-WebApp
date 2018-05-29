@@ -18,6 +18,9 @@ import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
 import AdminOrders from '@/views/AdminOrders'
 import AdminFeedback from '@/views/AdminFeedback'
+import AdminDiscount from '@/views/AdminDiscount'
+import NewAdminDiscount from '@/views/NewAdminDiscount'
+
 Vue.use(Router)
 
 const isAdminAuthenticated = (to, from, next) => {
@@ -160,6 +163,18 @@ export default new Router({
           path: '/admin/feedback',
           name: 'adminFeedback',
           component: AdminFeedback,
+          beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/discount',
+          name: 'adminDiscount',
+          component: AdminDiscount,
+          beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/discount/add',
+          name: 'adminDiscountAdd',
+          component: NewAdminDiscount,
           beforeEnter: isAdminAuthenticated
         }
       ]
