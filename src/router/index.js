@@ -17,10 +17,9 @@ import Store from '@/store'
 import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
 import AdminImportItems from '@/views/admin/ImportItems'
-
-import ArchivedAdminItems from '@/views/AdminArchivedItems'
-import AdminOrders from '@/views/AdminOrders'
-import AdminFeedback from '@/views/AdminFeedback'
+import ArchivedAdminItems from '@/views/admin/ArchivedItems'
+import AdminOrders from '@/views/admin/Orders'
+import AdminFeedback from '@/views/admin/Feedback'
 Vue.use(Router)
 
 const isAdminAuthenticated = (to, from, next) => {
@@ -146,6 +145,13 @@ export default new Router({
           name: 'adminItemsAdd',
           component: NewAdminItems,
           beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/items/edit/:itemid',
+          name: 'adminItemsEdit',
+          component: NewAdminItems,
+          beforeEnter: isAdminAuthenticated,
+          props: true
         },
         {
           path: '/admin/items/import',

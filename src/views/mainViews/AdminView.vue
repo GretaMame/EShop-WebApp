@@ -1,15 +1,10 @@
 <template>
   <el-container>
-    <el-header>
-       <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
-    </el-header>
     <el-main>
     <AdminNavigation></AdminNavigation>
+    <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
     <router-view/>
     </el-main>
-    <el-footer>
-
-    </el-footer>
   </el-container>
 </template>
 <script>
@@ -84,6 +79,9 @@ export default{
   .el-header {
     padding: 0;
     width: 100%;
+  }
+  .el-main {
+    padding: 16px 8px 0 16px;
   }
   header {
     height: 26px !important;

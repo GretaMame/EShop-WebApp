@@ -106,6 +106,7 @@ export default {
   methods: {
     handleSizeChange (pageSize) {
       this.perPage = pageSize
+      this.currentPage = 1
       this.fetchData()
     },
     handleCurrentChange (currentPage) {
@@ -137,15 +138,13 @@ export default {
       var itemsCountPromise = this.axios.get(`odata/Items?$count=true&$top=0${filter ? `&$filter=${filter}` : ''}`)
       itemsCountPromise.then(response => {
         this.totalItems = response.data['@odata.count']
-      }).catch(err => {
-        console.log(err)
       })
 
       var select = 'id,name,price,attributes&$expand=attributes,pictures($select=url)'
       var itemsPromise = this.axios.get(`odata/Items?$select=${select}&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filter ? `&$filter=${filter}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
-      }).catch(err => console.log(err))
+      })
 
       Promise.all([itemsCountPromise, itemsPromise]).then(() => {
         this.loading = false
@@ -249,9 +248,9 @@ export default {
     getCategoryFilter () {
       let filter
       if (this.subcategoryID) {
-        filter = `itemCategory/subCategory/id eq ${this.subcategoryID}`
+        filter = `subCategory/id eq ${this.subcategoryID}`
       } else if (this.categoryID) {
-        filter = `itemCategory/id eq ${this.categoryID}`
+        filter = `category/id eq ${this.categoryID}`
       }
       return filter
     },

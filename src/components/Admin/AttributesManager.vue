@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card">
+  <el-card class="main-card" v-loading="loading">
     <h4 class="title-text">Attributes</h4>
     <el-row v-for="attribute in attributes" :key="attribute.id">
       <el-col :span="10">{{ attribute.key }}</el-col>
@@ -79,7 +79,8 @@ export default {
       },
       selectedAttribute: {},
       newAttributeNames: [],
-      reloadAttributeNamesBool: false
+      reloadAttributeNamesBool: false,
+      loading: false
     }
   },
   mounted () {
@@ -97,10 +98,6 @@ export default {
           message: 'There was a problem while getting attribute names'
         })
       })
-
-    if (this.itemId) {
-      // implement load on item id
-    }
   },
   watch: {
     attributes: {
@@ -111,6 +108,47 @@ export default {
     }
   },
   methods: {
+    loadInitial (initialAttributes) {
+      this.attributes = []
+
+      if (!initialAttributes) {
+        return
+      }
+
+      let promiseArray = []
+      this.loading = true
+      for (let attribute of initialAttributes) {
+        let promise = this.axios.get(`admin/attributes/values?id=${attribute.attributeID}`)
+
+        promiseArray.push(promise)
+
+        promise
+        .then(response => {
+          this.attributes.push({
+            key: attribute.name,
+            value: attribute.value,
+            id: attribute.attributeID,
+            values: response.data
+          })
+        })
+        .catch(err => {
+          this.newAttribute.valuesLoading = false
+          console.log(err)
+          this.$notify.error({
+            title: 'Error',
+            message: 'There was a problem while getting attribute values'
+          })
+        })
+      }
+
+      Promise.all(promiseArray)
+        .then(() => {
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
     reset () {
       this.attributes = []
       this.newAttribute = {
