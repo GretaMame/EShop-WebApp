@@ -1,9 +1,7 @@
 <template>
   <el-container>
-    <el-header>
-       <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
-    </el-header>
     <el-main>
+      <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
     <AdminNavigation></AdminNavigation>
     <router-view/>
     </el-main>
