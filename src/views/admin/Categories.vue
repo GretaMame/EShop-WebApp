@@ -255,6 +255,5 @@ export default {
 }
 .custom-tree-node{
   font-size: 20px;
-  height: 28px;
 }
 </style>

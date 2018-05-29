@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card gd-min-height-77vh">
     <el-tabs v-model="localActiveName">
       <el-tab-pane name="details">
         <span slot="label"><i class="el-icon-info"></i>My details</span>
@@ -11,7 +11,7 @@
       </el-tab-pane>
       <el-tab-pane name="orderHistory">
         <span slot="label"><i class="el-icon-tickets"></i>My orders</span>
-        <order-history></order-history>
+        <order-history class="gd-min-height-70vh"></order-history>
       </el-tab-pane>
     </el-tabs>
   </el-card>

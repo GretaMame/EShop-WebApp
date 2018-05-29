@@ -1,11 +1,11 @@
 <template>
   <el-row type="flex">
-    <el-col :span="6" class="gd-filters hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
+    <el-col :span="6" class="hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
       <h2>Filters</h2>
-      <el-collapse>
+      <el-collapse class=gd-filters>
         <el-collapse-item class="gd-filterName" :title="attribute.name" v-for="attribute in filterAttributes" :key="attribute.id">
           <el-checkbox-group class="filterCheckBoxGroup" v-model="checkBoxesStates" @change="onFilterApplied">
-              <el-checkbox class="filterCheckBox" :label="`${attribute.id}::${value.value}`"
+              <el-checkbox class="filterCheckBox" :label="`${attribute.id}::${value.value}`" :disabled="loading"
                 v-for="value in attribute.values" :key="value.value">{{`${value.value} (${value.count})`}}</el-checkbox>
           </el-checkbox-group>
         </el-collapse-item>
@@ -19,22 +19,49 @@
           <span v-if="subcategoryID">/ {{subcategoryName}}</span>
         </div>
         <div v-if="items && items[0]">
-          <el-row>
-            <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="8" :md="6" :lg="4">
+          <el-row class="gd-min-height-70vh">
+            <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="12" :md="8" :lg="6">
               <div class="gd-clickable" @click="onItemClicked(item)">
                 <ItemCard :item="item"></ItemCard>
               </div>
             </el-col>
           </el-row>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :page-sizes="pageOptions"
-            :page-size="perPage"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalItems">
-          </el-pagination>
+          <el-row>
+            <el-col class="hidden-xs-only">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-sizes="pageOptions"
+                :page-size="perPage"
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalItems">
+              </el-pagination>
+            </el-col>
+            <el-col class="hidden-sm-and-up">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :page-sizes="pageOptions"
+                :page-size="perPage"
+                small
+                layout="total, sizes"
+                :total="totalItems">
+              </el-pagination>
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-size="perPage"
+                :pager-count="5"
+                background
+                small
+                layout="prev, pager, next"
+                :total="totalItems">
+              </el-pagination>
+            </el-col>
+          </el-row>
         </div>
         <div v-if="items.length === 0 && !loading" class="gd-no-items">
           <icon name="folder-open-o" class="gd-folder-icon"/>
@@ -58,20 +85,19 @@ export default {
       loadingFilters: false,
       perPage: 20,
       totalItems: 0,
-      pageOptions: [20, 40, 100, 200],
+      pageOptions: [10, 20, 40, 100, 200],
       currentPage: 1,
       categoryName: null,
       subcategoryName: null,
       filterAttributes: [],
-      checkBoxesStates: [],
-      filtersBefore: 0
+      checkBoxesStates: []
     }
   },
   components: {
     ItemCard
   },
   created () {
-    this.fetchData()
+    this.fetchData(true)
   },
   watch: {
     // call again the method if the route changes
@@ -88,10 +114,9 @@ export default {
     },
     routeChanged () {
       this.checkBoxesStates = []
-      this.filtersBefore = 0
-      this.fetchData()
+      this.fetchData(true)
     },
-    fetchData () {
+    fetchData (loadFilters) {
       this.loading = true
       this.items = []
       this.categoryName = null
@@ -128,11 +153,11 @@ export default {
         console.log(err)
         this.loading = false
       })
-      if (this.categoryID) {
+      if (this.categoryID && loadFilters) {
         setTimeout(() => {
           this.filterAttributes = []
           this.loadingFilters = true
-          this.axios.get(`odata/Items?$select=attributes&$expand=attributes${filter ? `&$filter=${filter}` : ''}`).then(response => {
+          this.axios.get(`odata/Items?$select=attributes&$expand=attributes&$filter=${this.getCategoryFilter()}`).then(response => {
             this.formatFilters(response)
             this.loadingFilters = false
             })
@@ -191,12 +216,31 @@ export default {
     },
     getFiltersFilter () {
       let filter = ''
+      let attributes = []
       for (let i = 0; i < this.checkBoxesStates.length; i++) {
         let attrParts = this.checkBoxesStates[i].split('::')
         let id = attrParts[0]
         let value = attrParts[1]
-        filter += `attributes/any(a: a/attributeID eq ${id} and a/value eq '${value}')`
-        if ((i + 1) !== this.checkBoxesStates.length) {
+        let existingAttribute = attributes.find(a => a.id === id)
+        if (existingAttribute) {
+          existingAttribute.values.push(value)
+        } else {
+          attributes.push({id: id, values: [value]})
+        }
+      }
+
+      for (let i = 0; i < attributes.length; i++) {
+        filter += `attributes/any(a: a/attributeID eq ${attributes[i].id} and (`
+        for (let j = 0; j < attributes[i].values.length; j++) {
+          filter += `a/value eq '${attributes[i].values[j].replace(/'/g, "''")}'`
+          if ((j + 1) !== attributes[i].values.length) {
+            filter += ' or '
+          } else {
+            filter += ')'
+          }
+        }
+        filter += ')'
+        if ((i + 1) !== attributes.length) {
           filter += ' and '
         }
       }
@@ -212,10 +256,7 @@ export default {
       return filter
     },
     onFilterApplied (filters) {
-      if ((this.filtersBefore < filters.length && this.items.length > 1) || this.filtersBefore > filters.length) {
-        this.fetchData()
-      }
-      this.filtersBefore = filters.length
+      this.fetchData()
     }
   }
 }
@@ -223,7 +264,6 @@ export default {
 <style scoped>
   .gd-homeBread {
     font-size: 24px;
-    padding-bottom: 20px;
     width: 100%;
     text-align: left;
   }
@@ -248,12 +288,11 @@ export default {
   }
   .gd-filters {
     min-height: 85vh;
-    overflow-y:auto;
     overflow-x: hidden;
     box-sizing: border-box;
     padding-left: 10px;
   }
-  .filterCheckBox {
+  .el-checkbox.filterCheckBox {
     display: block;
     margin: 0;
   }

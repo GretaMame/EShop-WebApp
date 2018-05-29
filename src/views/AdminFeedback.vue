@@ -1,14 +1,27 @@
 <template>
-  <div class="users-table">
+  <div class="feedback-table">
     <el-container v-loading="loading">
       <el-header>
-        <el-input placeholder="Search" v-model="searchText">
-          <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
-            <el-option label="Name" value="fullName"></el-option>
-            <el-option label="Email" value="email"></el-option>
-          </el-select>
-          <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
-        </el-input>
+        <el-row>
+          <el-col :span="6">
+            Rating:
+            <el-select v-model="selectedRating" @change="fetchData()">
+              <el-option
+                v-for="rating in possibleRatings"
+                :key="rating"
+                :label="rating"
+                :value="rating"/>
+            </el-select>
+          </el-col>
+          <el-col :span="18">
+            <el-input placeholder="Search" v-model="searchText">
+              <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
+                <el-option label="Email" value="email"></el-option>
+              </el-select>
+              <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
+            </el-input>
+          </el-col>
+        </el-row>
       </el-header>
       <el-main>
         <el-table
@@ -22,32 +35,20 @@
             label="Email"
             prop="email"/>
           <el-table-column
-            label="Name"
-            prop="fullName"/>
-          <el-table-column
-            label="Role"
-            prop="role"
-            width="100px"/>
-          <el-table-column
-            fixed="right"
-            label="Operations"
-            width="140">
+            label="Rating"
+            prop="rating">
             <template slot-scope="scope">
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  Change role<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    v-for="(item, index) in buildPossibleRoles(scope.row)"
-                    :key="`item-${index}`"
-                    @click.native="changeRole(scope.row,item)">
-                    {{ item }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <el-rate
+                v-model="scope.row.rating"
+                disabled
+                text-color="#ff9900">
+              </el-rate>
             </template>
           </el-table-column>
+          <el-table-column
+            label="Message"
+            width="700px"
+            prop="message"/>
         </el-table>
       </el-main>
       <el-footer>
@@ -67,6 +68,8 @@
 export default{
   data () {
     return {
+      selectedRating: 'All',
+      possibleRatings: ['All', '1', '2', '3', '4', '5'],
       loading: false,
       pageOptions: [5, 10, 25, 50],
       perPage: 5,
@@ -75,7 +78,7 @@ export default{
       items: null,
       totalRows: 0,
       searchText: '',
-      searchBy: 'Name'
+      searchBy: 'email'
     }
   },
   created () {
@@ -90,32 +93,6 @@ export default{
       this.currentPage = currentPage
       this.fetchData()
     },
-    changeRole (user, role) {
-      this.$confirm('This will change the user role. Continue?',
-      {
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-        type: 'Warning'
-      }).then(() => {
-        this.loading = true
-
-        this.axios.post('admin/users/changerole', {
-          Role: role,
-          Email: user.Email
-        })
-        .then(() => this.fetchData())
-        .catch((err) => {
-          console.log(err)
-          this.$notify.error({title: 'Error', message: 'Error encountered while changing role: ' + err.response.data.message})
-          this.fetchData()
-        })
-      })
-    },
-    buildPossibleRoles (user) {
-      var possibleValues = ['Admin', 'User', 'Blocked']
-
-      return possibleValues.filter(val => val !== user.Role)
-    },
     onFiltered (filteredItems) {
       this.totalRows = filteredItems.length
       this.currentPage = 1
@@ -124,6 +101,10 @@ export default{
       // build filter
 
       let filters = []
+
+      if (this.selectedRating !== 'All') {
+        filters.push('rating eq ' + this.selectedRating)
+      }
 
       if (this.searchText) {
         filters.push(`contains(${this.searchBy},'${this.searchText}')`)
@@ -134,7 +115,7 @@ export default{
       this.loading = true
 
       // get total rows for pagination (top=0 so no data is taken other than count)
-      var rowsPromise = this.axios.get(`odata/Users?$count=true&$top=0${filterText ? `&$filter=${filterText}` : ''}`)
+      var rowsPromise = this.axios.get(`odata/AdminFeedback?$count=true&$top=0${filterText ? `&$filter=${filterText}` : ''}`)
       rowsPromise.then(response => {
         this.totalRows = response.data['@odata.count']
       }).catch(err => {
@@ -142,7 +123,7 @@ export default{
       })
 
       // get items of current page
-      var itemsPromise = this.axios.get(`odata/Users?$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`)
+      var itemsPromise = this.axios.get(`odata/AdminFeedback?$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
       }).catch(err => console.log(err))
@@ -164,7 +145,7 @@ export default{
 }
 </script>
 <style>
-  .users-table{
+  .feedback-table{
     padding: 16px 0 0 0;
     display: flex;
   }
