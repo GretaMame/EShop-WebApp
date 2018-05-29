@@ -63,7 +63,7 @@
                     <el-input type="textarea" v-model="newItemForm.description"></el-input>
                   </el-form-item>
                   <el-form-item label="Price" prop="price">
-                    <el-input class="small-input-fix" :controls="false" placeholder="Price" v-model.lazy="newItemForm.price" v-money="money"></el-input>
+                    <el-input v-if="!reloadMoney" class="small-input-fix" :controls="false" placeholder="Price" v-model.lazy="newItemForm.price" v-money="money"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col class="attributes-photos-container" :span="13">
@@ -162,7 +162,8 @@ export default {
         suffix: '',
         precision: 2
       },
-      activeMangaerName: 'first'
+      activeMangaerName: 'first',
+      reloadMoney: false
     }
   },
   created () {
@@ -173,6 +174,12 @@ export default {
       this.$refs['attributesManager'].reset()
       this.$refs['photosManager'].reset()
       this.$refs[formName].resetFields()
+      this.selectedCategoryId = null
+      this.reloadMoney = true
+      this.$nextTick(() => {
+        this.newItemForm.price = 0.00
+        this.reloadMoney = false
+      })
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
