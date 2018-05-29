@@ -18,7 +18,22 @@ import ShopView from '@/views/mainViews/ShopView'
 import AdminView from '@/views/mainViews/AdminView'
 import AdminImportItems from '@/views/admin/ImportItems'
 
+import ArchivedAdminItems from '@/views/AdminArchivedItems'
+import AdminOrders from '@/views/AdminOrders'
+import AdminFeedback from '@/views/AdminFeedback'
 Vue.use(Router)
+
+const isAdminAuthenticated = (to, from, next) => {
+  if (Store.getters.isAdminAuthenticated) {
+    next()
+  } else {
+    if (Store.getters.isAuthenticated) {
+      next({name: 'home'})
+    } else {
+      next({name: 'login', query: {redirect: to.path}})
+    }
+  }
+}
 
 const isAuthenticated = (to, from, next) => {
   if (Store.getters.isAuthenticated) {
@@ -111,22 +126,26 @@ export default new Router({
     {
       path: '/admin',
       component: AdminView,
-      redirect: {name: 'adminUsers'},
+      redirect: {name: 'adminOrders'},
+      beforeEnter: isAdminAuthenticated,
       children: [
         {
           path: '/admin/users',
           name: 'adminUsers',
-          component: AdminUsers
+          component: AdminUsers,
+          beforeEnter: isAdminAuthenticated
         },
         {
           path: '/admin/items',
           name: 'adminItems',
-          component: AdminItems
+          component: AdminItems,
+          beforeEnter: isAdminAuthenticated
         },
         {
           path: '/admin/items/add',
           name: 'adminItemsAdd',
-          component: NewAdminItems
+          component: NewAdminItems,
+          beforeEnter: isAdminAuthenticated
         },
         {
           path: '/admin/items/import',
@@ -136,7 +155,26 @@ export default new Router({
         {
           path: '/admin/categories',
           name: 'adminCategories',
-          component: AdminCategories
+          component: AdminCategories,
+          beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/archiveditems',
+          name: 'adminArchivedItems',
+          component: ArchivedAdminItems,
+          beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/orders',
+          name: 'adminOrders',
+          component: AdminOrders,
+          beforeEnter: isAdminAuthenticated
+        },
+        {
+          path: '/admin/feedback',
+          name: 'adminFeedback',
+          component: AdminFeedback,
+          beforeEnter: isAdminAuthenticated
         }
       ]
     }

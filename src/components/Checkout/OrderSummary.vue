@@ -12,56 +12,54 @@
     <el-row>
       <el-card class="gd_cart_item gd_font">
         <el-row>
-          <el-row>
-            <el-col :span="12">
+          <el-col class="gd_padding_bottom" :md="12" :lg="12">
+            <el-row>
               <h3>Payment details</h3>
-            </el-col>
-            <el-col :span="12">
-              <h3>Delivery Address</h3>
-            </el-col>
-          </el-row>
-          <el-col class="gd_padding_bottom" :span="12">
+            </el-row>
             <el-col :span="6">
               <img src="http://prints.ultracoloringpages.com/26394191ee3b0e1409d127324c3a5d56.png" class="gd_image">
             </el-col>
             <el-col :span="18" align="left">
               <el-row>
-                <el-col :span="11" class="gd_label">Card number: </el-col>
+                <el-col :span="12" class="gd_label">Card number: </el-col>
                 <el-col :span="12">**** **** **** {{cardDetails.number.substr(15)}}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="11"  class="gd_label">Card holder: </el-col>
+                <el-col :span="12"  class="gd_label">Card holder: </el-col>
                 <el-col :span="12">{{cardDetails.holder}}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="11" class="gd_label">Expiration date: </el-col>
+                <el-col :span="12" class="gd_label">Expiration date: </el-col>
                 <el-col :span="12">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="11" class="gd_label">CVV: </el-col>
+                <el-col :span="12" class="gd_label">CVV: </el-col>
                 <el-col :span="12">***</el-col>
               </el-row>
             </el-col>
           </el-col>
-          <el-col class="gd_padding_bottom gd_border_color" :span="12">
+          <el-col class="gd_padding_bottom gd_border_color" :md="12" :lg="12">
+            <el-row>
+              <h3>Delivery Address</h3>
+            </el-row>
             <el-col :span="6">
               <img src="https://seeklogo.com/images/M/man-silhouette-delivery-logo-0DBA9FBE43-seeklogo.com.png" class="gd_image">
             </el-col>
             <el-col :span="18" align="left">
                 <el-row>
-                  <el-col :span="8" class="gd_label">Name: </el-col>
+                  <el-col :span="12" class="gd_label">Name: </el-col>
                   <el-col :span="12">{{address.name}} {{address.surname}}</el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="8" class="gd_label">Street: </el-col>
+                  <el-col :span="12" class="gd_label">Street: </el-col>
                   <el-col :span="12">{{address.street}}</el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="8" class="gd_label">Postcode: </el-col>
+                  <el-col :span="12" class="gd_label">Postcode: </el-col>
                   <el-col :span="12">{{address.postcode}}</el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="8" class="gd_label">City: </el-col>
+                  <el-col :span="12" class="gd_label">City: </el-col>
                   <el-col :span="12">{{address.city}}, {{address.country}}</el-col>
                 </el-row>
             </el-col>
@@ -70,17 +68,17 @@
         <div class="gd_summary">
           <el-row class="gd_padding_bottom">
             <el-row>
-              <el-col class="gd-text-align-right" :span="18">Subtotal:</el-col>
-              <el-col :span="5">{{(subtotal.toFixed(2))}} €</el-col>
+              <el-col class="gd-text-align-right" :xs="12" :sm="14" :md="16" :lg="17">Subtotal:</el-col>
+              <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(subtotal.toFixed(2))}} €</el-col>
             </el-row>
             <el-row>
-              <el-col class="gd-text-align-right" :span="18">Shipping:</el-col>
-              <el-col :span="5">{{(shippingCost)}} €</el-col>
+              <el-col class="gd-text-align-right" :xs="12" :sm="14" :md="16" :lg="17">Shipping:</el-col>
+              <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(shippingCost)}} €</el-col>
             </el-row>
           </el-row>
           <el-row>
-            <el-col class="gd-text-align-right" :span="18">Total:</el-col>
-            <el-col :span="5">{{(subtotal.toFixed(2))}} €</el-col>
+            <el-col class="gd-text-align-right" :xs="12" :sm="14" :md="16" :lg="17">Total:</el-col>
+            <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(subtotal.toFixed(2))}} €</el-col>
           </el-row>
         </div>
       </el-card>

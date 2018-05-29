@@ -85,4 +85,10 @@ export default {
     padding-left: 5px !important;
     background-color:#F5F5F5 !important;
   }
+  .gd-min-height-77vh{
+    min-height: 77vh;
+  }
+  .gd-min-height-70vh{
+    min-height: 70vh;
+  }
 </style>
