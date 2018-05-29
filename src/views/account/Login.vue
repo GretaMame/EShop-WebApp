@@ -86,6 +86,7 @@
         this.loading = false
         this.$store.dispatch('logIn', response.data)
         this.$router.push(this.$route.query.redirect || '/home')
+        EventBus.$emit('cartItemCountChanged')
       },
       redirect (windowName) {
         this.$router.push(windowName)

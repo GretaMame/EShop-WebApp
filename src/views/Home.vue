@@ -19,7 +19,7 @@
           <span v-if="subcategoryID">/ {{subcategoryName}}</span>
         </div>
         <div v-if="items && items[0]">
-          <el-row>
+          <el-row class="gd-min-height-70vh">
             <el-col class="gd-home-item-card" v-for="item in items" :key="item.sku" :xs="24" :sm="12" :md="8" :lg="6">
               <div class="gd-clickable" @click="onItemClicked(item)">
                 <ItemCard :item="item"></ItemCard>
@@ -264,7 +264,6 @@ export default {
 <style scoped>
   .gd-homeBread {
     font-size: 24px;
-    padding-bottom: 20px;
     width: 100%;
     text-align: left;
   }
