@@ -11,10 +11,18 @@
           <i class="el-icon-document"></i>
           <span slot="title">Orders</span>
         </el-menu-item>
-        <el-menu-item index="2" :route="{name:'adminItems'}">
-          <i class="el-icon-goods"></i>
-          <span slot="title">Items</span>
-        </el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">
+            <i class="el-icon-goods"></i>
+            Items
+          </template>
+          <el-menu-item index="2-1" :route="{name:'adminItems'}">
+            <span slot="title">View items</span>
+          </el-menu-item>
+          <el-menu-item index="2-2" :route="{name: 'adminImportItems'}">
+            <span slot="title">Import</span>
+          </el-menu-item>
+        </el-submenu>
         <el-menu-item index="3" :route="{name:'adminArchivedItems'}">
           <i class="el-icon-delete"></i>
           <span slot="title">Archived Items</span>
