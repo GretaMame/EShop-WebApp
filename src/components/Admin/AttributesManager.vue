@@ -27,10 +27,12 @@
           v-model="newAttribute.key"
           size="mini"
           filterable
-          placeholder="Please enter a keyword"
+          allow-create
+          default-first-option
+          placeholder="Enter key"
           v-loading="newAttribute.namesLoading"
           @change="loadAttributeValues"
-          v-if="!reloadAttributeNames">
+          v-if="!reloadAttributeNamesBool">
           <el-option
             v-for="item in getAvailableAttributeNames()"
             :key="item.id"
@@ -46,12 +48,14 @@
           size="mini"
           filterable
           remote
+          allow-create
           reserve-keyword
-          placeholder="Please enter a keyword"
+          default-first-option
+          placeholder="Enter value"
           v-loading="newAttribute.valuesLoading"
           @change="buildAttribute">
           <el-option
-            v-for="item in selectedAttribute.values"
+            v-for="item in getAvailableValues()"
             :key="item.id"
             :label="item.value"
             :value="item.value">
@@ -75,7 +79,7 @@ export default {
       },
       selectedAttribute: {},
       newAttributeNames: [],
-      reloadAttributeNames: false
+      reloadAttributeNamesBool: false
     }
   },
   mounted () {
@@ -118,7 +122,7 @@ export default {
     loadAttributeValues (attributeName) {
       this.selectedAttribute = this.newAttributeNames.find(x => x.name === attributeName)
 
-      if (this.selectedAttribute.values) {
+      if (!this.selectedAttribute || this.selectedAttribute.values) {
         return
       }
 
@@ -138,14 +142,24 @@ export default {
         })
     },
     buildAttribute () {
+      if (/^\s+$/.test(this.newAttribute.key) || /^\s+$/.test(this.newAttribute.value)) {
+        this.$notify.warning({
+            title: 'Warning',
+            message: 'Attribute key and value cannot be whitespace only'
+        })
+        return
+      }
+
       this.attributes.push({
         key: this.newAttribute.key,
         value: this.newAttribute.value,
-        id: this.selectedAttribute.id,
-        values: this.selectedAttribute.values
+        id: this.selectedAttribute ? this.selectedAttribute.id : -1,
+        values: this.selectedAttribute ? this.selectedAttribute.values : [this.newAttribute.value]
       })
 
-      this.newAttributeNames.find(x => x.id === this.selectedAttribute.id).selected = true
+      if (this.selectedAttribute) {
+        this.newAttributeNames.find(x => x.id === this.selectedAttribute.id).selected = true
+      }
 
       this.selectedAttribute = {}
       this.newAttribute = {
@@ -153,7 +167,7 @@ export default {
         valuesLoading: false
       }
 
-      this.reloadAttNames()
+      this.reloadAttributeNames()
     },
     getAvailableAttributeNames () {
       return this.newAttributeNames.filter(x => !x.selected)
@@ -168,15 +182,22 @@ export default {
         let index = this.attributes.indexOf(attribute)
         if (index >= 0) {
           this.attributes.splice(index, 1)
-          this.reloadAttNames()
+          this.reloadAttributeNames()
         }
       })
     },
-    reloadAttNames () {
-      this.reloadAttributeNames = true
+    reloadAttributeNames () {
+      this.reloadAttributeNamesBool = true
       this.$nextTick(() => {
-        this.reloadAttributeNames = false
+        this.reloadAttributeNamesBool = false
       })
+    },
+    getAvailableValues () {
+      if (!this.selectedAttribute) {
+        return []
+      }
+
+      return this.selectedAttribute.values
     }
   }
 }

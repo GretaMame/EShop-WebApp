@@ -9,6 +9,7 @@
       <img v-if="pictures.length == 0" src="@/../static/image-not-found.jpg" class="main-image">
       <img v-else :src="pictures[selectedPictureIndex].url" class="main-image">
     </div>
+    <span v-if="pictures.length >= 5" class="warning-text">Maximum number of pictures allowed has been reached</span>
     <div height="20%" width="100%">
       <el-row :gutter="25">
         <el-col v-for="(picture, index) in pictures" :key="picture.url" :span="5" v-bind:class="{'el-card-selected': index === selectedPictureIndex}">
@@ -130,5 +131,8 @@ export default {
 }
   .delete-button:hover{
     background-color: rgba(0,0,0,0.1);
+  }
+  .warning-text{
+    color: orange;
   }
 </style>

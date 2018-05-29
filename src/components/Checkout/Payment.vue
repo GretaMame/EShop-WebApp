@@ -4,20 +4,20 @@
     <div v-if="!editMode" class="gd_payment_details" align="center">
       <el-row class="gd-text-align-left">
         <el-row class="gd_margin">
-          <el-col :push="2" :span="12" class="gd_label">Card number: </el-col>
-          <el-col :span="10">{{cardDetails.number}}</el-col>
+          <el-col :span="12" class="gd_label">Card number: </el-col>
+          <el-col :span="12">{{cardDetails.number}}</el-col>
         </el-row>
         <el-row class="gd_margin">
-          <el-col :push="2" :span="12" class="gd_label">Card holder: </el-col>
-          <el-col :span="10">{{cardDetails.holder}}</el-col>
+          <el-col :span="12" class="gd_label">Card holder: </el-col>
+          <el-col :span="12">{{cardDetails.holder}}</el-col>
         </el-row>
         <el-row class="gd_margin">
-          <el-col :push="2" :span="12" class="gd_label">Expiration date: </el-col>
-          <el-col :span="10">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
+          <el-col :span="12" class="gd_label">Expiration date: </el-col>
+          <el-col :span="12">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
         </el-row>
         <el-row class="gd_margin">
-          <el-col :push="2" :span="12" class="gd_label">CVV: </el-col>
-          <el-col :span="10">{{cardDetails.cvv}}</el-col>
+          <el-col :span="12" class="gd_label">CVV: </el-col>
+          <el-col :span="12">{{cardDetails.cvv}}</el-col>
         </el-row>
       </el-row>
         <el-button class="gd_buttons" @click="editPaymentDetails()">Change card details</el-button>
@@ -36,8 +36,8 @@
           <el-input v-model="form.holder" placeholder="Name on card"></el-input>
         </el-form-item>
         <div align="left"><el-row class="gd_data_row">Expiration date:</el-row></div>
-        <el-form-item >
-          <el-col :span="10">
+        <el-form-item>
+          <el-col :xs="10" :sm="10" :md="10" :lg="10">
             <el-form-item prop="exp_year">
               <el-date-picker
                 v-model="form.exp_year"
@@ -48,7 +48,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="6" :offset="1">
+          <el-col :xs="14" :sm="13" :md="13" :lg="13">
             <el-form-item prop="exp_month">
               <el-select v-model="form.exp_month" placeholder="Exp. month">
                 <el-option label="January" value="1"></el-option>
@@ -68,7 +68,7 @@
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-col :span="4">
+          <el-col :xs="6" :sm="3" :md="3" :lg="3">
             <el-form-item prop="cvv">
               <el-input
                 v-model="form.cvv"
@@ -99,6 +99,14 @@ export default {
     loading: { type: Boolean }
   },
   data () {
+    var validateCreditCardNumber = (rule, value, callback) => {
+      value = value.replace(/\s/g, '')
+      if (this.mod10check(value)) {
+        callback()
+      } else {
+        callback(new Error('Please input a valid credit card number'))
+      }
+    }
     return {
       editMode: true,
       formName: 'CardDetailsForm',
@@ -121,6 +129,10 @@ export default {
             /* TODO: pasiziuret, kas ten per Luhn algoritmas, kuri turi tenktinti */
             pattern: '^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$',
             message: 'Please enter a valid card number',
+            trigger: 'blur'
+          },
+          {
+            validator: validateCreditCardNumber,
             trigger: 'blur'
           }
         ],
@@ -176,6 +188,22 @@ export default {
    this.fetchCardDetails()
   },
   methods: {
+    mod10check (value) {
+      var nCheck = 0
+      var nDigit = 0
+      var bEven = false
+      for (var n = value.length - 1; n >= 0; n--) {
+        var cDigit = value.charAt(n)
+        nDigit = parseInt(cDigit, 10)
+        if (bEven) {
+          if ((nDigit *= 2) > 9) nDigit -= 9
+        }
+
+        nCheck += nDigit
+        bEven = !bEven
+      }
+      return (nCheck % 10) === 0
+    },
     fetchCardDetails () {
       if (!this.cardDetails.number) {
         this.editMode = true

@@ -1,10 +1,100 @@
 <template>
   <div class="users-table">
+    <el-dialog
+      :title="'Orders of ' + selectedUser.email"
+      v-if="showUserDetails"
+      :visible.sync="showUserDetails"
+      width="70%">
+      <el-container v-loading="userDetailsLoading" class="user-details-window">
+        <el-main>
+          <el-card
+            class="gd_order"
+            v-for="order in selectedUserOrders"
+            :key="order.id"
+            shadow="hover">
+            <div slot="header" class="gd_order_header" align="left">
+              <el-row>
+                <el-col :span="14">
+                  <el-row>
+                    <span class="gd_label">Order no.:</span>
+                  </el-row>
+                  <el-row>
+                    {{order.orderNumber}}
+                  </el-row>
+                </el-col>
+                <el-col :span="5">
+                  <el-row>
+                    <span class="gd_label">Order date:</span>
+                  </el-row>
+                  <el-row>
+                    {{order.createDate}}
+                  </el-row>
+                </el-col>
+                <el-col :span="5">
+                  <el-row>
+                  <span class="gd_label">Order status:</span>
+                  </el-row>
+                  <el-row>
+                    {{order.status}}
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
+            <el-row class="gd_line_bottom_margin">
+              <el-col :span="18">
+              <span class="gd_label">Total: </span>
+              {{order.totalPrice.toFixed(2)}} €
+              </el-col>
+            </el-row>
+            <el-collapse>
+              <el-collapse-item>
+                <template slot="title">
+                  <span class="gd_label">{{countItems(order.items)}}</span>
+                </template>
+                <div v-for="item in order.items" :key="item.itemID" :item="item">
+                <el-row class="gd_item_name_row">
+                  <el-col :span="19">
+                  {{item.name}}
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="4">
+                    <span class="gd_label gd_gray_text">Unit price:</span>
+                  </el-col>
+                  <el-col :span="4">
+                    <span class="gd_gray_text">{{item.price.toFixed(2)}} €</span>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="4">
+                    <span class="gd_label gd_gray_text">Quantity:</span>
+                  </el-col>
+                  <el-col :span="4">
+                    <span class="gd_gray_text">{{item.count}}</span>
+                  </el-col>
+                </el-row>
+                </div>
+              </el-collapse-item>
+              <el-collapse-item>
+                <template slot="title">
+                  <span class="gd_label">Delivery address</span>
+                </template>
+                <div class="gd_gray_text">
+                  <el-row>{{order.deliveryAddress.Name}} {{order.deliveryAddress.Surname}}</el-row>
+                  <el-row>{{order.deliveryAddress.Street}}</el-row>
+                  <el-row>{{order.deliveryAddress.City}}</el-row>
+                  <el-row>{{order.deliveryAddress.Country}} {{order.deliveryAddress.Postcode}}</el-row>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </el-card>
+        </el-main>
+      </el-container>
+    </el-dialog>
     <el-container v-loading="loading">
       <el-header>
         <el-input placeholder="Search" v-model="searchText">
           <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
-            <el-option label="Name" value="name"></el-option>
             <el-option label="Email" value="email"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
@@ -20,10 +110,20 @@
           :header-cell-style="headerCellStyle()">
           <el-table-column
             label="Email"
-            prop="email"/>
+            prop="email">
+            <template slot-scope="scope">
+              <el-button type="text" @click="showDetails(scope.row)">{{scope.row.email}}</el-button>
+            </template>
+          </el-table-column>
           <el-table-column
-            label="Name"
-            prop="fullName"/>
+            label="Order count"
+            prop="orderCount"/>
+          <el-table-column
+            label="Total money spent"
+            prop="moneySpent"/>
+          <el-table-column
+            label="Average money spent"
+            prop="averageMoneySpent"/>
           <el-table-column
             label="Role"
             prop="role"
@@ -75,13 +175,22 @@ export default{
       items: null,
       totalRows: 0,
       searchText: '',
-      searchBy: 'name'
+      searchBy: 'name',
+      selectedUser: {},
+      showUserDetails: false,
+      userDetailsLoading: false,
+      selectedUserOrders: []
     }
   },
   created () {
     this.fetchData()
   },
   methods: {
+    countItems (items) {
+      var length = items.length
+      if (length === 1) return length + ' item'
+      return length + ' items'
+    },
     handleSizeChange (pageSize) {
       this.perPage = pageSize
       this.fetchData()
@@ -159,6 +268,28 @@ export default{
       return {
         'text-align': 'center'
       }
+    },
+    showDetails (user) {
+      this.selectedUser = user
+      this.showUserDetails = true
+      this.loadUserDetails(user)
+    },
+    loadUserDetails (user) {
+      this.userDetailsLoading = true
+
+      this.axios.get(`odata/AdminOrders?$filter=userEmail eq '${this.selectedUser.email}'`)
+        .then(response => {
+          this.userDetailsLoading = false
+          this.selectedUserOrders = response.data.value
+        })
+        .catch(err => {
+          this.userDetailsLoading = false
+          console.log(err)
+          this.$notify.error({
+            title: 'Error',
+            message: 'Something went wrong while getting user orders' + err
+          })
+        })
     }
   }
 }
@@ -183,5 +314,25 @@ export default{
   }
   .table {
     height: 70vh;
+  }
+  .user-details-window {
+    height: 60vh;
+  }
+  .gd_order {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 5px;
+    text-align: left;
+  }
+  .gd_gray_text {
+    color: gray;
+  }
+  .gd_line_bottom_margin {
+    margin-bottom: 10px;
+  }
+  .gd_item_name_row {
+    border-top: 1px solid lightgray;
+    padding-top: 5px;
+    color: #DF3A01;
   }
 </style>

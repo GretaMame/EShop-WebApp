@@ -82,11 +82,9 @@
         })
       },
       postLogin (response) {
-        this.axios.get('account/renewcsrftoken').then(() => {
-          EventBus.$emit('onLogin')
-        })
+        EventBus.$emit('onLogin')
         this.loading = false
-        this.$store.dispatch('logIn')
+        this.$store.dispatch('logIn', response.data)
         this.$router.push(this.$route.query.redirect || '/home')
       },
       redirect (windowName) {
@@ -101,7 +99,7 @@
     margin: auto;
     max-width: 600px;
     margin-top: 40px;
-    padding: 40px 60px 20px 60px;
+    padding: 10px;
   }
   form {
     margin: 0 auto;
