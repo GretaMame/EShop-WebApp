@@ -20,6 +20,9 @@
               <el-button slot="append" icon="el-icon-search" @click="fetchData()"></el-button>
             </el-input>
           </el-col>
+          <el-col :span="6">
+            <ExportButton />
+          </el-col>
         </el-row>
       </el-header>
       <el-main class="table-div">
@@ -102,7 +105,11 @@
   </div>
 </template>
 <script>
-export default{
+import ExportButton from '@/components/ExportComponent'
+export default {
+  components: {
+    ExportButton
+  },
   data () {
     return {
       loading: false,
