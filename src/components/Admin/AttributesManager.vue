@@ -28,10 +28,11 @@
           size="mini"
           filterable
           allow-create
-          placeholder="Please enter a keyword"
+          default-first-option
+          placeholder="Enter key"
           v-loading="newAttribute.namesLoading"
           @change="loadAttributeValues"
-          v-if="!reloadAttributeNames">
+          v-if="!reloadAttributeNamesBool">
           <el-option
             v-for="item in getAvailableAttributeNames()"
             :key="item.id"
@@ -49,7 +50,8 @@
           remote
           allow-create
           reserve-keyword
-          placeholder="Please enter a keyword"
+          default-first-option
+          placeholder="Enter value"
           v-loading="newAttribute.valuesLoading"
           @change="buildAttribute">
           <el-option
@@ -77,7 +79,7 @@ export default {
       },
       selectedAttribute: {},
       newAttributeNames: [],
-      reloadAttributeNames: false
+      reloadAttributeNamesBool: false
     }
   },
   mounted () {
@@ -140,6 +142,14 @@ export default {
         })
     },
     buildAttribute () {
+      if (/^\s+$/.test(this.newAttribute.key) || /^\s+$/.test(this.newAttribute.value)) {
+        this.$notify.warning({
+            title: 'Warning',
+            message: 'Attribute key and value cannot be whitespace only'
+        })
+        return
+      }
+
       this.attributes.push({
         key: this.newAttribute.key,
         value: this.newAttribute.value,
@@ -157,7 +167,7 @@ export default {
         valuesLoading: false
       }
 
-      this.reloadAttNames()
+      this.reloadAttributeNames()
     },
     getAvailableAttributeNames () {
       return this.newAttributeNames.filter(x => !x.selected)
@@ -172,14 +182,14 @@ export default {
         let index = this.attributes.indexOf(attribute)
         if (index >= 0) {
           this.attributes.splice(index, 1)
-          this.reloadAttNames()
+          this.reloadAttributeNames()
         }
       })
     },
-    reloadAttNames () {
-      this.reloadAttributeNames = true
+    reloadAttributeNames () {
+      this.reloadAttributeNamesBool = true
       this.$nextTick(() => {
-        this.reloadAttributeNames = false
+        this.reloadAttributeNamesBool = false
       })
     },
     getAvailableValues () {

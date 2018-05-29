@@ -67,8 +67,10 @@
                   </el-form-item>
                 </el-col>
                 <el-col class="attributes-photos-container" :span="13">
-                  <attributes-manager ref="attributesManager" v-on:attributes-changed="(atts) => attributes = atts" class="attributes-manager"></attributes-manager>
-                  <photos-manager ref="photosManager" v-on:pictures-changed="(pics) => pictures = pics" class="photos-manager"></photos-manager>
+                  <el-tabs v-model="activeManagerName">
+                    <el-tab-pane label="Attributes" name="first"><attributes-manager ref="attributesManager" v-on:attributes-changed="(atts) => attributes = atts" class="attributes-manager"></attributes-manager></el-tab-pane>
+                    <el-tab-pane label="Pictures" name="second"><photos-manager ref="photosManager" v-on:pictures-changed="(pics) => pictures = pics" class="photos-manager"></photos-manager></el-tab-pane>
+                  </el-tabs>
                 </el-col>
               </el-row>
           </el-card>
@@ -159,7 +161,8 @@ export default {
         prefix: '€ ',
         suffix: '',
         precision: 2
-      }
+      },
+      activeMangaerName: 'first'
     }
   },
   created () {
@@ -260,6 +263,7 @@ export default {
   .attributes-photos-container{
     height: 100%;
     padding-bottom: 8px;
+    padding-left: 8px;
   }
     .attributes-photos-container .attributes-manager{
       height: 40%;
