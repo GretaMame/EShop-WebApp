@@ -4,56 +4,58 @@
     <el-card
       class="gd_order"
       v-for="order in orders"
-      :key="order.ID"
+      :key="order.id"
       shadow="hover">
         <div slot="header" class="gd_order_header" align="left">
           <el-row>
-            <el-col :span="14">
-              <el-row>
+            <el-col :xs="24" :sm="14" :md="14" :lg="14">
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 <span class="gd_label">Order no.:</span>
-              </el-row>
-              <el-row>
-                {{order.OrderNumber}}
-              </el-row>
+              </el-col>
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+                {{order.orderNumber}}
+              </el-col>
             </el-col>
-            <el-col :span="5">
-              <el-row>
+            <el-col :xs="24" :sm="5" :md="5" :lg="5">
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 <span class="gd_label">Order date:</span>
-              </el-row>
-              <el-row>
-                {{order.CreateDate}}
-              </el-row>
+              </el-col>
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+                {{order.createDate}}
+              </el-col>
             </el-col>
-            <el-col :span="5">
-              <el-row>
+            <el-col :xs="24" :sm="5" :md="5" :lg="5">
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
               <span class="gd_label">Order status:</span>
-              </el-row>
-              <el-row>
-                {{order.Status}}
-              </el-row>
+              </el-col>
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+                {{order.status}}
+              </el-col>
             </el-col>
           </el-row>
         </div>
         <el-row class="gd_line_bottom_margin">
           <el-col :span="18">
           <span class="gd_label">Total: </span>
-          {{order.TotalPrice.toFixed(2)}} €
+          {{order.totalPrice.toFixed(2)}} €
           </el-col>
           <el-col :span="6">
-            <el-button size="small" @click="addItemsToCart(order.Items)" align="right">
-              Add all items to cart
-            </el-button>
+            <el-tooltip placement="bottom" content="Add all items to cart">
+              <el-button size="small" @click="addItemsToCart(order.items)" align="right">
+                <icon name="cart-arrow-down"/>
+              </el-button>
+            </el-tooltip>
           </el-col>
         </el-row>
         <el-collapse>
           <el-collapse-item>
             <template slot="title">
-              <span class="gd_label">{{countItems(order.Items)}}</span>
+              <span class="gd_label">{{countItems(order.items)}}</span>
             </template>
-            <div v-for="item in order.Items" :key="item.ItemID" :item="item">
+            <div v-for="item in order.items" :key="item.itemID" :item="item">
             <el-row class="gd_item_name_row">
               <el-col :span="19">
-              {{item.Name}}
+              {{item.name}}
               </el-col>
               <el-col :span="5" align="right">
                 <el-tooltip
@@ -62,20 +64,20 @@
                   effect="dark">
                   <el-button
                     icon="el-icon-search"
-                    @click="viewItemDetails(item.ItemID)"
+                    @click="viewItemDetails(item.itemID)"
                     size ="small"
                     circle>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip
                   placement="top"
-                  content="Add to cart"
+                  content="Add item to cart"
                   effect="dark">
                     <el-button
-                      icon="el-icon-goods"
-                      @click="addItemToCart(item.ItemID)"
+                      @click="addItemToCart(item.itemID)"
                       size ="small"
                       circle>
+                      <icon name="cart-plus"/>
                     </el-button>
                 </el-tooltip>
               </el-col>
@@ -85,7 +87,7 @@
                 <span class="gd_label gd_gray_text">Unit price:</span>
               </el-col>
               <el-col :span="4">
-                <span class="gd_gray_text">{{item.Price.toFixed(2)}} €</span>
+                <span class="gd_gray_text">{{item.price.toFixed(2)}} €</span>
               </el-col>
             </el-row>
             <el-row>
@@ -93,7 +95,7 @@
                 <span class="gd_label gd_gray_text">Quantity:</span>
               </el-col>
               <el-col :span="4">
-                <span class="gd_gray_text">{{item.Count}}</span>
+                <span class="gd_gray_text">{{item.count}}</span>
               </el-col>
             </el-row>
             </div>
@@ -103,23 +105,50 @@
               <span class="gd_label">Delivery address</span>
             </template>
             <div class="gd_gray_text">
-              <el-row>{{order.DeliveryAddress.Name}} {{order.DeliveryAddress.Surname}}</el-row>
-              <el-row>{{order.DeliveryAddress.Street}}</el-row>
-              <el-row>{{order.DeliveryAddress.City}}</el-row>
-              <el-row>{{order.DeliveryAddress.Country}} {{order.DeliveryAddress.Postcode}}</el-row>
+              <el-row>{{order.deliveryAddress.Name}} {{order.deliveryAddress.Surname}}</el-row>
+              <el-row>{{order.deliveryAddress.Street}}</el-row>
+              <el-row>{{order.deliveryAddress.City}}</el-row>
+              <el-row>{{order.deliveryAddress.Country}} {{order.deliveryAddress.Postcode}}</el-row>
             </div>
           </el-collapse-item>
         </el-collapse>
       </el-card>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :page-sizes="pageOptions"
-        :page-size="perPage"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalOrders">
-      </el-pagination>
+       <el-row>
+            <el-col class="hidden-xs-only">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-sizes="pageOptions"
+                :page-size="perPage"
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalOrders">
+              </el-pagination>
+            </el-col>
+            <el-col class="hidden-sm-and-up">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :page-sizes="pageOptions"
+                :page-size="perPage"
+                small
+                layout="total, sizes"
+                :total="totalOrders">
+              </el-pagination>
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-size="perPage"
+                :pager-count="5"
+                background
+                small
+                layout="prev, pager, next"
+                :total="totalOrders">
+              </el-pagination>
+            </el-col>
+          </el-row>
   </el-card>
 </template>
 
@@ -165,7 +194,7 @@ export default {
         this.totalOrders = response.data['@odata.count']
       })
 
-      var ordersPromise = this.axios.get(`odata/Orders?$expand=Items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}&$orderby=CreateDate desc`)
+      var ordersPromise = this.axios.get(`odata/Orders?$expand=items&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}&$orderby=createDate desc`)
       ordersPromise.then(response => {
         this.orders = response.data.value
         this.parseAddressesToObjects()
@@ -178,7 +207,7 @@ export default {
     parseAddressesToObjects () {
       var length = this.orders.length
       for (var i = 0; i < length; i++) {
-        this.orders[i].DeliveryAddress = JSON.parse(this.orders[i].DeliveryAddress)
+        this.orders[i].deliveryAddress = JSON.parse(this.orders[i].deliveryAddress)
       }
     },
     addItemsToCart (items) {
@@ -230,10 +259,6 @@ export default {
 </script>
 
 <style scoped>
-  .el-card__header {
-    padding: 0px !important;
-    background-color:#F5F5F5;
-  }
   .gd_order {
     max-width: 600px;;
     margin: 20px auto;
@@ -266,4 +291,3 @@ export default {
     margin-left: 1px;
   }
 </style>
-

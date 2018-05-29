@@ -11,7 +11,7 @@ export default {
 
     EventBus.$on('cookieExpired', () => {
       this.$router.push({name: 'login', query: {redirect: this.$router.currentRoute.path}})
-      this.$notify.error({
+      this.$notify.info({
         title: 'Logged out',
         message: 'You were logged out'
       })
@@ -19,14 +19,18 @@ export default {
 
     EventBus.$on('onLogin', () => {
       var cart = this.$store.getters.localCart
-      if (!cart) {
+      if (!cart || cart.length === 0) {
         return
       }
-      this.axios.post('cart', {Items: cart}).then(response => {
-        this.$store.dispatch('clearCart')
+      this.axios.get('account/renewcsrftoken').then(() => {
+        this.axios.post('cart', {Items: cart}).then(response => {
+          this.$store.dispatch('clearCart')
+          EventBus.$emit('cartMerged', true)
+        })
       })
       .catch(err => {
         console.log('Error while mergin cart ' + err)
+        EventBus.$emit('cartMerged', false)
       })
     })
   }
@@ -54,10 +58,9 @@ export default {
   .gd-body {
     height: calc(100vh - 60px);
   }
-    .gd-body > * {
-      margin-bottom: 20px;
-    }
-
+  .gd-body > * {
+    margin-bottom: 20px;
+  }
   .gd-logo {
 		font: italic bold 20px Georgia, serif;
 		color:peru;
@@ -76,5 +79,10 @@ export default {
   }
   .gd-text-align-right{
     text-align: right;
+  }
+  .el-card__header {
+    padding: 0px !important;
+    padding-left: 5px !important;
+    background-color:#F5F5F5 !important;
   }
 </style>

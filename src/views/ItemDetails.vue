@@ -2,15 +2,15 @@
   <el-row>
     <el-card v-loading="loading" class="box-card" >
       <el-row>
-        <el-breadcrumb v-if="item.ItemCategory" class="gd-itemDetailsBread">
-          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}`">
-            {{item.ItemCategory.Name}}
+        <el-breadcrumb v-if="item.itemCategory" class="gd-itemDetailsBread">
+          <el-breadcrumb-item :to="`/home/${item.itemCategory.id}`">
+            {{item.itemCategory.name}}
           </el-breadcrumb-item>
-          <el-breadcrumb-item :to="`/home/${item.ItemCategory.ID}/${item.ItemCategory.SubCategory.ID}`">
-            {{item.ItemCategory.SubCategory.Name}}
+          <el-breadcrumb-item :to="`/home/${item.itemCategory.id}/${item.itemCategory.subCategory.id}`">
+            {{item.itemCategory.subCategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
-            {{item.Name}}
+            {{item.name}}
           </el-breadcrumb-item>
         </el-breadcrumb>
       </el-row>
@@ -18,30 +18,30 @@
         <el-col :lg="12" :md="24" :sm="24">
           <el-row>
             <el-carousel height="500px" :autoplay="false" arrow="always">
-              <el-carousel-item v-if="item.Pictures && item.Pictures.length === 0">
+              <el-carousel-item v-if="item.pictures && item.pictures.length === 0">
                 <img class="carouselImage" src="@/../static/image-not-found.jpg">
               </el-carousel-item>
-              <el-carousel-item v-for="picture in this.item.Pictures" :key="picture.ID" >
-                <img class="carouselImage" :src="picture.URL">
+              <el-carousel-item v-for="picture in this.item.pictures" :key="picture.id" >
+                <img class="carouselImage" :src="picture.url">
               </el-carousel-item>
             </el-carousel>
           </el-row>
         </el-col>
         <el-col :lg="12" :md="24" :sm="24">
             <el-row class="gd-itemName">
-                <h2>{{this.item.Name}}</h2>
-                <span>SKU: {{this.item.SKU}}</span>
+                <h2>{{this.item.name}}</h2>
+                <span>SKU: {{this.item.sku}}</span>
             </el-row>
-            <el-row v-for="attr in this.item.Attributes" :key="attr.AttributeID" :gutter="10">
+            <el-row v-for="attr in this.item.attributes" :key="attr.attributeID" :gutter="10">
               <el-col class="gd-attributeName" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-                {{attr.Name}}:
+                {{attr.name}}:
               </el-col>
               <el-col class="gd-attributeValue" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-                {{attr.Value}}
+                {{attr.value}}
               </el-col>
             </el-row>
             <el-row class="gd-itemPrice">
-              <span>{{item.Price}} €</span>
+              <span>{{item.price}} €</span>
             </el-row>
             <el-row class="gd-addToCard">
               <el-input-number size="medium" :min="1" v-model="count"/>
@@ -53,13 +53,15 @@
         <h2>Description</h2>
       </el-row>
       <el-row>
-        {{this.item.Description}}
+        {{this.item.description}}
       </el-row>
     </el-card>
   </el-row>
 </template>
 
 <script>
+import EventBus from '@/eventBus'
+
 export default {
   props: ['id'],
   data () {
@@ -77,7 +79,7 @@ export default {
   methods: {
     loadItemDetails () {
       this.loading = true
-      this.axios.get(`odata/Items?$expand=Attributes,Pictures,ItemCategory($expand=SubCategory)&$filter=ID eq ${this.id}`).then(response => {
+      this.axios.get(`odata/Items?$expand=attributes,pictures,itemCategory($expand=subCategory)&$filter=id eq ${this.id}`).then(response => {
         if (response.data.value && response.data.value[0]) {
           this.item = response.data.value[0]
         }
@@ -94,7 +96,7 @@ export default {
     },
     addToCart () {
       var newItem = {
-        ItemID: this.id,
+        ItemID: this.item.id,
         Count: this.count
       }
       var addPromise = null
@@ -110,6 +112,7 @@ export default {
           title: 'Success',
           message: 'Item was added to cart.'
         })
+        EventBus.$emit('cartItemCountChanged')
       })
       .catch(err => {
         // try again if cookie expired, so items will be added to local storage cart
@@ -142,7 +145,7 @@ export default {
   .box-card {
     margin: auto;
     margin-top: 16px;
-    padding: 40px 60px 20px 60px;
+    padding: 30px;
     max-width: 1376px;
   }
 
@@ -169,7 +172,7 @@ export default {
     font-size: 18px;
     padding-bottom: 20px;
   }
-  
+
   .gd-itemName {
     padding-bottom:25px;
   }

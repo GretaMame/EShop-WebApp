@@ -5,20 +5,20 @@
         <h3>{{addressTitle}}</h3>
         <el-row class="gd-text-align-left">
           <el-row class="gd_margin">
-            <el-col :span="10" class="gd_label">Name: </el-col>
-            <el-col :span="14">{{address.name}} {{address.surname}}</el-col>
+            <el-col :span="11" class="gd_label">Name: </el-col>
+            <el-col :span="13">{{address.name}} {{address.surname}}</el-col>
           </el-row>
           <el-row class="gd_margin">
-            <el-col :span="10" class="gd_label">Street: </el-col>
-            <el-col :span="14">{{address.street}}</el-col>
+            <el-col :span="11" class="gd_label">Street: </el-col>
+            <el-col :span="13">{{address.street}}</el-col>
           </el-row>
           <el-row class="gd_margin">
-            <el-col :span="10" class="gd_label">Postcode: </el-col>
-            <el-col :span="14">{{address.postcode}}</el-col>
+            <el-col :span="11" class="gd_label">Postcode: </el-col>
+            <el-col :span="13">{{address.postcode}}</el-col>
           </el-row>
           <el-row class="gd_margin">
-            <el-col :span="10" class="gd_label">City: </el-col>
-            <el-col :span="14">{{address.city}}, {{address.country}}</el-col>
+            <el-col :span="11" class="gd_label">City, country: </el-col>
+            <el-col :span="13">{{address.city}}, {{address.country}}</el-col>
           </el-row>
         </el-row>
       </div>
@@ -69,7 +69,7 @@
     </div>
       <div class="gd_step_buttons">
         <el-button @click="$emit('previousStep')">Previous</el-button>
-        <el-button type="primary" @click="saveChanges()" :disabled="!addressProvided">Next</el-button>
+        <el-button type="primary" @click="saveChanges()">Next</el-button>
     </div>
   </el-card>
 </template>
@@ -86,7 +86,6 @@ export default {
       formName: 'ChangeAddressForm',
       addressTitle: 'Delivery Address',
       changeAddressTitle: 'Change delivery address',
-      addressProvided: false,
       form: {},
       rules: {
         name: [
@@ -149,12 +148,10 @@ export default {
   },
   methods: {
     checkIfEmptyAddress () {
-      if (!this.address.name) {
-        this.enterChangeAddressMode
-        this.addressProvided = false
+      if (typeof this.address.name === 'undefined') {
+        this.enterChangeAddressMode()
       } else {
         this.changeAddressMode = false
-        this.addressProvided = true
       }
     },
     enterChangeAddressMode () {
@@ -176,7 +173,6 @@ export default {
         this.$refs[this.formName].validate((valid) => {
           if (valid) {
             this.changeAddressMode = false
-            this.addressProvided = true
             this.$emit('updateAddress', this.form)
             this.$emit('nextStep')
           }

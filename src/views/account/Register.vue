@@ -129,7 +129,6 @@
     margin: auto;
     max-width: 600px;
     margin-top: 40px;
-    padding: 40px 60px 0px 60px;
   }
 
   form {
