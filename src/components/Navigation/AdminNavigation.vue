@@ -32,23 +32,6 @@
     </div>
   </div>
 </template>
-<<<<<<< HEAD:src/components/Navigation/AdminNavigation.vue
-=======
-<script>
-  import EventBus from '@/eventBus'
-  export default {
-    mounted () {
-      EventBus.$on('exportStarted', () => {
-        window.onbeforeunload = () => {
-          return 'export running'
-        }
-      })
-      EventBus.$on('exportFinished', () => {
-        window.onbeforeunload = undefined
-      })
-    }
-  }
->>>>>>> 4a98393b1af0df41776ca4cc3a0534a2a62545b6:src/components/Navigation/Admin.vue
 
 <script>
 </script>

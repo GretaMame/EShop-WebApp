@@ -55,14 +55,12 @@
           title: 'Export started',
           message: 'Once export file be ready, file download start automatically.'
         })
-        this.axios.get('admin/items/exportAll', {
-          responseType: 'blob'
-        }).then((response) => {
+        this.axios.get('admin/items/exportAll').then((response) => {
+          EventBus.$emit('exportFinished')
           this.generateDownload(response.data)
           this.exportStarted = false
-          EventBus.$emit('exportFinished')
         }).catch(e => {
-          console.log(e)
+          EventBus.$emit('exportFinished')
           this.exportStarted = false
           this.$notify.error({
             title: 'Error',
@@ -76,14 +74,13 @@
           title: 'Export started',
           message: 'Once export file be ready, file download start automatically.'
         })
-        this.axios.get('admin/items/export/' + categoryId, {
-          responseType: 'blob'
-        }).then((response) => {
+        this.axios.get('admin/items/export/' + categoryId).then((response) => {
+          EventBus.$emit('exportFinished')
           this.generateDownload(response.data)
           this.exportStarted = false
-          EventBus.$emit('exportFinished')
         }).catch(e => {
           this.exportStarted = false
+          EventBus.$emit('exportFinished')
           if (e.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
@@ -103,14 +100,13 @@
           title: 'Export started',
           message: 'Once export file be ready, file download start automatically.'
         })
-        this.axios.get('admin/items/export/subcategory/' + subcategoryId, {
-          responseType: 'blob'
-        }).then((response) => {
+        this.axios.get('admin/items/export/subcategory/' + subcategoryId).then((response) => {
+          EventBus.$emit('exportFinished')
           this.generateDownload(response.data)
           this.exportStarted = false
-          EventBus.$emit('exportFinished')
         }).catch(e => {
           this.exportStarted = false
+          EventBus.$emit('exportFinished')
           if (e.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
@@ -166,14 +162,8 @@
         var response = await this.axios.get(`admin/categories/${parentCategoryId}`)
         return response.data
       },
-      generateDownload (file) {
-        const url = window.URL.createObjectURL(new Blob([file]))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', new Date().toLocaleString() + '_ItemsExport.xlsx')
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+      generateDownload (response) {
+        window.open(this.axios.defaults.baseURL + response.urlToFile, '_self')
         this.$notify.info({
           title: 'Export successfully finished',
           message: 'Export file should start downloading in a moment.'
@@ -213,6 +203,7 @@
   .disabled:hover {
     cursor: wait;
   }
+
   ul {
     list-style-type: none;
   }
