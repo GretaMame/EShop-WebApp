@@ -175,7 +175,7 @@ export default{
       items: null,
       totalRows: 0,
       searchText: '',
-      searchBy: 'name',
+      searchBy: 'email',
       selectedUser: {},
       showUserDetails: false,
       userDetailsLoading: false,
