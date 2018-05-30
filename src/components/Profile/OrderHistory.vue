@@ -217,7 +217,7 @@ export default {
       if (items === null) return
       var itemsList = []
       for (var i = 0; i < items.length; i++) {
-        itemsList.push({ItemID: items[i].ItemID, Count: 1})
+        itemsList.push({ItemID: items[i].itemID, Count: 1})
       }
       this.loading = true
       this.axios.post('cart', {Items: itemsList})
@@ -225,7 +225,8 @@ export default {
           this.loading = false
           this.$notify.success({
             title: 'Success',
-            message: 'Items were added to cart.'
+            message: 'Items were added to cart.',
+            offset: 50
           })
         })
         .catch(this.handleError)
@@ -240,7 +241,8 @@ export default {
         this.loading = false
         this.$notify.success({
           title: 'Success',
-          message: 'Item was added to cart.'
+          message: 'Item was added to cart.',
+          offset: 50
         })
       })
       .catch(this.handleError)
@@ -251,10 +253,10 @@ export default {
         EventBus.$emit('cookieExpired')
         return
       }
-      console.log(err)
       this.$notify.error({
         title: 'Error',
-        message: 'Ups! Something bad happened.'
+        message: err.response.data.message,
+        offset: 50
       })
     }
   }

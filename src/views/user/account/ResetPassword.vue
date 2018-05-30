@@ -83,7 +83,8 @@
         }).catch(err => {
           this.$notify.error({
             title: 'Error',
-            message: err.response.data.message
+            message: err.response.data.message,
+          offset: 50
           })
           console.log(err)
           this.loading = false

@@ -1,5 +1,14 @@
 <template>
   <div class="main-div">
+    <el-dialog title="Version error" :visible.sync="versionDialogVisible" width="30%">
+      <span>Someone has already edited the item that you are trying to edit after you opened this window!</span>
+      <span>You can either reload the form for it to be updated with new data, or override the changes.</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="versionDialogVisible = false">Cancel</el-button>
+        <el-button type="warning" @click="reloadForm()">Reload form</el-button>
+        <el-button type="primary" @click="overrideChanges()">Override changes</el-button>
+      </span>
+    </el-dialog>
     <el-container v-loading="posting">
       <el-header>
         <el-row>
@@ -10,13 +19,13 @@
               </el-button>
             </router-link>
           </el-col>
-          <el-col :span="18">
+          <el-col :span="16">
             <h1>Add new item</h1>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="3">
             <el-button @click="resetForm('newItemForm')" round>Reset</el-button>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="3">
             <el-button @click="submitForm('newItemForm')" type="success" round>Save</el-button>
           </el-col>
         </el-row>
@@ -31,17 +40,19 @@
                 </el-form-item>
                 <el-row>
                   <el-col :span="10">
-                    <el-form-item label="Category" prop="category">
-                      <el-select class="small-input-fix" v-loading="categoriesLoading" placeholder="Category" v-model="selectedCategoryId" @change="fetchSubcategories">
+                    <el-form-item label="Category" prop="categoryid">
+                      <el-select class="small-input-fix" v-loading="categoriesLoading" placeholder="Category" v-model="newItemForm.categoryid"
+                        @change="fetchSubcategories">
                         <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id">
                         </el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-form-item label="Subcategory" prop="categoryid">
-                      <el-select class="small-input-fix" v-loading="subcategoriesLoading" placeholder="Subcategory" v-model="newItemForm.categoryid">
-                        <el-option v-for="subcategory in subcategories" :key="subcategory.id" :label="subcategory.name" :value="subcategory.id">
+                    <el-form-item label="Subcategory" prop="subcategoryid">
+                      <el-select class="small-input-fix" v-loading="subcategoriesLoading" placeholder="Subcategory" v-model="newItemForm.subcategoryid">
+                        <el-option v-for="subcategory in [{id: null, name: 'None'}].concat(subcategories)" :key="subcategory.id" :label="subcategory.name"
+                          :value="subcategory.id">
                         </el-option>
                       </el-select>
                     </el-form-item>
@@ -82,6 +93,7 @@
   import AttributesManager from '@/components/admin/AttributesManager'
   import PhotosManager from '@/components/admin/PhotosManager'
   export default {
+    props: ['itemid'],
     components: {
       AttributesManager,
       PhotosManager
@@ -97,11 +109,11 @@
           sku: '',
           description: '',
           price: 0.00,
-          categoryid: null
+          categoryid: null,
+          subcategoryid: null
         },
         pictures: [],
         attributes: [],
-        selectedCategoryId: null,
         categories: [],
         subcategories: [],
         categoriesLoading: true,
@@ -152,8 +164,11 @@
           categoryid: [{
             required: true,
             type: 'number',
-            message: 'Please select a child category',
+            message: 'Please select a category',
             trigger: 'blur'
+          }],
+          subcategoryid: [{
+            type: 'number'
           }]
         },
         money: {
@@ -164,21 +179,60 @@
           precision: 2
         },
         activeManagerName: 'first',
-        reloadMoney: false
+        reloadMoney: false,
+        isEditMode: false,
+        initialEditData: {},
+        versionDialogVisible: false
       }
     },
-    created () {
-      this.fetchCategories()
+    mounted () {
+      if (this.itemid) {
+        this.setUpOnEdit()
+      } else {
+        this.fetchCategories()
+      }
     },
     methods: {
+      setUpOnEdit () {
+        this.isEditMode = true
+
+        this.posting = true
+        this.axios.get('/admin/Items/single?id=' + this.itemid)
+          .then(response => {
+            let itemData = response.data
+            this.initialEditData = itemData
+            this.newItemForm.name = itemData.name
+            this.newItemForm.sku = itemData.sku
+            this.newItemForm.description = itemData.description
+            this.reloadMoneyValue(itemData.price)
+            this.fetchCategories()
+            this.$refs['attributesManager'].loadInitial(itemData.attributes)
+            this.$refs['photosManager'].loadInitial(itemData.pictures)
+            this.posting = false
+          })
+          .catch(err => {
+            this.posting = false
+            this.$notify.error({
+              title: 'Error',
+              message: err.response.data.message,
+              offset: 50
+            })
+          })
+      },
       resetForm (formName) {
-        this.$refs['attributesManager'].reset()
-        this.$refs['photosManager'].reset()
-        this.$refs[formName].resetFields()
-        this.selectedCategoryId = null
+        if (this.isEditMode) {
+          this.setUpOnEdit()
+        } else {
+          this.$refs['attributesManager'].reset()
+          this.$refs['photosManager'].reset()
+          this.$refs[formName].resetFields()
+          this.reloadMoneyValue(0.00)
+        }
+      },
+      reloadMoneyValue (reloadTo) {
         this.reloadMoney = true
         this.$nextTick(() => {
-          this.newItemForm.price = 0.00
+          this.newItemForm.price = reloadTo
           this.reloadMoney = false
         })
       },
@@ -193,37 +247,52 @@
         this.categoriesLoading = true
         this.axios.get('admin/categories/parent').then(response => {
           this.categories = response.data
+
+          if (this.isEditMode) {
+            this.newItemForm.categoryid = this.initialEditData.category.id
+            this.fetchSubcategories(this.newItemForm.categoryid)
+          }
+
           this.categoriesLoading = false
         }).catch(err => {
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting parent categories.'
+            message: err.response.data.message,
+            offset: 50
           })
           this.categoriesLoading = false
         })
       },
       fetchSubcategories (parentCategoryId) {
-        this.newItemForm.categoryid = null
+        this.newItemForm.subcategoryid = null
         this.subcategoriesLoading = true
         this.axios.get(`admin/categories/${parentCategoryId}`).then(response => {
           this.subcategories = response.data
+
+          if (this.isEditMode) {
+            if (parentCategoryId === this.initialEditData.category.id && this.initialEditData.subCategory) {
+              this.newItemForm.subcategoryid = this.initialEditData.subCategory.id
+            }
+          }
+
           this.subcategoriesLoading = false
         }).catch(err => {
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting children categories.'
+            message: err.response.data.message,
+            offset: 50
           })
           this.subcategoriesLoading = false
         })
       },
-      addItem () {
+      addItem (shouldForce) {
         this.posting = true
 
         var uploadForm = new FormData()
         for (let key in this.newItemForm) {
-          uploadForm.append(key, this.newItemForm[key])
+          if (this.newItemForm[key] !== undefined && this.newItemForm[key] !== null) {
+            uploadForm.append(key, this.newItemForm[key])
+          }
         }
         uploadForm.set('price', parseFloat(this.newItemForm.price.split(' ')[1]))
 
@@ -240,20 +309,39 @@
         this.pictures.filter(x => x.isFile).map(x => x.file)
           .forEach(picture => uploadForm.append('pictureFiles', picture))
 
-        this.axios.post('admin/items/create', uploadForm).then(response => {
+        if (this.isEditMode) {
+          uploadForm.append('force', !!shouldForce)
+          uploadForm.append('itemId', this.itemid)
+          uploadForm.append('optLockVersion', this.initialEditData.optLockVersion)
+        }
+
+        this.axios.post(`admin/items/${this.isEditMode ? 'edit' : 'create'}`, uploadForm).then(response => {
           this.posting = false
           this.resetForm('newItemForm')
           this.$notify.success({
             title: 'Success',
-            message: 'Succesfully added item'
+            message: `Succesfully ${this.isEditMode ? 'edited' : 'added'} item`,
+            offset: 50
           })
         }).catch(err => {
+          if (err.response && err.response.status === 409) {
+            this.versionDialogVisible = true
+          }
           this.posting = false
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting the category: ' + err
+            message: err.response.data.message,
+            offset: 50
           })
         })
+      },
+      overrideChanges () {
+        this.addItem(true)
+        this.versionDialogVisible = false
+      },
+      reloadForm () {
+        this.setUpOnEdit()
+        this.versionDialogVisible = false
       }
     }
   }

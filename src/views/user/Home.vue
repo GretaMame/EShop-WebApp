@@ -106,6 +106,7 @@ export default {
   methods: {
     handleSizeChange (pageSize) {
       this.perPage = pageSize
+      this.currentPage = 1
       this.fetchData()
     },
     handleCurrentChange (currentPage) {

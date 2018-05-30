@@ -1,12 +1,12 @@
 <template>
   <el-row>
-    <el-card v-loading="loading" class="box-card" >
+    <el-card v-loading="loading" class="box-card">
       <el-row>
         <el-breadcrumb class="gd-itemDetailsBread">
           <el-breadcrumb-item v-if="item.category" :to="`/home/${item.category.id}`">
             {{item.category.name}}
           </el-breadcrumb-item>
-          <el-breadcrumb-item v-if="item.subCategory" :to="`/home/${item.subCategory.id}/${item.subCategory.id}`">
+          <el-breadcrumb-item v-if="item.subCategory" :to="`/home/${item.category.id}/${item.subCategory.id}`">
             {{item.subCategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
@@ -21,7 +21,7 @@
               <el-carousel-item v-if="item.pictures && item.pictures.length === 0">
                 <img class="carouselImage" src="@/../static/image-not-found.jpg">
               </el-carousel-item>
-              <el-carousel-item v-for="picture in this.item.pictures" :key="picture.id" >
+              <el-carousel-item v-for="picture in this.item.pictures" :key="picture.id">
                 <img class="carouselImage" :src="picture.url">
               </el-carousel-item>
             </el-carousel>
@@ -61,85 +61,94 @@
 </template>
 
 <script>
-import EventBus from '@/eventBus'
+  import EventBus from '@/eventBus'
 
-export default {
-  props: ['id'],
-  data () {
-    return {
-      item: {},
-      loading: false,
-      count: 1
-    }
-  },
-
-  mounted () {
-    this.loadItemDetails()
-  },
-
-  methods: {
-    loadItemDetails () {
-      this.loading = true
-      this.axios.get(`odata/Items?$expand=attributes,pictures,category,subCategory&$filter=id eq ${this.id}`).then(response => {
-        if (response.data.value && response.data.value[0]) {
-          this.item = response.data.value[0]
-        }
-        this.loading = false
-      })
-      .catch(err => {
-        console.log(err)
-        this.loading = false
-        this.$notify.error({
-          title: 'Error',
-          message: 'Ups! Something bad happened.'
-        })
-      })
-    },
-    addToCart () {
-      var newItem = {
-        ItemID: this.item.id,
-        Count: this.count
+  export default {
+    props: ['id'],
+    data () {
+      return {
+        item: {},
+        loading: false,
+        count: 1
       }
-      var addPromise = null
-      if (this.$store.getters.isAuthenticated) {
-        addPromise = this.addToCartRemote(newItem)
-      } else {
-        addPromise = this.addToCartLocal(newItem)
-      }
+    },
 
-      addPromise.then(() => {
-        this.$notify.closeAll()
-        this.$notify.success({
-          title: 'Success',
-          message: 'Item was added to cart.'
-        })
-        EventBus.$emit('cartItemCountChanged')
-      })
-      .catch(err => {
-        // try again if cookie expired, so items will be added to local storage cart
-        if (err.cookieExpired) {
-          this.addToCart()
-          return
+    mounted () {
+      this.loadItemDetails()
+    },
+
+    methods: {
+      loadItemDetails () {
+        this.loading = true
+        this.axios
+          .get(
+            `odata/Items?$expand=attributes,pictures,category,subCategory&$filter=id eq ${
+            this.id
+          }`
+          )
+          .then(response => {
+            if (response.data.value && response.data.value[0]) {
+              this.item = response.data.value[0]
+            }
+            this.loading = false
+          })
+          .catch(err => {
+            this.loading = false
+            this.$notify.error({
+              title: 'Error',
+              message: err.response.data.message,
+              offset: 50
+            })
+          })
+      },
+      addToCart () {
+        var newItem = {
+          ItemID: this.item.id,
+          Count: this.count
         }
-        console.log(err)
-        this.$notify.closeAll()
-        this.$notify.error({
-          title: 'Error',
-          message: 'Ups! Something bad happened.'
+        var addPromise = null
+        if (this.$store.getters.isAuthenticated) {
+          addPromise = this.addToCartRemote(newItem)
+        } else {
+          addPromise = this.addToCartLocal(newItem)
+        }
+
+        addPromise
+          .then(() => {
+            this.$notify.closeAll()
+            this.$notify.success({
+              title: 'Success',
+              message: 'Item was added to cart.',
+              offset: 50
+            })
+            EventBus.$emit('cartItemCountChanged')
+          })
+          .catch(err => {
+            // try again if cookie expired, so items will be added to local storage cart
+            if (err.cookieExpired) {
+              this.addToCart()
+              return
+            }
+            this.$notify.closeAll()
+            this.$notify.error({
+              title: 'Error',
+              message: err.response.data.message,
+              offset: 50
+            })
+          })
+      },
+      addToCartLocal (item) {
+        return new Promise(resolve => {
+          this.$store.dispatch('addItemToCart', item)
+          resolve()
         })
-      })
-    },
-    addToCartLocal (item) {
-      return new Promise((resolve) => {
-        this.$store.dispatch('addItemToCart', item)
-        resolve()
-      })
-    },
-    addToCartRemote (item) {
-      return this.axios.put(`cart`, item)
+      },
+      addToCartRemote (item) {
+        return this.axios.put(`cart`, item)
+      }
     }
   }
-}
+
 </script>
 
 <style scoped>
@@ -175,19 +184,20 @@ export default {
   }
 
   .gd-itemName {
-    padding-bottom:25px;
+    padding-bottom: 25px;
   }
-    .gd-itemName > h2 {
-      padding-bottom: 0px;
-      margin-bottom: 0px;
-      line-height: 1;
-    }
 
-    .gd-itemName > span {
-      font-size: 12px;
-      padding-top: -12px;
-      margin-top: 0px;
-    }
+  .gd-itemName>h2 {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    line-height: 1;
+  }
+
+  .gd-itemName>span {
+    font-size: 12px;
+    padding-top: -12px;
+    margin-top: 0px;
+  }
 
   .gd-attributeName {
     text-align: right;
@@ -210,25 +220,26 @@ export default {
   }
 
   .gd-addToCard {
-    margin:20px;
+    margin: 20px;
   }
 
-    .gd-addToCard > .el-input-number {
-      margin-right: 10px;
-    }
+  .gd-addToCard>.el-input-number {
+    margin-right: 10px;
+  }
 
   .gd-description {
     margin-top: 16px;
     border-top: solid black 1pt;
   }
 
-    .gd-description h2 {
-      padding-top: 24px;
-    }
-  
-  .gd-discount-price{
+  .gd-description h2 {
+    padding-top: 24px;
+  }
+
+  .gd-discount-price {
     font-size: 24px;
-    color:brown;
+    color: brown;
     font-weight: bold;
   }
+
 </style>

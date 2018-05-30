@@ -1,6 +1,6 @@
 <template>
   <el-card class="gd_wrapper" v-loading="loading">
-    <div v-if="!editMode" class ="gd_card_content_wrapper">
+    <div v-if="!editMode" class="gd_card_content_wrapper">
       <h2>My details</h2>
       <el-card class="box-card gd_info_card" align="left">
         <div slot="header">
@@ -59,11 +59,7 @@
         <h2>Edit profile</h2>
         <p>Please update your personal details and save the changes.</p>
       </div>
-      <el-form
-        ref="editUserForm"
-        :model="form"
-        :rules="rules"
-        label-width="80px">
+      <el-form ref="editUserForm" :model="form" :rules="rules" label-width="80px">
         <el-card class="box-card gd_info_card" align="left">
           <div slot="header">
             <span class="gd_title">Personal information</span>
@@ -134,8 +130,7 @@
           address: {}
         },
         rules: {
-          name: [
-            {
+          name: [{
               pattern: '^[A-Za-z]+$',
               message: 'Name can only contain letters',
               trigger: 'blur'
@@ -146,8 +141,7 @@
               trigger: 'blur'
             }
           ],
-          surname: [
-            {
+          surname: [{
               pattern: '^[A-Za-z]+$',
               message: 'Surname can only contain letters',
               trigger: 'blur'
@@ -158,8 +152,7 @@
               trigger: 'blur'
             }
           ],
-          phone: [
-            {
+          phone: [{
               pattern: '^[+]?[0-9]+$',
               message: 'Please enter a valid phone number',
               trigger: 'blur'
@@ -170,8 +163,7 @@
               trigger: 'blur'
             }
           ],
-          addressName: [
-            {
+          addressName: [{
               pattern: '^[A-Za-z]+$',
               message: 'Name can only contain letters',
               trigger: 'blur'
@@ -182,8 +174,7 @@
               trigger: 'blur'
             }
           ],
-          addressSurname: [
-            {
+          addressSurname: [{
               pattern: '^[A-Za-z]+$',
               message: 'Surname can only contain letters',
               trigger: 'blur'
@@ -194,34 +185,26 @@
               trigger: 'blur'
             }
           ],
-          street: [
-            {
-              required: true,
-              message: 'Please enter street name and house/apartment number',
-              trigger: 'blur'
-            }
-          ],
-          city: [
-            {
-              required: true,
-              message: 'Please enter a city',
-              trigger: 'blur'
-            }
-          ],
-          country: [
-            {
-              required: true,
-              message: 'Please enter a country',
-              trigger: 'blur'
-            }
-          ],
-          postcode: [
-            {
-              required: true,
-              message: 'Please enter a postcode',
-              trigger: 'blur'
-            }
-          ]
+          street: [{
+            required: true,
+            message: 'Please enter street name and house/apartment number',
+            trigger: 'blur'
+          }],
+          city: [{
+            required: true,
+            message: 'Please enter a city',
+            trigger: 'blur'
+          }],
+          country: [{
+            required: true,
+            message: 'Please enter a country',
+            trigger: 'blur'
+          }],
+          postcode: [{
+            required: true,
+            message: 'Please enter a postcode',
+            trigger: 'blur'
+          }]
         },
         editMode: false
       }
@@ -245,38 +228,41 @@
             }
             this.$notify.error({
               title: 'Error',
-              message: err.response.data.message
+              message: err.response.data.message,
+              offset: 50
             })
           })
       },
       saveChanges () {
         if (this.checkIfValidInputs('editUserForm')) {
           if (this.checkIfChangesHaveBeenMade()) {
-              this.loading = true
-              this.prepareUserToUpdate()
-              this.axios.put('user/updateUser', this.updatedUser)
-                .then(response => {
-                  this.setValues(this.updatedUser, this.initialUserData)
-                  this.$notify.success({
-                    title: 'Success!',
-                    message: 'Profile successfuly updated'
-                  })
-                  this.exitEditMode()
-                  this.loading = false
+            this.loading = true
+            this.prepareUserToUpdate()
+            this.axios.put('user/updateUser', this.updatedUser)
+              .then(response => {
+                this.setValues(this.updatedUser, this.initialUserData)
+                this.$notify.success({
+                  title: 'Success!',
+                  message: 'Profile successfuly updated',
+                  offset: 50
                 })
-                .catch(err => {
-                  console.log(err)
-                  this.$notify.error({
-                    title: 'Error!',
-                    message: 'Profile could not be updated'
-                  })
-                  this.exitEditMode()
-                  this.loading = false
+                this.exitEditMode()
+                this.loading = false
+              })
+              .catch(err => {
+                this.$notify.error({
+                  title: 'Error!',
+                  message: err.response.data.message,
+                  offset: 50
                 })
+                this.exitEditMode()
+                this.loading = false
+              })
           } else {
             this.$notify.success({
               title: 'Success!',
-              message: 'Profile successfuly updated'
+              message: 'Profile successfuly updated',
+              offset: 50
             })
             this.exitEditMode()
           }
@@ -342,34 +328,43 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
   .gd_label {
     font-weight: bold;
   }
+
   .gd_title {
     font-weight: bold;
   }
+
   .gd_buttons {
     margin-top: 20px;
   }
+
   button {
     margin: 5px;
   }
+
   .gd_wrapper {
     margin: auto;
     max-width: 700px;
     margin-top: 40px;
   }
+
   .gd_card_content_wrapper {
     margin: 0 auto;
     max-width: 500px;
   }
+
   h2 {
     margin: 20px;
   }
+
   .gd_info_card {
     margin-top: 20px;
   }
+
 </style>
