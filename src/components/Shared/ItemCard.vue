@@ -4,7 +4,10 @@
     <img v-else src="@/../static/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
       <el-col :lg="20" :md="20" :sm="20" :xs="20" :pull="4">
-        <span>{{item.price}} €</span>
+        <div>
+          <div v-bind:class="{'gd-itemPrice-strike': item.discount}">{{item.price}} €</div>
+          <div v-if="item.discount" class="gd-discount-price">{{item.discount}} €</div>
+        </div>
       </el-col>
     </el-row>
     <el-row class="gd-item-card-main">
@@ -78,5 +81,13 @@
     color:midnightblue;
     font-weight: bold;
     font-size: 12pt;
+  }  
+  .gd-discount-price{
+    font-size: 14px;
+    color:brown;
+    font-weight: bold;
+  }
+  .gd-itemPrice-strike{
+    text-decoration: line-through solid;
   }
 </style>

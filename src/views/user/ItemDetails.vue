@@ -41,11 +41,8 @@
               </el-col>
             </el-row>
             <el-row class="gd-itemPrice">
-              <span v-if="item.discount === 0">{{item.price}} €</span>
-              <span v-else>
-                <el-row class="gd-itemPrice-strike">{{item.price}} €</el-row>
-                <el-row class="gd-discount-price">{{item.discount}} €</el-row>
-              </span>
+                <el-row v-bind:class="{'gd-itemPrice-strike': item.discount}">{{item.price}} €</el-row>
+                <el-row v-if="item.discount" class="gd-discount-price">{{item.discount}} €</el-row>
             </el-row>
             <el-row class="gd-addToCard">
               <el-input-number size="medium" :min="1" v-model="count"/>
@@ -208,6 +205,7 @@ export default {
   }
 
   .gd-itemPrice-strike{
+    font-size: 16pt;
     text-decoration: line-through solid;
   }
 

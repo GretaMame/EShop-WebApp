@@ -22,11 +22,11 @@
               <el-col :xs="24" :sm="24" :md="19" :lg="18">
                 {{item.name}}
               </el-col>
-              <el-col class="item-price hidden-md-and-up" :push="1" :xs="6" :sm="6">
-                <span v-if="item.discount === 0">{{item.price}} €</span>
+              <el-col class="item-price hidden-sm-and-down" :push="1" :xs="6" :sm="6">
+                <span v-if="!item.discount">{{item.price}} €</span>
                 <span v-else>
                   <el-row class="gd-itemPrice-strike">{{item.price}} €</el-row>
-                  <el-row class="gd-discount-price">{{item.discount}} €</el-row>
+                  <el-row v-if="item.discount" class="gd-discount-price">{{item.discount}} €</el-row>
                 </span>
               </el-col>
             </el-row>
@@ -41,10 +41,10 @@
                 &nbsp;
               </el-col>
               <el-col class="item-price hidden-md-and-up" :push="1" :xs="6" :sm="6">
-                <span v-if="item.discount === 0">{{item.price}} €</span>
+                <span v-if="!item.discount">{{item.price}} €</span>
                 <span v-else>
-                  <el-row class="gd-itemPrice-strike">{{item.price}} €</el-row>
-                  <el-row class="gd-discount-price">{{item.discount}} €</el-row>
+                  <el-col class="gd-itemPrice-strike">{{item.price}} €</el-col>
+                  <el-col v-if="item.discount" class="gd-discount-price">{{item.discount}} €</el-col>
                 </span>
               </el-col>
             </el-row>
@@ -149,10 +149,10 @@ export default {
     justify-content: center;
   }
   .gd-itemPrice-strike{
+    font-size: 16pt;
     text-decoration: line-through solid;
   }
   .gd-discount-price{
-    font-size: 18px;
     color:brown;
     font-weight: bold;
   }

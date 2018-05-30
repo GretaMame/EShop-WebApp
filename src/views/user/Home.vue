@@ -139,7 +139,7 @@ export default {
         this.totalItems = response.data['@odata.count']
       })
 
-      var select = 'id,name,price,attributes&$expand=attributes,pictures($select=url)'
+      var select = 'id,name,price,discount,attributes&$expand=attributes,pictures($select=url)'
       var itemsPromise = this.axios.get(`odata/Items?$select=${select}&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filter ? `&$filter=${filter}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
