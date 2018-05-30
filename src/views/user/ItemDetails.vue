@@ -64,25 +64,25 @@
 </template>
 
 <script>
-import EventBus from "@/eventBus";
+import EventBus from '@/eventBus'
 
 export default {
-  props: ["id"],
-  data() {
+  props: ['id'],
+  data () {
     return {
       item: {},
       loading: false,
       count: 1
-    };
+    }
   },
 
-  mounted() {
-    this.loadItemDetails();
+  mounted () {
+    this.loadItemDetails()
   },
 
   methods: {
-    loadItemDetails() {
-      this.loading = true;
+    loadItemDetails () {
+      this.loading = true
       this.axios
         .get(
           `odata/Items?$expand=attributes,pictures,category,subCategory&$filter=id eq ${
@@ -91,65 +91,65 @@ export default {
         )
         .then(response => {
           if (response.data.value && response.data.value[0]) {
-            this.item = response.data.value[0];
+            this.item = response.data.value[0]
           }
-          this.loading = false;
+          this.loading = false
         })
         .catch(err => {
-          console.log(err);
-          this.loading = false;
+          console.log(err)
+          this.loading = false
           this.$notify.error({
-            title: "Error",
-            message: "Ups! Something bad happened."
-          });
-        });
+            title: 'Error',
+            message: 'Ups! Something bad happened.'
+          })
+        })
     },
-    addToCart() {
+    addToCart () {
       var newItem = {
         ItemID: this.item.id,
         Count: this.count
-      };
-      var addPromise = null;
+      }
+      var addPromise = null
       if (this.$store.getters.isAuthenticated) {
-        addPromise = this.addToCartRemote(newItem);
+        addPromise = this.addToCartRemote(newItem)
       } else {
-        addPromise = this.addToCartLocal(newItem);
+        addPromise = this.addToCartLocal(newItem)
       }
 
       addPromise
         .then(() => {
-          this.$notify.closeAll();
+          this.$notify.closeAll()
           this.$notify.success({
-            title: "Success",
-            message: "Item was added to cart."
-          });
-          EventBus.$emit("cartItemCountChanged");
+            title: 'Success',
+            message: 'Item was added to cart.'
+          })
+          EventBus.$emit('cartItemCountChanged')
         })
         .catch(err => {
           // try again if cookie expired, so items will be added to local storage cart
           if (err.cookieExpired) {
-            this.addToCart();
-            return;
+            this.addToCart()
+            return
           }
-          console.log(err);
-          this.$notify.closeAll();
+          console.log(err)
+          this.$notify.closeAll()
           this.$notify.error({
-            title: "Error",
-            message: "Ups! Something bad happened."
-          });
-        });
+            title: 'Error',
+            message: 'Ups! Something bad happened.'
+          })
+        })
     },
-    addToCartLocal(item) {
+    addToCartLocal (item) {
       return new Promise(resolve => {
-        this.$store.dispatch("addItemToCart", item);
-        resolve();
-      });
+        this.$store.dispatch('addItemToCart', item)
+        resolve()
+      })
     },
-    addToCartRemote(item) {
-      return this.axios.put(`cart`, item);
+    addToCartRemote (item) {
+      return this.axios.put(`cart`, item)
     }
   }
-};
+}
 </script>
 
 <style scoped>
