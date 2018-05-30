@@ -82,7 +82,9 @@ export default{
             type: 'error'
           })
           this.$store.dispatch('setImportedItems', null)
-          this.$store.dispatch('setImportErrors', error.data.error.message)
+          if (error.data.error) {
+            this.$store.dispatch('setImportErrors', error.data.error.message)
+          }
           window.onbeforeunload = undefined
         })
     }
