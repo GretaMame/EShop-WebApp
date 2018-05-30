@@ -216,7 +216,6 @@ export default {
     addItemsToCart (items) {
       if (items === null) return
       var itemsList = []
-      console.log(items)
       for (var i = 0; i < items.length; i++) {
         itemsList.push({ItemID: items[i].itemID, Count: 1})
       }
