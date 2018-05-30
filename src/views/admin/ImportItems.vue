@@ -9,14 +9,13 @@
       <div>
         <el-upload
           action=""
-          :file-list="file"
-          :before-upload="setFile"
+          :on-change="setFile"
           :auto-upload="false"
           :limit="1"
           accept=".xlsx">
-          <el-button slot="trigger" size="medium">Select file</el-button>
-          <el-button @click="importItems" size="medium"  type="primary">Import</el-button>
+          <el-button size="medium">Select file</el-button>
         </el-upload>
+        <el-button @click="importItems" size="medium"  type="primary">Import</el-button>
       </div>
       <div
         v-if="this.$store.getters.importedItems && this.$store.getters.importedItems.length > 0"
@@ -116,7 +115,6 @@ export default {
       return attributes
     },
     setFile (file) {
-      console.log(file)
       this.file = file.raw
       return false
     }

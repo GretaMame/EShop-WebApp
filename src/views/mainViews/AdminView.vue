@@ -3,7 +3,6 @@
     <el-main>
       <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
     <AdminNavigation></AdminNavigation>
-    <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
     <router-view/>
     </el-main>
   </el-container>
@@ -36,13 +35,25 @@ export default{
       window.onbeforeunload = undefined
     })
   },
+  beforeDestroy () {
+    EventBus.$off('importStarted', file => {
+      this.importItems(file)
+    })
+    EventBus.$off('exportStarted', () => {
+      window.onbeforeunload = () => {
+        return 'export running'
+      }
+    })
+    EventBus.$off('exportFinished', () => {
+      window.onbeforeunload = undefined
+    })
+  },
   methods: {
     importItems (file) {
       this.$store.dispatch('startImport')
       window.onbeforeunload = () => {
         return 'export running'
       }
-      console.log(file)
       var form = new FormData()
       form.append('file', file)
       this.axios.post('/admin/items/import', form)
