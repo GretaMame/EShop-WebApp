@@ -110,10 +110,9 @@
             })
             .then(() => this.fetchData())
             .catch((err) => {
-              console.log(err)
               this.$notify.error({
                 title: 'Error',
-                message: 'Error encountered while changing status: ' + err.response.data.message,
+                message: err.response.data.message,
                 offset: 50
               })
               this.fetchData()
@@ -188,10 +187,9 @@
           })
           .catch(err => {
             this.orderDataLoading = false
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'Something bad happened while loading order data: ' + err,
+              message: err.response.data.message,
               offset: 50
             })
           })

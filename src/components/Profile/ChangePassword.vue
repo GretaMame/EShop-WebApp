@@ -111,7 +111,6 @@
             this.loading = true
             this.axios.put('account/changePassword', this.user)
               .then(response => {
-                console.log('Password change successful')
                 this.$notify.success({
                   title: 'Success!',
                   message: 'Password changed',

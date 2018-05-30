@@ -96,11 +96,10 @@
             this.loading = false
           })
           .catch(err => {
-            console.log(err)
             this.loading = false
             this.$notify.error({
               title: 'Error',
-              message: 'Ups! Something bad happened.',
+              message: err.response.data.message,
               offset: 50
             })
           })
@@ -133,11 +132,10 @@
               this.addToCart()
               return
             }
-            console.log(err)
             this.$notify.closeAll()
             this.$notify.error({
               title: 'Error',
-              message: 'Ups! Something bad happened.',
+              message: err.response.data.message,
               offset: 50
             })
           })

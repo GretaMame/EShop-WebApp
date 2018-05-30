@@ -57,10 +57,9 @@
             })
             .catch(err => {
               this.loading = false
-              console.log(err)
               this.$notify.error({
                 title: 'Error',
-                message: 'There was a problem while getting parent categories.',
+                message: err.response.data.message,
                 offset: 50
               })
             })
@@ -76,10 +75,9 @@
             resolve(response.data)
           })
           .catch(err => {
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while getting child categories.',
+              message: err.response.data.message,
               offset: 50
             })
           })
@@ -118,8 +116,8 @@
                 this.reloadTree()
                 this.$notify.error({
                   title: 'Error',
-                  message: 'There was a problem while creating the category: ' + err,
-          offset: 50
+                  message: err.response.data.message,
+                  offset: 50
                 })
               })
           } else {
@@ -139,8 +137,8 @@
                 this.reloadTree()
                 this.$notify.error({
                   title: 'Error',
-                  message: 'There was a problem while creating the subcategory: ' + err,
-          offset: 50
+                  message: err.response.data.message,
+                  offset: 50
                 })
               })
           }
@@ -171,8 +169,8 @@
                 this.reloadTree()
                 this.$notify.error({
                   title: 'Error',
-                  message: 'There was a problem while editing the category name: ' + err,
-          offset: 50
+                  message: err.response.data.message,
+                  offset: 50
                 })
               })
           } else {
@@ -192,8 +190,8 @@
                 this.reloadTree()
                 this.$notify.error({
                   title: 'Error',
-                  message: 'There was a problem while editing the subcategory name: ' + err,
-          offset: 50
+                  message: err.response.data.message,
+                  offset: 50
                 })
               })
           }
@@ -213,15 +211,15 @@
                 this.$notify.success({
                   title: 'Success',
                   message: 'Succesfully deleted category',
-          offset: 50
+                  offset: 50
                 })
               })
               .catch(err => {
                 this.reloadTree()
                 this.$notify.error({
                   title: 'Error',
-                  message: 'There was a problem while deleting the category: ' + err,
-          offset: 50
+                  message: err.response.data.message,
+                  offset: 50
                 })
               })
           } else {
@@ -231,15 +229,15 @@
                 this.$notify.success({
                   title: 'Success',
                   message: 'Succesfully deleted subcategory',
-          offset: 50
+                  offset: 50
                 })
               })
               .catch(err => {
                 this.reloadTree()
                 this.$notify.error({
                   title: 'Error',
-                  message: 'There was a problem while deleting the subcategory: ' + err,
-          offset: 50
+                  message: err.response.data.message,
+                  offset: 50
                 })
               })
           }

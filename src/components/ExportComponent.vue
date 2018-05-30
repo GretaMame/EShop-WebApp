@@ -60,12 +60,12 @@
           EventBus.$emit('exportFinished')
           this.generateDownload(response.data)
           this.exportStarted = false
-        }).catch(e => {
+        }).catch(err => {
           EventBus.$emit('exportFinished')
           this.exportStarted = false
           this.$notify.error({
             title: 'Error',
-            message: 'Failed to export items.',
+            message: err.response.data.message,
             offset: 50
           })
         })
@@ -81,19 +81,19 @@
           EventBus.$emit('exportFinished')
           this.generateDownload(response.data)
           this.exportStarted = false
-        }).catch(e => {
+        }).catch(err => {
           this.exportStarted = false
           EventBus.$emit('exportFinished')
-          if (e.response.status === 400) {
+          if (err.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
-              message: 'No item were found for this category.',
+              message: err.response.data.message,
               offset: 50
             })
           } else {
             this.$notify.error({
               title: 'Error',
-              message: 'Failed to export items.',
+              message: err.response.data.message,
               offset: 50
             })
           }
@@ -109,19 +109,19 @@
           EventBus.$emit('exportFinished')
           this.generateDownload(response.data)
           this.exportStarted = false
-        }).catch(e => {
+        }).catch(err => {
           this.exportStarted = false
           EventBus.$emit('exportFinished')
-          if (e.response.status === 400) {
+          if (err.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
-              message: 'No items were found for this category.',
+              message: err.response.data.message,
               offset: 50
             })
           } else {
             this.$notify.error({
               title: 'Error',
-              message: 'Failed to export items.',
+              message: err.response.data.message,
               offset: 50
             })
           }
@@ -157,11 +157,10 @@
             this.categoriesLoading = false
           })
         }).catch(err => {
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting parent categories.',
-          offset: 50
+            message: err.response.data.message,
+            offset: 50
           })
           this.categoriesLoading = false
         })

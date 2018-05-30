@@ -250,10 +250,9 @@
                 this.loading = false
               })
               .catch(err => {
-                console.log(err)
                 this.$notify.error({
                   title: 'Error!',
-                  message: 'Profile could not be updated',
+                  message: err.response.data.message,
                   offset: 50
                 })
                 this.exitEditMode()

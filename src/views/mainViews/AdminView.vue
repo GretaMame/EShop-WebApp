@@ -58,7 +58,6 @@
         form.append('file', file)
         this.axios.post('/admin/items/import', form)
           .then(Response => {
-            console.log(Response.data)
             if (Response.data.errors && Response.data.errors.length > 0) {
               this.$store.dispatch('setImportErrors', Response.data.errors)
               this.$notify({
@@ -77,15 +76,15 @@
             window.onbeforeunload = undefined
             this.$store.dispatch('endImport')
           })
-          .catch(error => {
+          .catch(err => {
             this.$store.dispatch('endImport')
             this.$notify({
-              message: 'Oops! Import could not be completed',
+              message: err.response.data.message,
               type: 'error',
               offset: 50
             })
             this.$store.dispatch('setImportedItems', null)
-            this.$store.dispatch('setImportErrors', error.data.error.message)
+            this.$store.dispatch('setImportErrors', err.data.error.message)
             window.onbeforeunload = undefined
           })
       }

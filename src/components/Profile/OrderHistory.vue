@@ -226,7 +226,7 @@ export default {
           this.$notify.success({
             title: 'Success',
             message: 'Items were added to cart.',
-          offset: 50
+            offset: 50
           })
         })
         .catch(this.handleError)
@@ -253,11 +253,10 @@ export default {
         EventBus.$emit('cookieExpired')
         return
       }
-      console.log(err)
       this.$notify.error({
         title: 'Error',
-        message: 'Ups! Something bad happened.',
-          offset: 50
+        message: err.response.data.message,
+        offset: 50
       })
     }
   }

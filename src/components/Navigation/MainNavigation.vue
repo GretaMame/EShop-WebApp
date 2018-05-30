@@ -76,10 +76,9 @@
             this.postSignOut()
             return
           }
-          console.log('error: ', err)
           this.$notify.error({
             title: 'Error',
-            message: 'Unable to log out.',
+            message: err.response.data.message,
             offset: 50
           })
         })

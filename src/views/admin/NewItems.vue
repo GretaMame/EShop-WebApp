@@ -200,7 +200,6 @@
         this.axios.get('/admin/Items/single?id=' + this.itemid)
           .then(response => {
             let itemData = response.data
-            console.log(itemData)
             this.initialEditData = itemData
             this.newItemForm.name = itemData.name
             this.newItemForm.sku = itemData.sku
@@ -213,10 +212,9 @@
           })
           .catch(err => {
             this.posting = false
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while getting item to edit data.',
+              message: err.response.data.message,
               offset: 50
             })
           })
@@ -257,10 +255,9 @@
 
           this.categoriesLoading = false
         }).catch(err => {
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting parent categories.',
+            message: err.response.data.message,
             offset: 50
           })
           this.categoriesLoading = false
@@ -280,10 +277,9 @@
 
           this.subcategoriesLoading = false
         }).catch(err => {
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting children categories.',
+            message: err.response.data.message,
             offset: 50
           })
           this.subcategoriesLoading = false
@@ -334,7 +330,7 @@
           this.posting = false
           this.$notify.error({
             title: 'Error',
-            message: `There was a problem while ${this.isEditMode ? 'editing' : 'adding'} the category: ` + err,
+            message: err.response.data.message,
             offset: 50
           })
         })
