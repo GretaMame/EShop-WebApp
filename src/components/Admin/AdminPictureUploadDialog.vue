@@ -13,7 +13,7 @@
           action=""
           :before-upload="pictureUploadChanged">
           <el-button size="small" type="primary" class="upload-button">Click to upload</el-button>
-          <span slot="tip" class="el-upload__tip">jpg/png/bmp files with a size less than 5MB</span>
+          <div slot="tip" class="el-upload__tip">jpg/png/bmp files with a size less than 5MB</div>
         </el-upload>
       </el-col>
     </el-row>
@@ -80,11 +80,11 @@ export default{
 }
 .preview-slot{
   margin: 16px;
-  height: 200px;
+  height: 150px;
   align-items: center;
 }
 .preview-image{
-  max-height: 200px;
+  max-height: 150px;
   min-height: 100px;
 }
 .preview-text{
