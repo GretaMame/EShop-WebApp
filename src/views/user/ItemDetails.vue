@@ -6,7 +6,7 @@
           <el-breadcrumb-item v-if="item.category" :to="`/home/${item.category.id}`">
             {{item.category.name}}
           </el-breadcrumb-item>
-          <el-breadcrumb-item v-if="item.subCategory" :to="`/home/${item.subCategory.id}/${item.subCategory.id}`">
+          <el-breadcrumb-item v-if="item.subCategory" :to="`/home/${item.category.id}/${item.subCategory.id}`">
             {{item.subCategory.name}}
           </el-breadcrumb-item>
           <el-breadcrumb-item class="gd-truncateText">
@@ -64,173 +64,180 @@
 </template>
 
 <script>
-import EventBus from '@/eventBus'
+import EventBus from "@/eventBus";
 
 export default {
-  props: ['id'],
-  data () {
+  props: ["id"],
+  data() {
     return {
       item: {},
       loading: false,
       count: 1
-    }
+    };
   },
 
-  mounted () {
-    this.loadItemDetails()
+  mounted() {
+    this.loadItemDetails();
   },
 
   methods: {
-    loadItemDetails () {
-      this.loading = true
-      this.axios.get(`odata/Items?$expand=attributes,pictures,category,subCategory&$filter=id eq ${this.id}`).then(response => {
-        if (response.data.value && response.data.value[0]) {
-          this.item = response.data.value[0]
-        }
-        this.loading = false
-      })
-      .catch(err => {
-        console.log(err)
-        this.loading = false
-        this.$notify.error({
-          title: 'Error',
-          message: 'Ups! Something bad happened.'
+    loadItemDetails() {
+      this.loading = true;
+      this.axios
+        .get(
+          `odata/Items?$expand=attributes,pictures,category,subCategory&$filter=id eq ${
+            this.id
+          }`
+        )
+        .then(response => {
+          if (response.data.value && response.data.value[0]) {
+            this.item = response.data.value[0];
+          }
+          this.loading = false;
         })
-      })
+        .catch(err => {
+          console.log(err);
+          this.loading = false;
+          this.$notify.error({
+            title: "Error",
+            message: "Ups! Something bad happened."
+          });
+        });
     },
-    addToCart () {
+    addToCart() {
       var newItem = {
         ItemID: this.item.id,
         Count: this.count
-      }
-      var addPromise = null
+      };
+      var addPromise = null;
       if (this.$store.getters.isAuthenticated) {
-        addPromise = this.addToCartRemote(newItem)
+        addPromise = this.addToCartRemote(newItem);
       } else {
-        addPromise = this.addToCartLocal(newItem)
+        addPromise = this.addToCartLocal(newItem);
       }
 
-      addPromise.then(() => {
-        this.$notify.closeAll()
-        this.$notify.success({
-          title: 'Success',
-          message: 'Item was added to cart.'
+      addPromise
+        .then(() => {
+          this.$notify.closeAll();
+          this.$notify.success({
+            title: "Success",
+            message: "Item was added to cart."
+          });
+          EventBus.$emit("cartItemCountChanged");
         })
-        EventBus.$emit('cartItemCountChanged')
-      })
-      .catch(err => {
-        // try again if cookie expired, so items will be added to local storage cart
-        if (err.cookieExpired) {
-          this.addToCart()
-          return
-        }
-        console.log(err)
-        this.$notify.closeAll()
-        this.$notify.error({
-          title: 'Error',
-          message: 'Ups! Something bad happened.'
-        })
-      })
+        .catch(err => {
+          // try again if cookie expired, so items will be added to local storage cart
+          if (err.cookieExpired) {
+            this.addToCart();
+            return;
+          }
+          console.log(err);
+          this.$notify.closeAll();
+          this.$notify.error({
+            title: "Error",
+            message: "Ups! Something bad happened."
+          });
+        });
     },
-    addToCartLocal (item) {
-      return new Promise((resolve) => {
-        this.$store.dispatch('addItemToCart', item)
-        resolve()
-      })
+    addToCartLocal(item) {
+      return new Promise(resolve => {
+        this.$store.dispatch("addItemToCart", item);
+        resolve();
+      });
     },
-    addToCartRemote (item) {
-      return this.axios.put(`cart`, item)
+    addToCartRemote(item) {
+      return this.axios.put(`cart`, item);
     }
   }
-}
+};
 </script>
 
 <style scoped>
-  .box-card {
-    margin: auto;
-    margin-top: 16px;
-    padding: 30px;
-    max-width: 1376px;
-  }
+.box-card {
+  margin: auto;
+  margin-top: 16px;
+  padding: 30px;
+  max-width: 1376px;
+}
 
-  .carouselImage {
-    max-height: 500px;
-    max-width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    margin: auto auto;
-  }
+.carouselImage {
+  max-height: 500px;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto auto;
+}
 
-  .gd-truncateText {
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 25vw;
-  }
+.gd-truncateText {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 25vw;
+}
 
-  .gd-itemDetailsBread {
-    font-size: 18px;
-    padding-bottom: 20px;
-  }
+.gd-itemDetailsBread {
+  font-size: 18px;
+  padding-bottom: 20px;
+}
 
-  .gd-itemName {
-    padding-bottom:25px;
-  }
-    .gd-itemName > h2 {
-      padding-bottom: 0px;
-      margin-bottom: 0px;
-      line-height: 1;
-    }
+.gd-itemName {
+  padding-bottom: 25px;
+}
+.gd-itemName > h2 {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  line-height: 1;
+}
 
-    .gd-itemName > span {
-      font-size: 12px;
-      padding-top: -12px;
-      margin-top: 0px;
-    }
+.gd-itemName > span {
+  font-size: 12px;
+  padding-top: -12px;
+  margin-top: 0px;
+}
 
-  .gd-attributeName {
-    text-align: right;
-  }
+.gd-attributeName {
+  text-align: right;
+}
 
-  .gd-attributeValue {
-    text-align: left;
-    color: grey;
-  }
+.gd-attributeValue {
+  text-align: left;
+  color: grey;
+}
 
-  .gd-itemPrice {
-    font-size: 24px;
-    padding-top: 24px;
-    color: midnightblue;
-  }
+.gd-itemPrice {
+  font-size: 24px;
+  padding-top: 24px;
+  color: midnightblue;
+}
 
-  .gd-itemPrice-strike{
-    text-decoration: line-through solid;
-  }
+.gd-itemPrice-strike {
+  text-decoration: line-through solid;
+}
 
-  .gd-addToCard {
-    margin:20px;
-  }
+.gd-addToCard {
+  margin: 20px;
+}
 
-    .gd-addToCard > .el-input-number {
-      margin-right: 10px;
-    }
+.gd-addToCard > .el-input-number {
+  margin-right: 10px;
+}
 
-  .gd-description {
-    margin-top: 16px;
-    border-top: solid black 1pt;
-  }
+.gd-description {
+  margin-top: 16px;
+  border-top: solid black 1pt;
+}
 
-    .gd-description h2 {
-      padding-top: 24px;
-    }
-  
-  .gd-discount-price{
-    font-size: 24px;
-    color:brown;
-    font-weight: bold;
-  }
+.gd-description h2 {
+  padding-top: 24px;
+}
+
+.gd-discount-price {
+  font-size: 24px;
+  color: brown;
+  font-weight: bold;
+}
 </style>
