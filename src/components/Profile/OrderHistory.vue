@@ -2,35 +2,35 @@
   <el-card class="gd_wrapper" v-loading="loading">
     <h2>Order history</h2>
     <el-card
-      class="gd_order"
+      class="gd_order gd-min-height-70vh"
       v-for="order in orders"
       :key="order.id"
       shadow="hover">
         <div slot="header" class="gd_order_header" align="left">
           <el-row>
-            <el-col :span="14">
-              <el-row>
+            <el-col :xs="24" :sm="14" :md="14" :lg="14">
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 <span class="gd_label">Order no.:</span>
-              </el-row>
-              <el-row>
+              </el-col>
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 {{order.orderNumber}}
-              </el-row>
+              </el-col>
             </el-col>
-            <el-col :span="5">
-              <el-row>
+            <el-col :xs="24" :sm="5" :md="5" :lg="5">
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 <span class="gd_label">Order date:</span>
-              </el-row>
-              <el-row>
+              </el-col>
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 {{order.createDate}}
-              </el-row>
+              </el-col>
             </el-col>
-            <el-col :span="5">
-              <el-row>
+            <el-col :xs="24" :sm="5" :md="5" :lg="5">
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
               <span class="gd_label">Order status:</span>
-              </el-row>
-              <el-row>
+              </el-col>
+              <el-col :xs="12" :sm="24" :md="24" :lg="24">
                 {{order.status}}
-              </el-row>
+              </el-col>
             </el-col>
           </el-row>
         </div>
@@ -40,9 +40,11 @@
           {{order.totalPrice.toFixed(2)}} €
           </el-col>
           <el-col :span="6">
-            <el-button size="small" @click="addItemsToCart(order.items)" align="right">
-              Add all items to cart
-            </el-button>
+            <el-tooltip placement="bottom" content="Add all items to cart">
+              <el-button size="small" @click="addItemsToCart(order.items)" align="right">
+                <icon name="cart-arrow-down"/>
+              </el-button>
+            </el-tooltip>
           </el-col>
         </el-row>
         <el-collapse>
@@ -69,13 +71,13 @@
                 </el-tooltip>
                 <el-tooltip
                   placement="top"
-                  content="Add to cart"
+                  content="Add item to cart"
                   effect="dark">
                     <el-button
-                      icon="el-icon-goods"
                       @click="addItemToCart(item.itemID)"
                       size ="small"
                       circle>
+                      <icon name="cart-plus"/>
                     </el-button>
                 </el-tooltip>
               </el-col>
@@ -111,15 +113,45 @@
           </el-collapse-item>
         </el-collapse>
       </el-card>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :page-sizes="pageOptions"
-        :page-size="perPage"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalOrders">
-      </el-pagination>
+      <el-row v-if="order">
+        <el-col class="hidden-xs-only">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="pageOptions"
+            :page-size="perPage"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalOrders">
+          </el-pagination>
+        </el-col>
+        <el-col class="hidden-sm-and-up">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-sizes="pageOptions"
+            :page-size="perPage"
+            small
+            layout="total, sizes"
+            :total="totalOrders">
+          </el-pagination>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="perPage"
+            :pager-count="5"
+            background
+            small
+            layout="prev, pager, next"
+            :total="totalOrders">
+          </el-pagination>
+        </el-col>
+      </el-row>
+      <el-row v-else>
+        <h1 style="padding-top: 10%">Your order history is empty</h1>
+      </el-row>
   </el-card>
 </template>
 
@@ -185,7 +217,7 @@ export default {
       if (items === null) return
       var itemsList = []
       for (var i = 0; i < items.length; i++) {
-        itemsList.push({ItemID: items[i].ItemID, Count: 1})
+        itemsList.push({ItemID: items[i].itemID, Count: 1})
       }
       this.loading = true
       this.axios.post('cart', {Items: itemsList})

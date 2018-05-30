@@ -3,15 +3,10 @@
     <el-container v-loading="loading">
       <el-header>
         <el-row>
-          <el-col :span="5" :xl="2">
-            <router-link :to="{ name: 'adminItemsAdd' }">
-              <el-button>Add new item</el-button>
-            </router-link>
+          <el-col :span="3">
+            <el-button :disabled="selectedItems.length === 0" type="danger" @click="unarchiveSelected">Unarchive selected</el-button>
           </el-col>
-          <el-col :span="5" :xl="2">
-            <el-button :disabled="selectedItems.length === 0" type="danger" @click="deleteSelected">Archive selected</el-button>
-          </el-col>
-          <el-col :span="8" :xl="14">
+          <el-col :span="21">
             <el-input placeholder="Search" v-model="searchText">
               <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
                 <el-option label="Name" value="name"></el-option>
@@ -19,9 +14,6 @@
               </el-select>
               <el-button slot="append" icon="el-icon-search" @click="fetchData()"></el-button>
             </el-input>
-          </el-col>
-          <el-col :span="6">
-            <ExportButton />
           </el-col>
         </el-row>
       </el-header>
@@ -62,27 +54,21 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column label="Price" prop="price" width="100px">
-                    <template slot-scope="scope">
-              {{scope.row.price}} €
-            </template>
-          </el-table-column>
-          <el-table-column label="Category" prop="category" width="130px" />
           <el-table-column
-            label="Archived"
-            prop="isDeleted"
-            width="80px">
-            <template slot-scope="scope">
-              {{ scope.row.isDeleted ? 'Yes' : 'No' }}
-            </template>
-          </el-table-column>
+            label="Price"
+            prop="price"
+            width="100px"/>
+          <el-table-column
+            label="Category"
+            prop="category"
+            width="130px"/>
           <el-table-column
             fixed="right"
             label="Operations"
             width="120"
             class="table-actions">
             <template slot-scope="scope">
-              <router-link :to="{ name: 'adminItemsEdit', params: {itemid: scope.row.id} }">
+              <router-link :to="{ name: 'adminItemsAdd' }">
                 <el-button class="table-action-button" type="text" size="small">Edit item</el-button>
               </router-link>
             </template>
@@ -103,11 +89,7 @@
   </div>
 </template>
 <script>
-import ExportButton from '@/components/ExportComponent'
-export default {
-  components: {
-    ExportButton
-  },
+export default{
   data () {
     return {
       loading: false,
@@ -140,20 +122,20 @@ export default {
     handleSelectionChange (val) {
       this.selectedItems = val
     },
-    deleteSelected () {
+    unarchiveSelected () {
       if (this.selectedItems.length === 0) {
         return
       }
 
-      this.$confirm('Are you sure you want to delete selected items?',
+      this.$confirm('Are you sure you want to unarchive selected items?',
       {
         confirmButtonText: 'Yes',
         cancelButtonText: 'No',
         type: 'Warning'
       }).then(() => {
         this.loading = true
-        let idsToArchive = this.selectedItems.map(x => x.id)
-        this.axios.post('admin/Items/archive', idsToArchive)
+        let idsToUnarchive = this.selectedItems.map(x => x.id)
+        this.axios.post('admin/Items/unarchive', idsToUnarchive)
           .then(() => {
             this.loading = false
             this.fetchData()
@@ -163,7 +145,7 @@ export default {
             console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while archiving the items: ' + err
+              message: 'There was a problem while unarchiving the items: ' + err
             })
           })
       })
@@ -178,6 +160,8 @@ export default {
       // build filter
 
       let filters = []
+
+      filters.push('isDeleted eq true')
 
       if (this.searchText) {
         filters.push(`contains(${this.searchBy},'${this.searchText}')`)
