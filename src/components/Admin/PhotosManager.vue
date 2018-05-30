@@ -72,6 +72,9 @@ export default {
     },
     addSelectedPicture (picture) {
       this.pictures.push(picture)
+      if (this.pictures.length === 1) {
+        this.selectedPictureIndex = 0
+      }
       this.uploadPictureDialogVisible = false
     },
     deletePicture (picture) {
@@ -84,6 +87,7 @@ export default {
         let index = this.pictures.indexOf(picture)
         if (index >= 0) {
           this.pictures.splice(index, 1)
+          this.selectedPictureIndex--
         }
       })
     }
@@ -128,6 +132,7 @@ export default {
   width: 50px;
 }
 .delete-button{
+  top: 0;
   position: absolute;
   color: red;
 }

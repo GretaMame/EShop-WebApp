@@ -161,7 +161,7 @@ export default{
 
       let filters = []
 
-      filters.push('IsDeleted eq true')
+      filters.push('isDeleted eq true')
 
       if (this.searchText) {
         filters.push(`contains(${this.searchBy},'${this.searchText}')`)

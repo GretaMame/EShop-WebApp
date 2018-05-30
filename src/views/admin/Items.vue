@@ -3,15 +3,15 @@
     <el-container v-loading="loading">
       <el-header>
         <el-row>
-          <el-col :span="3">
+          <el-col :span="5" :xl="2">
             <router-link :to="{ name: 'adminItemsAdd' }">
               <el-button>Add new item</el-button>
             </router-link>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="5" :xl="2">
             <el-button :disabled="selectedItems.length === 0" type="danger" @click="deleteSelected">Archive selected</el-button>
           </el-col>
-          <el-col :span="18">
+          <el-col :span="8" :xl="14">
             <el-input placeholder="Search" v-model="searchText">
               <el-select v-model="searchBy" slot="prepend" placeholder="Search by">
                 <el-option label="Name" value="name"></el-option>
