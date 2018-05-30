@@ -17,6 +17,12 @@
           :fit="true"
           :header-cell-style="headerCellStyle()">
           <el-table-column
+            width="50">
+            <template slot-scope="scope">
+              <el-button icon="el-icon-delete" circle size="mini" @click="deleteDiscount(scope.$index)"></el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="Category"
             width="150px"
             prop="categoryName"/>
@@ -76,6 +82,31 @@ export default{
     handleCurrentChange (currentPage) {
       this.currentPage = currentPage
       this.fetchData()
+    },
+    deleteDiscount (index) {
+      console.log(index)
+      console.log(this.discounts[index].id)
+      console.log(this.discounts[index])
+      this.$confirm('Are you sure you want to delete selected discounts?',
+      {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'Warning'
+      }).then(() => {
+        this.loading = true
+        this.axios.delete('admin/discount/' + this.discounts[index].id)
+          .then(() => {
+            this.loading = false
+            this.fetchData()
+          })
+          .catch(err => {
+            this.loading = false
+            this.$notify.error({
+              title: 'Error',
+              message: 'There was a problem while deleting the discounts: ' + err
+            })
+          })
+      })
     },
     onFiltered (filtereddiscounts) {
       this.totalRows = filtereddiscounts.length
