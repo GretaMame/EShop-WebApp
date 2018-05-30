@@ -29,10 +29,10 @@
             </el-form-item>
             <div class="buttons" align="center">
               <el-form-item>
-                <el-button class="btn" type="primary" @click="$router.push('/home')">Continue shopping</el-button>
+                <el-button class="btn" @click="$router.push('/home')">Continue shopping</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button class="btn" @click="submitFeedback('feedbackForm')">Submit</el-button>
+                <el-button class="btn" type="primary" @click="submitFeedback('feedbackForm')">Submit</el-button>
               </el-form-item>
             </div>
           </el-form>
@@ -99,7 +99,7 @@
 </script>
 
 
-<style>
+<style scoped>
   .message {
     align-items: center;
     justify-content: center;
