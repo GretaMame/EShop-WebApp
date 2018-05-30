@@ -53,7 +53,8 @@
         this.exportStarted = true
         this.$notify.info({
           title: 'Export started',
-          message: 'Once export file be ready, file download start automatically.'
+          message: 'Once export file be ready, file download start automatically.',
+          offset: 50
         })
         this.axios.get('admin/items/exportAll').then((response) => {
           EventBus.$emit('exportFinished')
@@ -64,7 +65,8 @@
           this.exportStarted = false
           this.$notify.error({
             title: 'Error',
-            message: 'Failed to export items.'
+            message: 'Failed to export items.',
+            offset: 50
           })
         })
       },
@@ -72,7 +74,8 @@
         this.exportStarted = true
         this.$notify.info({
           title: 'Export started',
-          message: 'Once export file be ready, file download start automatically.'
+          message: 'Once export file be ready, file download start automatically.',
+          offset: 50
         })
         this.axios.get('admin/items/export/' + categoryId).then((response) => {
           EventBus.$emit('exportFinished')
@@ -84,12 +87,14 @@
           if (e.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
-              message: 'No item were found for this category.'
+              message: 'No item were found for this category.',
+              offset: 50
             })
           } else {
             this.$notify.error({
               title: 'Error',
-              message: 'Failed to export items.'
+              message: 'Failed to export items.',
+              offset: 50
             })
           }
         })
@@ -110,12 +115,14 @@
           if (e.response.status === 400) {
             this.$notify.warning({
               title: 'Warning',
-              message: 'No items were found for this category.'
+              message: 'No items were found for this category.',
+              offset: 50
             })
           } else {
             this.$notify.error({
               title: 'Error',
-              message: 'Failed to export items.'
+              message: 'Failed to export items.',
+              offset: 50
             })
           }
         })
@@ -153,7 +160,8 @@
           console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting parent categories.'
+            message: 'There was a problem while getting parent categories.',
+          offset: 50
           })
           this.categoriesLoading = false
         })
@@ -166,7 +174,8 @@
         window.open(this.axios.defaults.baseURL + response.urlToFile, '_self')
         this.$notify.info({
           title: 'Export successfully finished',
-          message: 'Export file should start downloading in a moment.'
+          message: 'Export file should start downloading in a moment.',
+          offset: 50
         })
       },
       left () {

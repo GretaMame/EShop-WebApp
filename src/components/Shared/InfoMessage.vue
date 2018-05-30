@@ -9,11 +9,15 @@
         <div class="feedback-content">
           <p>How was your shopping experience? Please rate it below and leave your feedback.</p>
           <div class="rating-container">
-            <el-col class="hidden-xs-only" :push="1" :sm="3" :md="3" :lg="3"><h4>Poor</h4></el-col>
-            <el-col :sm="8" :md="8" :lg="8">
-              <el-rate class="rate-content" @change="rateChanged" v-model="form.rating"/>
+            <el-col class="hidden-xs-only" :push="1" :sm="3" :md="3" :lg="3">
+              <h4>Poor</h4>
             </el-col>
-            <el-col class="hidden-xs-only" :pull="1" :sm="3" :md="3" :lg="3"><h4>Great</h4></el-col>
+            <el-col :sm="8" :md="8" :lg="8">
+              <el-rate class="rate-content" @change="rateChanged" v-model="form.rating" />
+            </el-col>
+            <el-col class="hidden-xs-only" :pull="1" :sm="3" :md="3" :lg="3">
+              <h4>Great</h4>
+            </el-col>
           </div>
           <el-form :model="form" :rules="rules" ref="feedbackForm">
             <el-form-item prop="message">
@@ -79,7 +83,8 @@
               this.loading = false
               this.$notify.error({
                 title: 'Error',
-                message: e.response.data.message
+                message: e.response.data.message,
+                offset: 50
               })
             })
           }

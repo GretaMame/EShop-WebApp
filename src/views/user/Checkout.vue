@@ -132,7 +132,8 @@ export default {
             this.fetchData(true)
             this.$notify.info({
               title: 'Logged out',
-              message: 'You were logged out'
+              message: 'You were logged out',
+          offset: 50
             })
             return
           }
@@ -241,7 +242,8 @@ export default {
       }).catch(e => {
         this.$notify.error({
             title: 'Error',
-            message: e.response.data.message
+            message: e.response.data.message,
+          offset: 50
           })
         this.loading = false
       })

@@ -1,16 +1,10 @@
 <template>
   <div>
     <el-row class="hidden-sm-and-up">
-      <NavigationMobile
-        :categories="categories"
-        :itemsInCart="itemsInCart"
-        v-on:signOut="signOut"/>
+      <NavigationMobile :categories="categories" :itemsInCart="itemsInCart" v-on:signOut="signOut" />
     </el-row>
     <el-row class="hidden-xs-only">
-      <Navigation
-        :categories="categories"
-        :itemsInCart="itemsInCart"
-        v-on:signOut="signOut"/>
+      <Navigation :categories="categories" :itemsInCart="itemsInCart" v-on:signOut="signOut" />
     </el-row>
   </div>
 </template>
@@ -21,8 +15,8 @@
 
   export default {
     components: {
-    Navigation,
-    NavigationMobile
+      Navigation,
+      NavigationMobile
     },
     data () {
       return {
@@ -51,16 +45,16 @@
     },
     methods: {
       fetchData () {
-          this.loadCategory().catch(err => {
-            console.log(err)
-          })
-          this.loadCartCount()
+        this.loadCategory().catch(err => {
+          console.log(err)
+        })
+        this.loadCartCount()
       },
       loadCategory () {
         this.categoriesPromise = this.axios.get('Category').then(response => {
-            this.categories = response.data
-            this.categoriesPromise = null
-          })
+          this.categories = response.data
+          this.categoriesPromise = null
+        })
         return this.categoriesPromise
       },
       loadCartCount () {
@@ -85,7 +79,8 @@
           console.log('error: ', err)
           this.$notify.error({
             title: 'Error',
-            message: 'Unable to log out.'
+            message: 'Unable to log out.',
+            offset: 50
           })
         })
       },
@@ -102,7 +97,8 @@
       postSignOut () {
         this.$store.dispatch('logOut')
         this.$notify.success({
-          title: 'Successful logout'
+          title: 'Successful logout',
+          offset: 50
         })
         this.$router.push('/home')
         this.axios.get('account/renewcsrftoken')
@@ -129,11 +125,15 @@
             }
           }
         }
-        setNames({categoryName: categoryName, subcategoryName: subcategoryName})
+        setNames({
+          categoryName: categoryName,
+          subcategoryName: subcategoryName
+        })
       },
       goToOrderHistory () {
         this.$router.push()
       }
     }
   }
+
 </script>

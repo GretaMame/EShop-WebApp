@@ -1,51 +1,28 @@
 <template>
   <el-card class="gd_wrapper" :v-loading="loading">
     <h2>Change password</h2>
-    <el-form
-      :model="user"
-      :rules="rules"
-      ref="changePasswordForm"
-      size="medium"
-      label-position="top"
-      align="left"
-      class="gd_form_wrapper">
+    <el-form :model="user" :rules="rules" ref="changePasswordForm" size="medium" label-position="top" align="left" class="gd_form_wrapper">
       <el-form-item id="passwordItem" prop="currentPassword" label="Current password">
-        <el-input
-          type="password"
-          :autofocus="true"
-          v-model="user.currentPassword"
-          placeholder="Enter your current password">
+        <el-input type="password" :autofocus="true" v-model="user.currentPassword" placeholder="Enter your current password">
         </el-input>
       </el-form-item>
       <el-row>
         <el-form-item id="forgotPasswordLinkItem" size="mini">
-            <el-button
-              class="gd_link"
-              type="text"
-              @click="redirect('forgotPassword')">
-              Forgot password?
-            </el-button>
-          </el-form-item>
-        </el-row>
+          <el-button class="gd_link" type="text" @click="redirect('forgotPassword')">
+            Forgot password?
+          </el-button>
+        </el-form-item>
+      </el-row>
       <el-form-item prop="newPassword" label="New password">
-        <el-input
-          type="password"
-          v-model="user.newPassword"
-          placeholder="Enter your new password">
+        <el-input type="password" v-model="user.newPassword" placeholder="Enter your new password">
         </el-input>
       </el-form-item>
       <el-form-item prop="repeatNewPassword" label="Repeat new password">
-        <el-input
-          type="password"
-          v-model="user.repeatNewPassword"
-          placeholder="Repeat your new password"
-          @keyup.enter.native="submitForm('changePasswordForm')">
+        <el-input type="password" v-model="user.repeatNewPassword" placeholder="Repeat your new password" @keyup.enter.native="submitForm('changePasswordForm')">
         </el-input>
       </el-form-item>
       <el-form-item align="center">
-        <el-button
-          type="primary"
-          @click="submitForm('changePasswordForm')">
+        <el-button type="primary" @click="submitForm('changePasswordForm')">
           Change password
         </el-button>
       </el-form-item>
@@ -79,15 +56,12 @@
         },
         errorMessage: '',
         rules: {
-          currentPassword: [
-            {
-              required: true,
-              message: 'Please enter your current password',
-              trigger: 'blur'
-            }
-          ],
-          newPassword: [
-            {
+          currentPassword: [{
+            required: true,
+            message: 'Please enter your current password',
+            trigger: 'blur'
+          }],
+          newPassword: [{
               required: true,
               message: 'Please enter your new password',
               trigger: 'blur'
@@ -117,8 +91,7 @@
               trigger: 'blur'
             }
           ],
-          repeatNewPassword: [
-            {
+          repeatNewPassword: [{
               required: true,
               message: 'Please repeat your new password',
               trigger: 'blur'
@@ -133,72 +106,86 @@
     },
     methods: {
       submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.axios.put('account/changePassword', this.user)
-          .then(response => {
-          console.log('Password change successful')
-            this.$notify.success({
-              title: 'Success!',
-              message: 'Password changed'
-            })
-            this.$store.dispatch('logOut')
-            this.redirect('login')
-          })
-          .catch(err => {
-            this.$notify.error({
-              title: 'Error!',
-              message: err.response.data.message
-            })
-          this.$refs['changePasswordForm'].resetFields()
-          this.loading = false
-          })
-        }
-      })
-    },
-    redirect (windowName) {
-        this.$router.push({name: windowName})
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading = true
+            this.axios.put('account/changePassword', this.user)
+              .then(response => {
+                console.log('Password change successful')
+                this.$notify.success({
+                  title: 'Success!',
+                  message: 'Password changed',
+                  offset: 50
+                })
+                this.$store.dispatch('logOut')
+                this.redirect('login')
+              })
+              .catch(err => {
+                this.$notify.error({
+                  title: 'Error!',
+                  message: err.response.data.message,
+                  offset: 50
+                })
+                this.$refs['changePasswordForm'].resetFields()
+                this.loading = false
+              })
+          }
+        })
+      },
+      redirect (windowName) {
+        this.$router.push({
+          name: windowName
+        })
       }
+    }
   }
-}
+
 </script>
 
 <style scoped>
   label {
     margin: 0px;
   }
+
   form {
     margin: 10px;
     margin-top: 30px;
     padding: 0px 60px;
   }
+
   .el-button {
     margin-top: 30px;
   }
+
   .gd_wrapper {
     margin: auto;
     max-width: 700px;
     margin-top: 40px;
   }
+
   .gd_form_wrapper {
     margin: 0 auto;
     max-width: 400px;
     padding: 0;
   }
+
   h2 {
     margin: 20px;
     margin-bottom: 40px;
   }
+
   #forgotPasswordLinkItem {
     text-align: end;
   }
+
   div#passwordItem {
     margin-bottom: 0px;
   }
+
   .gd_link {
     margin-top: 0px;
   }
+
   @media screen and (max-width: 600px) {
     .gd_wrapper {
       margin: auto;
@@ -206,8 +193,9 @@
       padding: 10px 10px;
     }
     form {
-    margin: 10px;
-    margin-top: 30px;
+      margin: 10px;
+      margin-top: 30px;
+    }
   }
-  }
+
 </style>

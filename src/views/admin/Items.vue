@@ -163,7 +163,8 @@ export default {
             console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while archiving the items: ' + err
+              message: 'There was a problem while archiving the items: ' + err,
+          offset: 50
             })
           })
       })

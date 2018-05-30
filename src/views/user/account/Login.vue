@@ -7,11 +7,7 @@
           <el-input :autofocus="true" v-model="loginForm.email" placeholder="Enter your email"></el-input>
         </el-form-item>
         <el-form-item id="passwordItem" prop="password" label="Password">
-          <el-input
-            type="password"
-            v-model="loginForm.password"
-            placeholder="Enter your password"
-            @keyup.enter.native="onSubmit('loginForm')">
+          <el-input type="password" v-model="loginForm.password" placeholder="Enter your password" @keyup.enter.native="onSubmit('loginForm')">
           </el-input>
         </el-form-item>
         <el-row>
@@ -42,8 +38,8 @@
         loading: false,
         windowName: '',
         loginForm: {
-          email: 'gretuka27@gmail.com',
-          password: 'K0ldunai!'
+          email: '',
+          password: ''
         },
         rules: {
           email: [{
@@ -69,13 +65,14 @@
           if (valid) {
             this.loading = true
             this.axios.post('account/login', this.loginForm).then(this.postLogin)
-            .catch(err => {
-              this.$notify.error({
-                title: 'Error',
-                message: err.response.data.message
+              .catch(err => {
+                this.$notify.error({
+                  title: 'Error',
+                  message: err.response.data.message,
+                  offset: 50
+                })
+                this.loading = false
               })
-              this.loading = false
-            })
           } else {
             console.log('Inputs not valid')
           }
@@ -102,11 +99,13 @@
     margin-top: 40px;
     padding: 10px;
   }
+
   form {
     margin: 0 auto;
     max-width: 450px;
     margin-top: 30px;
   }
+
   #forgotPasswordLinkItem {
     text-align: end;
   }

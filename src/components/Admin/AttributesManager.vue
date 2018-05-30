@@ -95,7 +95,8 @@ export default {
         console.log(err)
         this.$notify.error({
           title: 'Error',
-          message: 'There was a problem while getting attribute names'
+          message: 'There was a problem while getting attribute names',
+          offset: 50
         })
       })
   },
@@ -136,7 +137,8 @@ export default {
           console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting attribute values'
+            message: 'There was a problem while getting attribute values',
+          offset: 50
           })
         })
       }
@@ -175,7 +177,8 @@ export default {
           console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting attribute values'
+            message: 'There was a problem while getting attribute values',
+          offset: 50
           })
         })
     },
@@ -183,7 +186,8 @@ export default {
       if (!this.newAttribute.key || !this.newAttribute.value || /^\s+$/.test(this.newAttribute.key) || /^\s+$/.test(this.newAttribute.value)) {
         this.$notify.warning({
             title: 'Warning',
-            message: 'Attribute key and value cannot be empty/whitespace only'
+            message: 'Attribute key and value cannot be empty/whitespace only',
+          offset: 50
         })
         return
       }

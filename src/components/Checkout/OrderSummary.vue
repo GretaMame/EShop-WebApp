@@ -130,7 +130,8 @@ export default {
       .catch(error => {
         this.$notify.error({
           title: 'Error!',
-          message: 'Could not fetch cart'
+          message: 'Could not fetch cart',
+          offset: 50
         })
         console.log(error)
       })
