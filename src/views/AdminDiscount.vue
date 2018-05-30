@@ -59,7 +59,7 @@ export default{
     return {
       loading: false,
       pageOptions: [5, 10, 25, 50],
-      perPage: 5,
+      perPage: 10,
       currentPage: 1,
       discounts: null,
       totalRows: 0

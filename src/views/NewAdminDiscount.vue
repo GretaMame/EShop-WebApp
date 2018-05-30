@@ -18,15 +18,15 @@
         </el-row>
       </el-header>
       <el-main>
-        <el-form ref="newDiscountForm" :model="newDiscountForm" :rules="rules">
+        <el-form ref="newDiscountForm" :model="newDiscountForm" :rules="rules" label-position="right">
           <el-card>
               <el-row class="main-row">
                 <el-col>
                   <el-form-item label="Discount description" prop="description">
                     <el-input placeholder="Description" v-model="newDiscountForm.description"></el-input>
                   </el-form-item>
-                  <el-row>
-                    <el-col :span="5">
+                  <el-row :gutter="20">
+                    <el-col :span="6">
                       <el-form-item label="Choose" prop="choose">
                         <el-select class="gd-width-190" v-model="newDiscountForm.choose" placeholder="Select">
                           <el-option
@@ -38,38 +38,38 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col :push="1" :span="6">
-                      <el-form-item label="Category" prop="categoryid">
-                        <el-select class="gd-width-220" v-model="newDiscountForm.categoryid" placeholder="Categories">
+                    <el-col :span="6">
+                      <el-form-item label="Category" prop="category">
+                        <el-select class="gd-width-220" v-model="newDiscountForm.categoryId" placeholder="Categories" @change="onCategoryChange">
                           <el-option
                             v-for="category in categories"
-                            :key="category.value"
-                            :label="category.label"
-                            :value="category.value">
+                            :key="category.id"
+                            :label="category.name"
+                            :value="category.id">
                           </el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col v-if="newDiscountForm.choose == '2' || newDiscountForm.choose == '3'" :push="1" :span="6">
-                      <el-form-item label="Subcategory" prop="subcategory">
-                        <el-select class="gd-width-220" v-model="subcategory" placeholder="Subcategories">
+                    <el-col v-if="newDiscountForm.choose == '2' || newDiscountForm.choose == '3'" :span="6">
+                      <el-form-item label="Subcategory" prop="subCategory">
+                        <el-select class="gd-width-220" v-model="newDiscountForm.subCategoryId" placeholder="Subcategories" @change="onSubCategoryChange">
                           <el-option
-                            v-for="subcategory in subcategories"
-                            :key="subcategory.value"
-                            :label="subcategory.label"
-                            :value="subcategory.value">
+                            v-for="subCategory in subCategories"
+                            :key="subCategory.id"
+                            :label="subCategory.name"
+                            :value="subCategory.id">
                           </el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col v-if="newDiscountForm.choose == '3'" :push="1" :span="6">
+                    <el-col v-if="newDiscountForm.choose == '3'" :span="6">
                       <el-form-item label="Item" prop="item">
-                        <el-select class="gd-width-220" v-model="item" placeholder="Items">
+                        <el-select class="gd-width-220" v-model="newDiscountForm.itemId" placeholder="Items" v-loading="itemsLoading">
                           <el-option
                             v-for="item in items"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                           </el-option>
                         </el-select>
                       </el-form-item>
@@ -93,7 +93,7 @@
                   <el-row>
                     <el-col :span="9">
                       <el-form-item label="Valid until" prop="date">
-                        <el-date-picker type="date" placeholder="Pick a date" v-model="newDiscountForm.date"></el-date-picker>
+                        <el-date-picker :picker-options="pickerOptions" v-model="newDiscountForm.date" type="date" placeholder="Pick a date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -110,39 +110,29 @@
 export default {
   data () {
     return {
+      categories: [],
+      categoriesPromise: null,
+      items: {},
+      itemsLoading: false,
+      subCategories: [],
       options: [{
-          value: '1',
+          value: 1,
           label: 'Category'
         }, {
-          value: '2',
+          value: 2,
           label: 'SubCategory'
         }, {
-          value: '3',
+          value: 3,
           label: 'Item'
       }],
-      value: '1',
-      categories: [{
-        value: 'Category',
-        label: 'Jewerly'
-      }],
-      category: '',
-      subcategories: [{
-        value: 'Subcategory',
-        label: 'Earings'
-      }],
-      subcategory: '',
-      items: [{
-        value: 'Item',
-        label: 'Ponio batas'
-      }],
-      item: '',
-      disount: 0,
       newDiscountForm: {
+        choose: 1,
         description: '',
         resource: 'Percentage',
-        choose: '1',
-        categoryid: null,
-        discount: 0,
+        categoryId: null,
+        subCategoryId: null,
+        discount: 1,
+        itemId: null,
         date: null
       },
       rules: {
@@ -159,13 +149,13 @@ export default {
         }],
         choose: [{
             required: true,
-            type: 'string',
+            type: 'number',
             message: 'Please choose the option',
             trigger: 'blur'
         }],
-        categoryid: [{
+        categoryId: [{
             required: true,
-            type: 'number',
+            type: 'object',
             message: 'Please select a category',
             trigger: 'blur'
         }],
@@ -174,26 +164,60 @@ export default {
             type: 'number',
             message: 'Please enter the discount value',
             trigger: 'blur'
-        }],
-        date: [{
-            required: true,
-            type: 'date',
-            message: 'Please enter the date when discount will expire',
-            trigger: 'blur'
         }]
       },
-      money: {
-        decimal: '.',
-        thousands: '',
-        prefix: '€ ',
-        suffix: '',
-        precision: 2
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() <= Date.now()
+        }
       }
     }
   },
-  mounted () {
+  created () {
+      this.fetchData()
   },
   methods: {
+    fetchData () {
+      this.loadCategory().catch(err => {
+        console.log(err)
+      })
+    },
+    loadCategory () {
+        this.categoriesPromise = this.axios.get('Category').then(response => {
+            this.categories = response.data
+            this.categoriesPromise = null
+          })
+        return this.categoriesPromise
+    },
+    loadItems () {
+      let filter = ''
+      if (this.newDiscountForm.subCategoryId) {
+        filter = `subCategory/id eq ${this.newDiscountForm.subCategoryId}`
+      } else {
+        filter = `category/id eq ${this.newDiscountForm.categoryId}`
+      }
+      this.itemsLoading = true
+      this.axios.get(`odata/Items?$select=id,name&$filter=${filter}`).then(response => {
+          this.items = response.data.value
+          this.itemsLoading = false
+        }).catch(err => {
+          console.log(err)
+          this.itemsLoading = false
+        })
+    },
+    onCategoryChange () {
+      this.newDiscountForm.subCategoryId = null
+      this.categories
+        .forEach((category, index) => {
+          if (category.id === this.newDiscountForm.categoryId) {
+            this.subCategories = category.subCategories
+          }
+        })
+      this.loadItems()
+    },
+    onSubCategoryChange () {
+      this.loadItems()
+    },
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
@@ -205,19 +229,38 @@ export default {
       })
     },
     addDiscount () {
-      this.posting = true
-      let formCopy = JSON.parse(JSON.stringify(this.newDiscountForm))
-      formCopy.price = parseFloat(formCopy.price.split(' ')[1])
-      this.axios.post('admin/discount/create', formCopy).then(response => {
+      let isPercentages = false
+      if (this.newDiscountForm.resource === 'Percentage') {
+        isPercentages = true
+      }
+
+      let discount = {
+        name: this.newDiscountForm.description,
+        value: this.newDiscountForm.discount,
+        to: this.newDiscountForm.date,
+        isPercentages: isPercentages,
+        itemID: null,
+        categoryID: null,
+        subCategoryID: null
+      }
+
+      if (this.newDiscountForm.choose === 3) {
+        discount.itemID = this.newDiscountForm.itemId
+      } else if (this.newDiscountForm.choose === 2) {
+        discount.subCategoryID = this.newDiscountForm.subCategoryId
+      } else {
+        discount.categoryID = this.newDiscountForm.categoryId
+      }
+      this.axios.post('admin/discount', discount).then(response => {
         this.resetForm('newDiscountForm')
         this.$notify.success({
           title: 'Success',
-          message: 'Succesfully added Discount'
+          message: 'Succesfully added discount'
         })
       }).catch(err => {
         this.$notify.error({
           title: 'Error',
-          message: 'There was a problem while getting the category: ' + err
+          message: 'There was a problem while adding discount: ' + err.response.data.message
         })
       })
     }
