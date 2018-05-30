@@ -40,7 +40,11 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column label="Price" prop="price" width="100px" />
+          <el-table-column label="Price" prop="price" width="100px">
+                    <template slot-scope="scope">
+              {{scope.row.price}} €
+            </template>
+          </el-table-column>
           <el-table-column label="Category" prop="category" width="130px" />
           <el-table-column fixed="right" label="Operations" width="120" class="table-actions">
             <template slot-scope="scope">

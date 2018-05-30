@@ -44,7 +44,10 @@ export default{
       window.onbeforeunload = () => {
         return 'export running'
       }
-      this.axios.get('/admin/items/import')
+      console.log(file)
+      var form = new FormData()
+      form.append('file', file)
+      this.axios.post('/admin/items/import', form)
         .then(Response => {
           console.log(Response.data)
           if (Response.data.errors && Response.data.errors.length > 0) {
@@ -59,21 +62,19 @@ export default{
               type: 'success'
             })
           }
-          console.log(Response.data.items)
           this.$store.dispatch('setImportedItems', Response.data.items)
           window.onbeforeunload = undefined
           this.$store.dispatch('endImport')
         })
         .catch(error => {
+          this.$store.dispatch('endImport')
           this.$notify({
             message: 'Oops! Import could not be completed',
             type: 'error'
           })
-          console.log(error)
           this.$store.dispatch('setImportedItems', null)
           this.$store.dispatch('setImportErrors', error.data.error.message)
           window.onbeforeunload = undefined
-          this.$store.dispatch('endImport')
         })
     }
   }
