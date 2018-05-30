@@ -83,10 +83,10 @@ export default {
     createCategory (node) {
       let dictKey = `${node.parent.level > 0 ? node.parent.data.name : ''}${node.parent.level}`
 
-      if (this.addNewName[dictKey] && (this.addNewName[dictKey].length < 10 || this.addNewName[dictKey].length > 50)) {
+      if (this.addNewName[dictKey] && (this.addNewName[dictKey].length < 3 || this.addNewName[dictKey].length > 50)) {
         this.$notify.error({
           title: 'Error',
-          message: 'The category name should be between 10 and 50 characters'
+          message: 'The category name should be between 3 and 50 characters'
         })
         return
       }
@@ -103,6 +103,7 @@ export default {
             name: this.addNewName[dictKey]
           })
             .then(response => {
+              this.addNewName[dictKey] = ''
               this.reloadTree()
               this.$notify.success({
                 title: 'Success',
@@ -142,8 +143,8 @@ export default {
       this.$prompt('Please enter new category name', 'Edit', {
         confirmButtonText: 'Edit',
         cancelButtonText: 'Cancel',
-        inputPattern: /\w{10,50}/,
-        inputErrorMessage: 'The category name should be between 10 and 50 characters'
+        inputPattern: /\w{3,50}/,
+        inputErrorMessage: 'The category name should be between 3 and 50 characters'
       }).then(value => {
         this.loading = true
         if (node.level === 1) {

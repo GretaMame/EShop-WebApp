@@ -94,7 +94,7 @@
 </script>
 
 
-<style>
+<style scoped>
   .message {
     align-items: center;
     justify-content: center;

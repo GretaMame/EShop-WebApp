@@ -84,6 +84,7 @@ const store = new Vuex.Store({
     },
     logout (state) {
       state.user.authenticated = false
+      state.user.role = ''
     },
     addItemToCart (state, item) {
       if (!state.cart) {
