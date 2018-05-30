@@ -239,6 +239,7 @@ export default {
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
         this.loading = false
+        EventBus.$emit('updateCartCount')
       }).catch(err => {
         this.$notify.error({
             title: 'Error',

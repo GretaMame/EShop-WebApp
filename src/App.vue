@@ -11,7 +11,15 @@
         console.log(err)
       })
 
-      EventBus.$on('cookieExpired', () => {
+      EventBus.$on('cookieExpired', this.cookieExpired)
+      EventBus.$on('onLogin', this.onLogin)
+    },
+    beforeDestroy () {
+      EventBus.$off('cookieExpired', this.cookieExpired)
+      EventBus.$off('onLogin', this.onLogin)
+    },
+    methods: {
+      cookieExpired () {
         this.$router.push({
           name: 'login',
           query: {
@@ -23,9 +31,8 @@
           message: 'You were logged out',
           offset: 50
         })
-      })
-
-      EventBus.$on('onLogin', () => {
+      },
+      onLogin () {
         var cart = this.$store.getters.localCart
         if (!cart || cart.length === 0) {
           return
@@ -42,7 +49,7 @@
             console.log('Error while mergin cart ' + err)
             EventBus.$emit('cartMerged', false)
           })
-      })
+      }
     }
   }
 
