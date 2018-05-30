@@ -178,10 +178,9 @@
             })
             .then(() => this.fetchData())
             .catch((err) => {
-              console.log(err)
               this.$notify.error({
                 title: 'Error',
-                message: 'Error encountered while changing role: ' + err.response.data.message,
+                message: err.response.data.message,
                 offset: 50
               })
               this.fetchData()
@@ -254,10 +253,9 @@
           })
           .catch(err => {
             this.userDetailsLoading = false
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'Something went wrong while getting user orders' + err,
+              message: err.response.data.message,
               offset: 50
             })
           })

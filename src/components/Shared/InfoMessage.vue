@@ -78,12 +78,11 @@
             this.axios.post('/feedback', this.form).then(response => {
               this.loading = false
               this.feedbackSubmited = true
-            }).catch(e => {
-              console.log(e)
+            }).catch(err => {
               this.loading = false
               this.$notify.error({
                 title: 'Error',
-                message: e.response.data.message,
+                message: err.response.data.message,
                 offset: 50
               })
             })

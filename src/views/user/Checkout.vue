@@ -133,7 +133,7 @@ export default {
             this.$notify.info({
               title: 'Logged out',
               message: 'You were logged out',
-          offset: 50
+              offset: 50
             })
             return
           }
@@ -239,11 +239,11 @@ export default {
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
         this.loading = false
-      }).catch(e => {
+      }).catch(err => {
         this.$notify.error({
             title: 'Error',
-            message: e.response.data.message,
-          offset: 50
+            message: err.response.data.message,
+            offset: 50
           })
         this.loading = false
       })

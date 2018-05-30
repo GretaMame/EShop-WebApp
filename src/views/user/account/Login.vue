@@ -73,8 +73,6 @@
                 })
                 this.loading = false
               })
-          } else {
-            console.log('Inputs not valid')
           }
         })
       },

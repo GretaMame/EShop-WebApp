@@ -160,11 +160,10 @@ export default {
           })
           .catch(err => {
             this.loading = false
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while archiving the items: ' + err,
-          offset: 50
+              message: err.response.data.message,
+              offset: 50
             })
           })
       })
