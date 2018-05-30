@@ -180,10 +180,10 @@ export default {
         })
     },
     buildAttribute () {
-      if (/^\s+$/.test(this.newAttribute.key) || /^\s+$/.test(this.newAttribute.value)) {
+      if (!this.newAttribute.key || !this.newAttribute.value || /^\s+$/.test(this.newAttribute.key) || /^\s+$/.test(this.newAttribute.value)) {
         this.$notify.warning({
             title: 'Warning',
-            message: 'Attribute key and value cannot be whitespace only'
+            message: 'Attribute key and value cannot be empty/whitespace only'
         })
         return
       }

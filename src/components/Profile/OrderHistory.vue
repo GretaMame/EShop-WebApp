@@ -217,7 +217,7 @@ export default {
       if (items === null) return
       var itemsList = []
       for (var i = 0; i < items.length; i++) {
-        itemsList.push({ItemID: items[i].ItemID, Count: 1})
+        itemsList.push({ItemID: items[i].itemID, Count: 1})
       }
       this.loading = true
       this.axios.post('cart', {Items: itemsList})
