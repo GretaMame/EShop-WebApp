@@ -16,25 +16,25 @@
             <el-row>
               <h3>Payment details</h3>
             </el-row>
-            <el-col :span="6">
+            <el-col :span="6" class="hidden-xs-only">
               <img src="http://prints.ultracoloringpages.com/26394191ee3b0e1409d127324c3a5d56.png" class="gd_image">
             </el-col>
-            <el-col :span="18" align="left">
+            <el-col :lg="18" :sm="18" :md="18" :xs="24" align="left">
               <el-row>
-                <el-col :span="12" class="gd_label">Card number: </el-col>
-                <el-col :span="12">**** **** **** {{cardDetails.number.substr(15)}}</el-col>
+                <el-col :span="13" class="gd_label">Card number: </el-col>
+                <el-col :span="11">**** **** **** {{cardDetails.number.substr(15)}}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="12"  class="gd_label">Card holder: </el-col>
-                <el-col :span="12">{{cardDetails.holder}}</el-col>
+                <el-col :span="13"  class="gd_label">Card holder: </el-col>
+                <el-col :span="11">{{cardDetails.holder}}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="12" class="gd_label">Expiration date: </el-col>
-                <el-col :span="12">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
+                <el-col :span="13" class="gd_label">Expiration date: </el-col>
+                <el-col :span="11">{{cardDetails.exp_year}}/{{cardDetails.exp_month}}</el-col>
               </el-row>
               <el-row>
-                <el-col :span="12" class="gd_label">CVV: </el-col>
-                <el-col :span="12">***</el-col>
+                <el-col :span="13" class="gd_label">CVV: </el-col>
+                <el-col :span="11">***</el-col>
               </el-row>
             </el-col>
           </el-col>
@@ -42,10 +42,10 @@
             <el-row>
               <h3>Delivery Address</h3>
             </el-row>
-            <el-col :span="6">
+            <el-col :span="6" class="hidden-xs-only">
               <img src="https://seeklogo.com/images/M/man-silhouette-delivery-logo-0DBA9FBE43-seeklogo.com.png" class="gd_image">
             </el-col>
-            <el-col :span="18" align="left">
+            <el-col :lg="18" :sm="18" :md="18" :xs="24" align="left">
                 <el-row>
                   <el-col :span="12" class="gd_label">Name: </el-col>
                   <el-col :span="12">{{address.name}} {{address.surname}}</el-col>
@@ -72,13 +72,13 @@
               <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(subtotal.toFixed(2))}} €</el-col>
             </el-row>
             <el-row>
-              <el-col class="gd-text-align-right" :xs="12" :sm="14" :md="16" :lg="17">Shipping:</el-col>
-              <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(shippingCost)}} €</el-col>
+              <el-col class="gd-text-align-right" :xs="12" :sm="14" :md="16" :lg="17">Discount:</el-col>
+              <el-col :xs="12" :sm="10" :md="8" :lg="7">- {{(discount.toFixed(2))}} €</el-col>
             </el-row>
           </el-row>
           <el-row>
             <el-col class="gd-text-align-right" :xs="12" :sm="14" :md="16" :lg="17">Total:</el-col>
-            <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(subtotal.toFixed(2))}} €</el-col>
+            <el-col :xs="12" :sm="10" :md="8" :lg="7">{{(total.toFixed(2))}} €</el-col>
           </el-row>
         </div>
       </el-card>
@@ -97,14 +97,15 @@ export default {
     cardDetails: { type: Object },
     address: { type: Object },
     loading: { type: Boolean },
-    subtotal: { type: Number }
+    total: { type: Number }
   },
   components: {
     'cart-item': CartItem
   },
   data () {
     return {
-      shippingCost: 0,
+      discount: 0,
+      subtotal: 0,
       formName: 'Summary',
       cart: {}
     }
@@ -126,6 +127,8 @@ export default {
       return this.axios.get(`Cart`)
       .then(response => {
         this.cart = response.data
+        this.calculateSubtotal()
+        this.calculateDiscount()
       })
       .catch(err => {
         this.$notify.error({
@@ -133,6 +136,33 @@ export default {
           message: err.response.data.message,
           offset: 50
         })
+      })
+    },
+    calculateSubtotal () {
+      var items = this.cart.items
+      this.$nextTick(() => {
+        if (items) {
+          var arrayLength = items.length
+          this.subtotal = 0
+          for (var i = 0; i < arrayLength; i++) {
+            this.subtotal += items[i].price * items[i].count
+          }
+        }
+      })
+    },
+    calculateDiscount () {
+      var items = this.cart.items
+      this.$nextTick(() => {
+        if (items) {
+          var arrayLength = items.length
+          this.discount = 0
+          for (var i = 0; i < arrayLength; i++) {
+            this.discount += items[i].discount * items[i].count
+          }
+          if (this.discount !== 0) {
+            this.discount = this.subtotal - this.discount
+          }
+        }
       })
     }
   }
@@ -166,5 +196,10 @@ export default {
   }
   .gd_border_color{
     border-bottom: 0.5px outset #8a170617;
+  }
+  @media (max-width: 768px) {
+    .gd_summary{
+      font-size: 16pt;
+    }
   }
 </style>

@@ -50,7 +50,7 @@
         v-if="activeIndex === 3"
         :cardDetails="cardDetails"
         :address="deliveryAddress"
-        :subtotal="subtotal"
+        :total="subtotal"
         :loading="loading"
         v-on:performCheckout="performCheckout"
         v-on:previousStep="previousStep"

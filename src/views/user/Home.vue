@@ -64,9 +64,12 @@
           </el-row>
         </div>
         <div v-if="items.length === 0 && !loading" class="gd-no-items">
-          <icon name="folder-open-o" class="gd-folder-icon"/>
-          <br>
-          No items are currently available
+          <el-row>
+            <icon name="folder-open-o" class="gd-folder-icon"/>
+          </el-row>
+          <el-row>
+            No items are currently available
+          </el-row>
         </div>
       </el-card>
     </el-col>
