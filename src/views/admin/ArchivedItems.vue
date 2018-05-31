@@ -154,7 +154,7 @@ import EventBus from '@/eventBus/index.js'
 
         // get items of current page
         var itemsPromise = this.axios.get(
-          `odata/AdminItems?$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`
+          `odata/AdminItems?$orderby=id desc&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`
         )
         itemsPromise.then(response => {
           this.items = response.data.value

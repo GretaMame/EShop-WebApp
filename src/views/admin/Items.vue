@@ -119,7 +119,7 @@ export default {
       items: [],
       totalRows: 1,
       searchText: '',
-      searchBy: 'Name',
+      searchBy: 'name',
       selectedItems: []
     }
   },
@@ -197,7 +197,7 @@ export default {
       })
 
       // get items of current page
-      var itemsPromise = this.axios.get(`odata/AdminItems?$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`)
+      var itemsPromise = this.axios.get(`odata/AdminItems?$orderby=id desc&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`)
       itemsPromise.then(response => {
         this.items = response.data.value
       }).catch(err => console.log(err))
@@ -218,6 +218,9 @@ export default {
 }
 </script>
 <style scoped>
+  .el-select {
+    width: 120px;
+  }
   .items-table{
     padding: 16px 0 0 0;
     display: flex;
