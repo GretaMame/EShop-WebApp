@@ -28,7 +28,7 @@
               </template>
             </el-menu-item>
           </el-submenu>
-          <el-menu-item v-else>
+          <el-menu-item v-else :index="`/home/${category.id}`">
             <template slot="title">
               <span class="gd-category">
                 {{category.name}}

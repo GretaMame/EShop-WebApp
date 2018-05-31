@@ -1,6 +1,6 @@
 <template>
   <div class="orders-table">
-    <el-dialog :title="'Order data: ' + openOrder.orderNumber" v-if="orderDataVisible" :visible.sync="orderDataVisible" width="60%">
+    <el-dialog :title="'Order number: ' + openOrder.orderNumber" v-if="orderDataVisible" :visible.sync="orderDataVisible" width="60%">
       <el-container v-loading="orderDataLoading">
         <el-header>
           <div class="delivery-address">{{buildDeliveryAddress()}}</div>
