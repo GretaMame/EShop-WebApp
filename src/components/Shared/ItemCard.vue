@@ -48,7 +48,7 @@
   }
   .gd-item-image {
     align-content: center;
-    max-height: 150px;
+    height: 150px;
   }
   .gd-item-attributes{
     text-align: left;
@@ -77,7 +77,7 @@
     color:midnightblue;
     font-weight: bold;
     font-size: 13pt;
-  }  
+  }
   .gd-discount-price{
     color:brown;
     font-weight: bold;
