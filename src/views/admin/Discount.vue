@@ -121,7 +121,7 @@ export default{
       })
 
       // get discounts of current page
-      var discountsPromise = this.axios.get(`odata/Discount?$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}`)
+      var discountsPromise = this.axios.get(`odata/Discount?$orderby=id desc&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}`)
       discountsPromise.then(response => {
         this.discounts = response.data.value
       })
