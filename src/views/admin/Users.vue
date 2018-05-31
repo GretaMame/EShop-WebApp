@@ -92,8 +92,8 @@
           <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
         </el-input>
       </el-header>
-      <el-main>
-        <el-table class="table" :data="items" :stripe="true" size="medium" :fit="true" :header-cell-style="headerCellStyle()">
+      <el-main class="table-div">
+        <el-table :data="items" :stripe="true" size="medium" :fit="true" :header-cell-style="headerCellStyle()">
           <el-table-column label="Email" prop="email">
             <template slot-scope="scope">
               <el-button type="text" @click="showDetails(scope.row)">{{scope.row.email}}</el-button>
@@ -101,7 +101,7 @@
           </el-table-column>
           <el-table-column label="Order count" prop="orderCount" />
           <el-table-column label="Total money spent" prop="moneySpent" />
-          <el-table-column label="Average money spent" prop="averageMoneySpent" />
+          <el-table-column label="Average money spent" prop="averageMoneySpent" :formatter="formatAverage"/>
           <el-table-column label="Role" prop="role" width="100px" />
           <el-table-column fixed="right" label="Operations" width="140">
             <template slot-scope="scope">
@@ -129,15 +129,16 @@
   </div>
 </template>
 <script>
+  import EventBus from '@/eventBus/index.js'
   export default {
     data () {
       return {
         loading: false,
         pageOptions: [5, 10, 25, 50],
-        perPage: 5,
+        perPage: 10,
         currentPage: 1,
         filter: null,
-        items: null,
+        items: [],
         totalRows: 0,
         searchText: '',
         searchBy: 'email',
@@ -152,9 +153,12 @@
     },
     methods: {
       countItems (items) {
-        var length = items.length
-        if (length === 1) return length + ' item'
-        return length + ' items'
+        if (items) {
+          var length = items.length
+          if (length === 1) return length + ' item'
+          return length + ' items'
+        }
+        return null
       },
       handleSizeChange (pageSize) {
         this.perPage = pageSize
@@ -213,8 +217,6 @@
         var rowsPromise = this.axios.get(`odata/Users?$count=true&$top=0${filterText ? `&$filter=${filterText}` : ''}`)
         rowsPromise.then(response => {
           this.totalRows = response.data['@odata.count']
-        }).catch(err => {
-          console.log(err)
         })
 
         // get items of current page
@@ -223,12 +225,16 @@
         )
         itemsPromise.then(response => {
           this.items = response.data.value
-        }).catch(err => console.log(err))
+        })
 
         // wait for both promises to end
         Promise.all([rowsPromise, itemsPromise]).then(() => {
           this.loading = false
         }).catch((err) => {
+          if (err.cookieExpired) {
+            EventBus.$emit('cookieExpired')
+            return
+          }
           console.log(err)
           this.loading = false
         })
@@ -259,12 +265,15 @@
               offset: 50
             })
           })
+      },
+      formatAverage (row, column, cellValue, index) {
+        return cellValue.toFixed(2)
       }
     }
   }
 
 </script>
-<style>
+<style scoped>
   .users-table {
     padding: 16px 0 0 0;
     display: flex;
@@ -287,8 +296,8 @@
     width: 120px;
   }
 
-  .table {
-    height: 70vh;
+  .table-div {
+    height: 80vh;
   }
 
   .user-details-window {

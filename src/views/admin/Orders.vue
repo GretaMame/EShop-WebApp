@@ -63,6 +63,7 @@
   </div>
 </template>
 <script>
+  import EventBus from '@/eventBus/index.js'
   export default {
     data () {
       return {
@@ -187,6 +188,10 @@
           })
           .catch(err => {
             this.orderDataLoading = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
               message: err.response.data.message,

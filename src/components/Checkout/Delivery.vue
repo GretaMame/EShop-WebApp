@@ -197,7 +197,7 @@ export default {
   }
   .gd_address_wrapper {
     margin: 0px auto;
-    max-width: 250px;
+    max-width: 270px;
   }
   h3 {
     margin-top: 20px;

@@ -1,8 +1,12 @@
 <template>
   <el-card class="gd_wrapper" v-loading="loading">
     <h2>Order history</h2>
+    <el-card v-if="!orders" style="margin-bottom:40vh;">
+      <h3>You do not have any orders yet</h3>
+    </el-card>
     <el-card
-      class="gd_order gd-min-height-70vh"
+      v-else
+      class="gd_order"
       v-for="order in orders"
       :key="order.id"
       shadow="hover">
@@ -54,10 +58,10 @@
             </template>
             <div v-for="item in order.items" :key="item.itemID" :item="item">
             <el-row class="gd_item_name_row">
-              <el-col :span="19">
+              <el-col :xs="24" :sm="19" :md="19" :lg="19">
               {{item.name}}
               </el-col>
-              <el-col :span="5" align="right">
+              <el-col :xs="24" :sm="5" :md="5" :lg="5" align="right">
                 <el-tooltip
                   placement="top"
                   content="View item"
@@ -83,18 +87,18 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="4">
+              <el-col :xs="9" :sm="4" :md="4" :lg="4">
                 <span class="gd_label gd_gray_text">Unit price:</span>
               </el-col>
-              <el-col :span="4">
+              <el-col :xs="7" :sm="5" :md="5" :lg="5">
                 <span class="gd_gray_text">{{item.price.toFixed(2)}} €</span>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="4">
+              <el-col :xs="9" :sm="4" :md="4" :lg="4">
                 <span class="gd_label gd_gray_text">Quantity:</span>
               </el-col>
-              <el-col :span="4">
+              <el-col :xs="7" :sm="5" :md="5" :lg="5">
                 <span class="gd_gray_text">{{item.count}}</span>
               </el-col>
             </el-row>
@@ -163,7 +167,7 @@ export default {
       orders: [],
       loading: '',
       itemsText: 'items',
-      perPage: 20,
+      perPage: 10,
       totalOrders: 0,
       pageOptions: [5, 10, 15, 20],
       currentPage: 1

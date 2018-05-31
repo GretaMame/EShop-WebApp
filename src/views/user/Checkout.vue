@@ -50,7 +50,7 @@
         v-if="activeIndex === 3"
         :cardDetails="cardDetails"
         :address="deliveryAddress"
-        :subtotal="subtotal"
+        :total="subtotal"
         :loading="loading"
         v-on:performCheckout="performCheckout"
         v-on:previousStep="previousStep"
@@ -118,13 +118,14 @@ export default {
           this.loading = false
         }).catch((err) => {
           this.loading = false
-          console.log('something bad happened ' + err)
+          console.log('something bad happened: ' + err)
         })
       } else {
         var cartPromise = this.loadCart()
         var addressPromise = this.loadAddress()
         Promise.all([cartPromise, addressPromise]).then(() => {
           this.calculateSubtotal()
+          EventBus.$emit('updateCartCount')
           this.loading = false
         }).catch((err) => {
           this.loading = false
@@ -246,6 +247,11 @@ export default {
         this.loading = false
         EventBus.$emit('updateCartCount')
       }).catch(err => {
+        this.formatCardInput()
+        if (err.cookieExpired) {
+          EventBus.$emit('cookieExpired')
+          return
+        }
         this.$notify.error({
             title: 'Error',
             message: err.response.data.message,
@@ -253,6 +259,15 @@ export default {
           })
         this.loading = false
       })
+    },
+    formatCardInput () {
+      this.cardDetails.number = this.cardDetails.number.split(' ').join('')
+      var split = 4
+      var chunk = []
+      for (var i = 0, len = this.cardDetails.number.length; i < len; i += split) {
+        chunk.push(this.cardDetails.number.substr(i, split))
+      }
+      this.cardDetails.number = chunk.join(' ')
     },
     setLoading (value) {
       this.loading = value

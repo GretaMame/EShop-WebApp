@@ -222,6 +222,7 @@ export default {
         let index = this.attributes.indexOf(attribute)
         if (index >= 0) {
           this.attributes.splice(index, 1)
+          this.newAttributeNames.find(x => x.id === attribute.id).selected = false
           this.reloadAttributeNames()
         }
       })
