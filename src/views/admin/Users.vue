@@ -257,10 +257,13 @@
       loadUserDetails (user) {
         this.userDetailsLoading = true
 
-        this.axios.get(`odata/AdminOrders?$filter=userEmail eq '${this.selectedUser.email}'`)
+        this.axios.get(`odata/AdminOrders?$expand=items&$filter=userEmail eq '${this.selectedUser.email}'`)
           .then(response => {
             this.userDetailsLoading = false
             this.selectedUserOrders = response.data.value
+            for (let order of this.selectedUserOrders) {
+              order.deliveryAddress = JSON.parse(order.deliveryAddress)
+            }
           })
           .catch(err => {
             this.userDetailsLoading = false
