@@ -3,8 +3,8 @@
     <img v-if="item.pictures && item.pictures[0]" :src="item.pictures[0].url" class="gd-item-image">
     <img v-else src="@/../static/image-not-found.jpg" class="gd-item-image">
     <el-row class="gd-item-price">
-      <el-col :lg="10" :md="10" :sm="5" :xs="5" :pull="1" style="text-align: right;" v-bind:class="{'gd-itemPrice-strike': item.discount}">{{item.price}} €</el-col>
-      <el-col :lg="10" :md="10" :sm="5" :xs="5" style="text-align: left;" class="gd-discount-price" v-if="item.discount">{{item.discount}} €</el-col>
+      <el-col :span="10" :pull="1" style="text-align: right;" v-bind:class="{'gd-itemPrice-strike': item.discount}">{{item.price}} €</el-col>
+      <el-col :span="10" style="text-align: left;" class="gd-discount-price" v-if="item.discount">{{item.discount}} €</el-col>
     </el-row>
     <el-row class="gd-item-card-main">
       <el-popover class="gd-module"

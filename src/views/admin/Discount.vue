@@ -69,7 +69,7 @@ export default{
       pageOptions: [5, 10, 25, 50],
       perPage: 10,
       currentPage: 1,
-      discounts: {},
+      discounts: [],
       totalRows: 0
     }
   },
@@ -86,9 +86,6 @@ export default{
       this.fetchData()
     },
     deleteDiscount (index) {
-      console.log(index)
-      console.log(this.discounts[index].id)
-      console.log(this.discounts[index])
       this.$confirm('Are you sure you want to delete selected discounts?',
       {
         confirmButtonText: 'Yes',
@@ -109,7 +106,8 @@ export default{
             }
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while deleting the discounts: ' + err
+              message: err.response.data.message,
+              offset: 50
             })
           })
       })
@@ -134,8 +132,12 @@ export default{
         this.checkValue()
         this.loading = false
       }).catch((err) => {
-        console.log(err)
         this.loading = false
+        this.$notify.error({
+          title: 'Error',
+          message: err.response.data.message,
+          offset: 50
+        })
       })
     },
     checkValue () {

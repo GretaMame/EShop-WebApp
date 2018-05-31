@@ -50,7 +50,7 @@
         v-if="activeIndex === 3"
         :cardDetails="cardDetails"
         :address="deliveryAddress"
-        :subtotal="subtotal"
+        :total="subtotal"
         :loading="loading"
         v-on:performCheckout="performCheckout"
         v-on:previousStep="previousStep"
@@ -125,6 +125,7 @@ export default {
         var addressPromise = this.loadAddress()
         Promise.all([cartPromise, addressPromise]).then(() => {
           this.calculateSubtotal()
+          EventBus.$emit('updateCartCount')
           this.loading = false
         }).catch((err) => {
           this.loading = false
@@ -247,6 +248,10 @@ export default {
         EventBus.$emit('updateCartCount')
       }).catch(err => {
         this.formatCardInput()
+        if (err.cookieExpired) {
+          EventBus.$emit('cookieExpired')
+          return
+        }
         this.$notify.error({
             title: 'Error',
             message: err.response.data.message,
