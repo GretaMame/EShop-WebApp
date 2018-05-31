@@ -294,29 +294,22 @@
             uploadForm.append(key, this.newItemForm[key])
           }
         }
-      uploadForm.set('price', parseFloat(this.newItemForm.price.split(' ')[1]))
+        uploadForm.set('price', parseFloat(this.newItemForm.price.split(' ')[1]))
 
-      for (let i = 0; i < this.attributes.length; i++) {
-        let attribute = this.attributes[i]
-        if (!attribute.key || !attribute.value || /^\s+$/.test(attribute.key) || /^\s+$/.test(attribute.value)) {
-          this.$notify.warning({
-              title: 'Warning',
-              message: 'Attributes keys and values cannot be empty/whitespace only'
-          })
-          return
+        for (let i = 0; i < this.attributes.length; i++) {
+          let attribute = this.attributes[i]
+          if (!attribute.key || !attribute.value || /^\s+$/.test(attribute.key) || /^\s+$/.test(attribute.value)) {
+            this.$notify.warning({
+                title: 'Warning',
+                message: 'Attributes keys and values cannot be empty/whitespace only'
+            })
+            return
+          }
+
+          uploadForm.append(`attributes[${i}].attributeId`, attribute.id)
+          uploadForm.append(`attributes[${i}].value`, attribute.value)
+          uploadForm.append(`attributes[${i}].key`, attribute.key)
         }
-
-        uploadForm.append(`attributes[${i}].attributeId`, attribute.id)
-        uploadForm.append(`attributes[${i}].value`, attribute.value)
-        uploadForm.append(`attributes[${i}].key`, attribute.key)
-      }
-
-        this.attributes
-          .forEach((attribute, index) => {
-            uploadForm.append(`attributes[${index}].attributeId`, attribute.id)
-            uploadForm.append(`attributes[${index}].value`, attribute.value)
-            uploadForm.append(`attributes[${index}].key`, attribute.key)
-          })
 
         this.pictures.filter(x => !x.isFile).map(x => x.url)
           .forEach(picture => uploadForm.append('pictureUrls', picture))
