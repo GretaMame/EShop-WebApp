@@ -6,7 +6,12 @@
         mode="vertical"
         default-active="1"
         :router="true">
-        <span>ADMIN PANEL</span>
+        <div>
+          <router-link :to="{name:'home'}">
+            <el-button class="go-back-button" size="small" icon="el-icon-arrow-left">Back to store</el-button>
+          </router-link>
+        </div>
+        <span class="gd_title">ADMIN PANEL</span>
         <el-menu-item index="1" :route="{name:'adminOrders'}">
           <i class="el-icon-document"></i>
           <span slot="title">Orders</span>
@@ -58,6 +63,10 @@
 
   .gd_title {
     padding-left: 20px;
+  }
+
+  .go-back-button {
+    margin: 8px;
   }
 
 </style>
