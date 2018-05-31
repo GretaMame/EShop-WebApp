@@ -91,10 +91,10 @@ import EventBus from '@/eventBus/index.js'
       createCategory (node) {
         let dictKey = `${node.parent.level > 0 ? node.parent.data.name : ''}${node.parent.level}`
 
-        if (this.addNewName[dictKey] && (this.addNewName[dictKey].length < 10 || this.addNewName[dictKey].length > 50)) {
+        if (this.addNewName[dictKey] && (this.addNewName[dictKey].length < 3 || this.addNewName[dictKey].length > 50)) {
           this.$notify.error({
             title: 'Error',
-            message: 'The category name should be between 10 and 50 characters',
+            message: 'The category name should be between 3 and 50 characters',
             offset: 50
           })
           return
@@ -112,6 +112,7 @@ import EventBus from '@/eventBus/index.js'
               })
               .then(response => {
                 this.reloadTree()
+                this.addNewName[dictKey] = ''
                 this.$notify.success({
                   title: 'Success',
                   message: 'Succesfully created category',
@@ -133,6 +134,7 @@ import EventBus from '@/eventBus/index.js'
               })
               .then(response => {
                 this.reloadTree()
+                this.addNewName[dictKey] = ''
                 this.$notify.success({
                   title: 'Success',
                   message: 'Succesfully created subcategory',
@@ -154,8 +156,8 @@ import EventBus from '@/eventBus/index.js'
         this.$prompt('Please enter new category name', 'Edit', {
           confirmButtonText: 'Edit',
           cancelButtonText: 'Cancel',
-          inputPattern: /\w{10,50}/,
-          inputErrorMessage: 'The category name should be between 10 and 50 characters'
+          inputPattern: /\w{3,50}/,
+          inputErrorMessage: 'The category name should be between 3 and 50 characters'
         }).then(value => {
           this.loading = true
           if (node.level === 1) {

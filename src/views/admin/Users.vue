@@ -100,8 +100,13 @@
             </template>
           </el-table-column>
           <el-table-column label="Order count" prop="orderCount" />
-          <el-table-column label="Total money spent" prop="moneySpent" />
-          <el-table-column label="Average money spent" prop="averageMoneySpent" :formatter="formatAverage"/>
+          <el-table-column label="Total money spent" prop="moneySpent" >
+            <template slot-scope="scope">
+              {{scope.row.moneySpent}} €
+            </template>
+          </el-table-column>
+          <el-table-column label="Average money spent" prop="averageMoneySpent" :formatter="formatAverage">
+          </el-table-column>
           <el-table-column label="Role" prop="role" width="100px" />
           <el-table-column fixed="right" label="Operations" width="140">
             <template slot-scope="scope">
@@ -267,7 +272,7 @@
           })
       },
       formatAverage (row, column, cellValue, index) {
-        return cellValue.toFixed(2)
+        return cellValue.toFixed(2) + ' '
       }
     }
   }

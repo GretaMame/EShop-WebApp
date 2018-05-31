@@ -153,7 +153,7 @@
 
         // get items of current page
         var itemsPromise = this.axios.get(
-          `odata/AdminOrders?$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`
+          `odata/AdminOrders?$orderby=id desc&$skip=${this.perPage * (this.currentPage - 1)}&$top=${this.perPage}${filterText ? `&$filter=${filterText}` : ''}`
         )
         itemsPromise.then(response => {
           this.items = response.data.value
