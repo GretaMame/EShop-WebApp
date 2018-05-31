@@ -1,15 +1,15 @@
 <template>
   <div class="orders-table">
-    <el-dialog :title="'Order data: ' + openOrder.orderNumber" v-if="orderDataVisible" :visible.sync="orderDataVisible" width="60%">
+    <el-dialog :title="'Order number: ' + openOrder.orderNumber" v-if="orderDataVisible" :visible.sync="orderDataVisible" width="60%">
       <el-container v-loading="orderDataLoading">
         <el-header>
           <div class="delivery-address">{{buildDeliveryAddress()}}</div>
         </el-header>
         <el-main class="dialog-main">
           <el-table class="table" :data="openOrder.items" :stripe="true" size="medium" :fit="true" :header-cell-style="() => { return {'text-align': 'center'} }">
-            <el-table-column label="SKU" prop="item.sku" />
-            <el-table-column label="Name" prop="item.name" />
-            <el-table-column label="Price" prop="price" />
+            <el-table-column label="SKU" prop="sku" />
+            <el-table-column label="Name" prop="name" />
+            <el-table-column label="Price" prop="price" :formatter="appendCurrency" />
             <el-table-column label="Count" prop="count" />
           </el-table>
         </el-main>
@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="Email" prop="userEmail" />
           <el-table-column label="Name" prop="name" />
-          <el-table-column label="Price" prop="totalPrice" />
+          <el-table-column label="Price" prop="totalPrice" :formatter="appendCurrency" />
           <el-table-column label="Status" prop="status" width="100px" />
           <el-table-column fixed="right" label="Operations" width="140">
             <template slot-scope="scope">
@@ -207,6 +207,9 @@
         let deliveryAddress = this.openOrder.deliveryAddress
 
         return `${deliveryAddress.Name} ${deliveryAddress.Surname}\n${deliveryAddress.Street}\n${deliveryAddress.Postcode} ${deliveryAddress.City}\n${deliveryAddress.Country}`
+      },
+      appendCurrency (row, column, cellValue, index) {
+        return cellValue + ' €'
       }
     }
   }
