@@ -59,7 +59,9 @@
     </el-container>
   </div>
 </template>
+
 <script>
+import EventBus from '@/eventBus/index.js'
 export default{
   data () {
     return {
@@ -101,6 +103,10 @@ export default{
           })
           .catch(err => {
             this.loading = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
               message: 'There was a problem while deleting the discounts: ' + err

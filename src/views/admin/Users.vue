@@ -129,6 +129,7 @@
   </div>
 </template>
 <script>
+  import EventBus from '@/eventBus/index.js'
   export default {
     data () {
       return {
@@ -229,6 +230,10 @@
         Promise.all([rowsPromise, itemsPromise]).then(() => {
           this.loading = false
         }).catch((err) => {
+          if (err.cookieExpired) {
+            EventBus.$emit('cookieExpired')
+            return
+          }
           console.log(err)
           this.loading = false
         })
