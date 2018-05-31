@@ -11,11 +11,7 @@
             <el-input type="password" v-model="registerForm.password" placeholder="Enter your password"></el-input>
           </el-form-item>
           <el-form-item prop="confirmPassword" label="Repeat password">
-            <el-input
-              type="password"
-              v-model="registerForm.confirmPassword"
-              placeholder="Repeat your password"
-              @keyup.enter.native="submitForm('registerForm')">
+            <el-input type="password" v-model="registerForm.confirmPassword" placeholder="Repeat your password" @keyup.enter.native="submitForm('registerForm')">
             </el-input>
           </el-form-item>
           <div class="error-msg" v-if="errorOccured">
@@ -116,7 +112,7 @@
         }).catch(err => {
           this.loading = false
           this.errorOccured = true
-          this.errorMessage = err.response.data[0]
+          this.errorMessage = err.response.data.message
         })
       }
     }

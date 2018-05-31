@@ -219,6 +219,9 @@
           .then(response => {
             this.setValues(response.data, this.initialUserData)
             this.loading = false
+             if (!this.initialUserData.name) {
+              this.editMode = true
+            }
           })
           .catch(err => {
             this.loading = false

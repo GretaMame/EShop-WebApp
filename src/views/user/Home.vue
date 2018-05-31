@@ -2,6 +2,9 @@
   <el-row type="flex">
     <el-col :span="6" class="hidden-xs-only" v-loading="loadingFilters" v-if="categoryID">
       <h2>Filters</h2>
+      <span v-if="filterAttributes.length == 0">
+        This category or subcategory has no attributes
+      </span>
       <el-collapse class=gd-filters>
         <el-collapse-item class="gd-filterName" :title="attribute.name" v-for="attribute in filterAttributes" :key="attribute.id">
           <el-checkbox-group class="filterCheckBoxGroup" v-model="checkBoxesStates" @change="onFilterApplied">

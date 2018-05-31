@@ -5,7 +5,7 @@
     <el-row>
       <el-col :span="12">
         <span>URL: </span>
-        <el-input placeholder="URL" v-model="photoURL" @change="pictureUrlChanged" size="small"></el-input>
+        <el-input placeholder="URL" v-model="photoURL" @input="pictureUrlChanged" size="small"></el-input>
       </el-col>
       <el-col :span="12">
         <span>Upload: </span>
