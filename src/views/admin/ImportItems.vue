@@ -52,7 +52,7 @@
           </el-table-column>
           <el-table-column label="Category" prop="category" width="130px">
             <template slot-scope="scope">
-              {{scope.row.category.name}} / {{scope.row.subCategory.name}}
+              {{scope.row.category.name}}{{scope.row.subCategory ? ' / ' + scope.row.subCategory.name : ''}}
             </template>
           </el-table-column>
           <el-table-column label="Attributes" prop="attributes">
