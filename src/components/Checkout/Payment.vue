@@ -126,7 +126,6 @@ export default {
             trigger: 'blur'
           },
           {
-            /* TODO: pasiziuret, kas ten per Luhn algoritmas, kuri turi tenktinti */
             pattern: '^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$',
             message: 'Please enter a valid card number',
             trigger: 'blur'

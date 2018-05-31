@@ -92,8 +92,8 @@
           <el-button slot="append" icon="el-icon-search" @click.native="fetchData()"></el-button>
         </el-input>
       </el-header>
-      <el-main>
-        <el-table class="table" :data="items" :stripe="true" size="medium" :fit="true" :header-cell-style="headerCellStyle()">
+      <el-main class="table-div">
+        <el-table :data="items" :stripe="true" size="medium" :fit="true" :header-cell-style="headerCellStyle()">
           <el-table-column label="Email" prop="email">
             <template slot-scope="scope">
               <el-button type="text" @click="showDetails(scope.row)">{{scope.row.email}}</el-button>
@@ -129,6 +129,7 @@
   </div>
 </template>
 <script>
+  import EventBus from '@/eventBus/index.js'
   export default {
     data () {
       return {
@@ -230,6 +231,10 @@
         Promise.all([rowsPromise, itemsPromise]).then(() => {
           this.loading = false
         }).catch((err) => {
+          if (err.cookieExpired) {
+            EventBus.$emit('cookieExpired')
+            return
+          }
           console.log(err)
           this.loading = false
         })
@@ -268,7 +273,7 @@
   }
 
 </script>
-<style>
+<style scoped>
   .users-table {
     padding: 16px 0 0 0;
     display: flex;
@@ -291,8 +296,8 @@
     width: 120px;
   }
 
-  .table {
-    height: 70vh;
+  .table-div {
+    height: 80vh;
   }
 
   .user-details-window {

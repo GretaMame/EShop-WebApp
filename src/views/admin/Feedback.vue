@@ -23,9 +23,8 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-main>
+      <el-main class="table-div">
         <el-table
-          class="table"
           :data="items"
           :stripe="true"
           size="medium"
@@ -64,7 +63,9 @@
     </el-container>
   </div>
 </template>
+
 <script>
+import EventBus from '@/eventBus/index.js'
 export default{
   data () {
     return {
@@ -133,6 +134,10 @@ export default{
         this.loading = false
       }).catch((err) => {
         console.log(err)
+        if (err.cookieExpired) {
+          EventBus.$emit('cookieExpired')
+          return
+        }
         this.loading = false
       })
     },
@@ -144,7 +149,7 @@ export default{
   }
 }
 </script>
-<style>
+<style scoped>
   .feedback-table{
     padding: 16px 0 0 0;
     display: flex;
@@ -162,7 +167,8 @@ export default{
   .el-select {
     width: 120px;
   }
-  .table {
-    height: 70vh;
+
+  .table-div {
+    height: 80vh;
   }
 </style>

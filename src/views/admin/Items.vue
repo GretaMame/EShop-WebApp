@@ -104,6 +104,7 @@
 </template>
 <script>
 import ExportButton from '@/components/ExportComponent'
+import EventBus from '@/eventBus/index.js'
 export default {
   components: {
     ExportButton
@@ -206,6 +207,10 @@ export default {
         this.loading = false
       }).catch((err) => {
         console.log(err)
+        if (err.cookieExpired) {
+          EventBus.$emit('cookieExpired')
+          return
+        }
         this.loading = false
       })
     }

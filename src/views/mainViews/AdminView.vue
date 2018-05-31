@@ -78,14 +78,20 @@
           })
           .catch(err => {
             this.$store.dispatch('endImport')
-            this.$notify({
-              message: err.response.data.message,
-              type: 'error',
-              offset: 50
-            })
-            this.$store.dispatch('setImportedItems', null)
-            this.$store.dispatch('setImportErrors', err.data.error.message)
             window.onbeforeunload = undefined
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
+            if (err.response) {
+              this.$notify({
+                message: err.response.data.message,
+                type: 'error',
+                offset: 50
+              })
+            }
+            this.$store.dispatch('setImportErrors', null)
+            this.$store.dispatch('setImportedItems', null)
           })
       }
     }

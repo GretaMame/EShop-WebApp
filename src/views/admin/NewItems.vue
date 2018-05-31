@@ -92,6 +92,7 @@
   } from 'v-money'
   import AttributesManager from '@/components/admin/AttributesManager'
   import PhotosManager from '@/components/admin/PhotosManager'
+  import EventBus from '@/eventBus/index.js'
   export default {
     props: ['itemid'],
     components: {
@@ -212,6 +213,10 @@
           })
           .catch(err => {
             this.posting = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
               message: err.response.data.message,

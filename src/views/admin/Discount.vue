@@ -8,9 +8,8 @@
           </router-link>
         </el-col>
       </el-row>
-      <el-main>
+      <el-main class="table-div">
         <el-table
-          class="table"
           :data="discounts"
           :stripe="true"
           size="medium"
@@ -59,7 +58,9 @@
     </el-container>
   </div>
 </template>
+
 <script>
+import EventBus from '@/eventBus/index.js'
 export default{
   data () {
     return {
@@ -98,6 +99,10 @@ export default{
           })
           .catch(err => {
             this.loading = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
               message: err.response.data.message,
@@ -153,7 +158,7 @@ export default{
   }
 }
 </script>
-<style>
+<style scoped>
   .discount-table{
     padding: 16px 0 0 0;
     display: flex;
@@ -171,7 +176,8 @@ export default{
   .el-select {
     width: 120px;
   }
-  .table {
-    height: 70vh;
+
+  .table-div {
+    height: 80vh;
   }
 </style>
