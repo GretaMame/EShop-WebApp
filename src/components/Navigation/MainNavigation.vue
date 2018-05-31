@@ -55,7 +55,6 @@
           this.axios.get('/Cart/itemsCount').then(response => {
             this.itemsInCart = response.data
           }).catch(err => {
-            console.log(err)
             if (err.response && err.response.status === 404) {
               this.itemsInCart = 0
             }

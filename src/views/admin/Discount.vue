@@ -58,7 +58,9 @@
     </el-container>
   </div>
 </template>
+
 <script>
+import EventBus from '@/eventBus/index.js'
 export default{
   data () {
     return {
@@ -97,6 +99,10 @@ export default{
           })
           .catch(err => {
             this.loading = false
+            if (err.cookieExpired) {
+              EventBus.$emit('cookieExpired')
+              return
+            }
             this.$notify.error({
               title: 'Error',
               message: err.response.data.message,

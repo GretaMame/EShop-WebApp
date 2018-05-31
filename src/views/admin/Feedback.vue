@@ -63,7 +63,9 @@
     </el-container>
   </div>
 </template>
+
 <script>
+import EventBus from '@/eventBus/index.js'
 export default{
   data () {
     return {
@@ -132,6 +134,10 @@ export default{
         this.loading = false
       }).catch((err) => {
         console.log(err)
+        if (err.cookieExpired) {
+          EventBus.$emit('cookieExpired')
+          return
+        }
         this.loading = false
       })
     },
