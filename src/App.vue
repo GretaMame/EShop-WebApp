@@ -6,6 +6,11 @@
   import EventBus from './eventBus'
   export default {
     name: 'app',
+    data () {
+      return {
+        loggedOutMessage: null
+      }
+    },
     created () {
       this.axios.get('account/renewcsrftoken').catch(err => {
         console.log(err)
@@ -20,17 +25,22 @@
     },
     methods: {
       cookieExpired () {
-        this.$router.push({
-          name: 'login',
-          query: {
-            redirect: this.$router.currentRoute.path
-          }
-        })
-        this.$notify.info({
-          title: 'Logged out',
-          message: 'You were logged out',
-          offset: 50
-        })
+        if (!this.loggedOutMessage) {
+          this.$router.push({
+            name: 'login',
+            query: {
+              redirect: this.$router.currentRoute.path
+            }
+          })
+          EventBus.$emit('updateCartCount')
+
+          this.loggedOutMessage = this.$notify.info({
+            title: 'Logged out',
+            message: 'You were logged out',
+            offset: 50,
+            onClose: () => { this.loggedOutMessage = null }
+          })
+        }
       },
       onLogin () {
         var cart = this.$store.getters.localCart
