@@ -132,7 +132,8 @@ export default {
             this.fetchData(true)
             this.$notify.info({
               title: 'Logged out',
-              message: 'You were logged out'
+              message: 'You were logged out',
+              offset: 50
             })
             return
           }
@@ -157,7 +158,7 @@ export default {
         filter += `id eq ${localCart[i].ItemID} or `
       }
       filter = filter.slice(0, -4)
-      var select = 'id,sku,name,price,attributes&$expand=attributes,pictures($select=url)'
+      var select = 'id,sku,name,price,discount,attributes&$expand=attributes,pictures($select=url)'
 
       return this.axios.get(`odata/Items?$select=${select}&$filter=${filter}`).then(response => {
         this.cart = {items: response.data.value}
@@ -180,7 +181,8 @@ export default {
         if (itemInLocal) {
           this.$set(this.cart.items[i], 'count', itemInLocal.Count)
         }
-        this.$set(this.cart.items[i], 'mainPicture', this.cart.items[i].pictures[0].url)
+        this.$set(this.cart.items[i], 'mainPicture', this.cart.items[i].pictures[0] &&
+          this.cart.items[i].pictures[0].url ? this.cart.items[i].pictures[0].url : null)
       }
     },
     changeAddress (newAddress) {
@@ -226,7 +228,11 @@ export default {
           var arrayLength = items.length
           this.subtotal = 0
           for (var i = 0; i < arrayLength; i++) {
-            this.subtotal += items[i].price * items[i].count
+            if (items[i].discount) {
+              this.subtotal += items[i].discount * items[i].count
+            } else {
+              this.subtotal += items[i].price * items[i].count
+            }
           }
         }
       })
@@ -238,10 +244,12 @@ export default {
       this.axios.post('checkout', this.cardDetails).then(response => {
         this.nextStep()
         this.loading = false
-      }).catch(e => {
+        EventBus.$emit('updateCartCount')
+      }).catch(err => {
         this.$notify.error({
             title: 'Error',
-            message: e.response.data.message
+            message: err.response.data.message,
+            offset: 50
           })
         this.loading = false
       })

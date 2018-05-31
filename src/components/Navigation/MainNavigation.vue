@@ -1,16 +1,10 @@
 <template>
   <div>
     <el-row class="hidden-sm-and-up">
-      <NavigationMobile
-        :categories="categories"
-        :itemsInCart="itemsInCart"
-        v-on:signOut="signOut"/>
+      <NavigationMobile :categories="categories" :itemsInCart="itemsInCart" v-on:signOut="signOut" />
     </el-row>
     <el-row class="hidden-xs-only">
-      <Navigation
-        :categories="categories"
-        :itemsInCart="itemsInCart"
-        v-on:signOut="signOut"/>
+      <Navigation :categories="categories" :itemsInCart="itemsInCart" v-on:signOut="signOut" />
     </el-row>
   </div>
 </template>
@@ -21,8 +15,8 @@
 
   export default {
     components: {
-    Navigation,
-    NavigationMobile
+      Navigation,
+      NavigationMobile
     },
     data () {
       return {
@@ -33,34 +27,27 @@
     },
     created () {
       this.fetchData()
-      EventBus.$on('getNamesForBreadcrumb', (ids, setNames) => {
-        if (this.categoriesPromise) {
-          this.categoriesPromise.then(() => {
-            this.resolveCategoriesNames(ids, setNames)
-          })
-        } else {
-          this.resolveCategoriesNames(ids, setNames)
-        }
-      })
-      EventBus.$on('cartItemCountChanged', this.loadCartCount)
+      EventBus.$on('getNamesForBreadcrumb', this.getNamesForBreadcrumb)
       EventBus.$on('cartMerged', this.loadCartCount)
+      EventBus.$on('updateCartCount', this.loadCartCount)
     },
     beforeDestroy () {
-      EventBus.$off('cartItemCountChanged', this.loadCartCount)
-      EventBus.$on('cartMerged', this.loadCartCount)
+      EventBus.$off('cartMerged', this.loadCartCount)
+      EventBus.$off('updateCartCount', this.loadCartCount)
+      EventBus.$off('getNamesForBreadcrumb', this.getNamesForBreadcrumb)
     },
     methods: {
       fetchData () {
-          this.loadCategory().catch(err => {
-            console.log(err)
-          })
-          this.loadCartCount()
+        this.loadCategory().catch(err => {
+          console.log(err)
+        })
+        this.loadCartCount()
       },
       loadCategory () {
         this.categoriesPromise = this.axios.get('Category').then(response => {
-            this.categories = response.data
-            this.categoriesPromise = null
-          })
+          this.categories = response.data
+          this.categoriesPromise = null
+        })
         return this.categoriesPromise
       },
       loadCartCount () {
@@ -69,6 +56,9 @@
             this.itemsInCart = response.data
           }).catch(err => {
             console.log(err)
+            if (err.response && err.response.status === 404) {
+              this.itemsInCart = 0
+            }
           })
         } else {
           this.itemsInCart = this.$store.getters.countCartItemsCount
@@ -82,10 +72,10 @@
             this.postSignOut()
             return
           }
-          console.log('error: ', err)
           this.$notify.error({
             title: 'Error',
-            message: 'Unable to log out.'
+            message: err.response.data.message,
+            offset: 50
           })
         })
       },
@@ -102,7 +92,8 @@
       postSignOut () {
         this.$store.dispatch('logOut')
         this.$notify.success({
-          title: 'Successful logout'
+          title: 'Successful logout',
+          offset: 50
         })
         this.$router.push('/home')
         this.axios.get('account/renewcsrftoken')
@@ -129,11 +120,24 @@
             }
           }
         }
-        setNames({categoryName: categoryName, subcategoryName: subcategoryName})
+        setNames({
+          categoryName: categoryName,
+          subcategoryName: subcategoryName
+        })
       },
       goToOrderHistory () {
         this.$router.push()
+      },
+      getNamesForBreadcrumb (ids, setNames) {
+        if (this.categoriesPromise) {
+          this.categoriesPromise.then(() => {
+            this.resolveCategoriesNames(ids, setNames)
+          })
+        } else {
+          this.resolveCategoriesNames(ids, setNames)
+        }
       }
     }
   }
+
 </script>

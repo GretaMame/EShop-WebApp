@@ -127,12 +127,12 @@ export default {
       .then(response => {
         this.cart = response.data
       })
-      .catch(error => {
+      .catch(err => {
         this.$notify.error({
           title: 'Error!',
-          message: 'Could not fetch cart'
+          message: err.response.data.message,
+          offset: 50
         })
-        console.log(error)
       })
     }
   }

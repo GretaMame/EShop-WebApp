@@ -6,7 +6,12 @@
         mode="vertical"
         default-active="1"
         :router="true">
-        <span>ADMIN PANEL</span>
+        <div>
+          <router-link :to="{name:'home'}">
+            <el-button class="go-back-button" size="small" icon="el-icon-arrow-left">Back to store</el-button>
+          </router-link>
+        </div>
+        <span class="gd_title">ADMIN PANEL</span>
         <el-menu-item index="1" :route="{name:'adminOrders'}">
           <i class="el-icon-document"></i>
           <span slot="title">Orders</span>
@@ -34,6 +39,10 @@
           <i class="el-icon-d-caret"></i>
           <span slot="title">Categories</span>
         </el-menu-item>
+        <el-menu-item index="4" :route="{name:'adminDiscount'}">
+          <i class="el-icon-bell"></i>
+          <span slot="title">Discounts</span>
+        </el-menu-item>
         <el-menu-item index="5" :route="{name:'adminFeedback'}">
           <i class="el-icon-star-off"></i>
           <span slot="title">Feedback</span>
@@ -46,7 +55,7 @@
 <script>
 </script>
 
-<style>
+<style scoped>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
     min-height: 300px;
@@ -58,6 +67,10 @@
 
   .gd_title {
     padding-left: 20px;
+  }
+
+  .go-back-button {
+    margin: 8px;
   }
 
 </style>

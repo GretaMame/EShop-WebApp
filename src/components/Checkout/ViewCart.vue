@@ -7,8 +7,7 @@
       v-bind:item="item"
       v-bind:editable="true"
       v-on:updated="updateCartItem"
-      v-on:delete="deleteCartItem"
-      v-bind:quantiySum="quantitySum">
+      v-on:delete="deleteCartItem">
     </cart-item>
     <h3><b>Subtotal:</b> {{(subtotal.toFixed(2))}} €</h3>
     <div class="gd_step_buttons">
@@ -55,6 +54,7 @@ export default {
       } else {
         this.axios.delete('Cart/deletecartitem/' + id).then(response => {
           this.removeFromCart(id)
+          EventBus.$emit('updateCartCount')
           this.calculateSubtotal()
         }).catch(err => {
           console.log(err)
@@ -75,7 +75,7 @@ export default {
       } else {
         this.axios.put('Cart/updatecartitems', { items: itemsCount }).then(response => {
           this.isUpdated = false
-          EventBus.$emit('cartItemCountChanged')
+          EventBus.$emit('updateCartCount')
         }).catch(err => {
           console.log(err)
         })
@@ -84,7 +84,6 @@ export default {
     removeFromCart (id) {
       for (var i = 0; i < this.cart.items.length; i++) {
         if (this.cart.items[i].id === id) {
-          EventBus.$emit('cartItemCountChanged')
           this.cart.items.splice(i, 1)
           break
         }

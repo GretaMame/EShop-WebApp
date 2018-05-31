@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import EventBus from '@/eventBus'
 
 Vue.use(Vuex)
 
@@ -84,6 +85,9 @@ const store = new Vuex.Store({
     },
     logout (state) {
       state.user.authenticated = false
+      state.importedItems = null
+      state.importErrors = null
+      state.user.role = ''
     },
     addItemToCart (state, item) {
       if (!state.cart) {
@@ -96,6 +100,7 @@ const store = new Vuex.Store({
         }
       }
       state.cart.push(item)
+      EventBus.$emit('updateCartCount')
     },
     clearCart (state) {
       state.cart = null
@@ -107,6 +112,7 @@ const store = new Vuex.Store({
           break
         }
       }
+      EventBus.$emit('updateCartCount')
     },
     updateItems (state, items) {
       for (var newItem of items) {
@@ -117,6 +123,7 @@ const store = new Vuex.Store({
           }
         }
       }
+      EventBus.$emit('updateCartCount')
     },
     startImport (state) {
       state.importInProgress = true
@@ -128,7 +135,6 @@ const store = new Vuex.Store({
       state.importErrors = errors
     },
     setImportedItems (state, items) {
-      console.log(items)
       state.importedItems = items
     }
   },
