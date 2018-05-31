@@ -10,23 +10,32 @@
       </el-menu-item>
       <el-submenu index="/categories">
         <template slot="title">Goods</template>
-        <el-submenu v-for="category in categories" :key="category.name" :index="`/home/${category.id}`">
-          <template slot="title">
-            <span class="gd-category gd-pr-30px gd-width-100" v-on:click="routToCategory(category.id)">
-              {{category.name}}
-            </span>
-          </template>
-          <el-menu-item v-if="category.subCategories"
-          v-for="subcategory in category.subCategories"
-          :key="subcategory.name"
-          :index="`/home/${category.id}/${subcategory.id}`">
+        <div v-for="category in categories" :key="category.name" >
+          <el-submenu v-if="category.subCategories.length > 0" :index="`/home/${category.id}`">
+            <template slot="title">
+              <span class="gd-category gd-pr-30px gd-width-100" v-on:click="routToCategory(category.id)">
+                {{category.name}}
+              </span>
+            </template>
+            <el-menu-item
+            v-for="subcategory in category.subCategories"
+            :key="subcategory.name"
+            :index="`/home/${category.id}/${subcategory.id}`">
+              <template slot="title">
+                <span class="gd-category">
+                  {{subcategory.name}}
+                </span>
+              </template>
+            </el-menu-item>
+          </el-submenu>
+          <el-menu-item v-else>
             <template slot="title">
               <span class="gd-category">
-                {{subcategory.name}}
+                {{category.name}}
               </span>
             </template>
           </el-menu-item>
-        </el-submenu>
+        </div>
       </el-submenu>
       <el-menu-item class="gd-float-right" index="/register" v-if="!this.$store.getters.isAuthenticated" route="/register">
         Sign up

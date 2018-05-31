@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <status-bar v-if="this.$store.getters.isImportInProgress"></status-bar>
+      <status-bar class="gd_status_bar" v-if="this.$store.getters.isImportInProgress"></status-bar>
       <AdminNavigation></AdminNavigation>
       <router-view/>
     </el-main>
@@ -111,6 +111,13 @@
 
   header {
     height: 26px !important;
+  }
+
+  .gd_status_bar {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
   }
 
 </style>
