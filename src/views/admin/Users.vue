@@ -275,7 +275,7 @@
           })
       },
       formatAverage (row, column, cellValue, index) {
-        return cellValue.toFixed(2) + ' '
+        return cellValue.toFixed(2) + ' €'
       }
     }
   }
