@@ -25,10 +25,10 @@
                   <el-form-item label="Discount description" prop="description">
                     <el-input placeholder="Description" v-model="newDiscountForm.description"></el-input>
                   </el-form-item>
-                  <el-row :gutter="20">
-                    <el-col :span="6">
+                  <el-row>
+                    <el-col :span="5">
                       <el-form-item label="Choose" prop="choose">
-                        <el-select class="gd-width-190" v-model="newDiscountForm.choose" placeholder="Select">
+                        <el-select class="gd-width-200" v-model="newDiscountForm.choose" placeholder="Select" @change="onOptionChange">
                           <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -38,7 +38,7 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="5">
                       <el-form-item label="Category" prop="category">
                         <el-select class="gd-width-220" v-model="newDiscountForm.categoryId" placeholder="Categories" @change="onCategoryChange">
                           <el-option
@@ -50,7 +50,7 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col v-if="newDiscountForm.choose == '2' || newDiscountForm.choose == '3'" :span="6">
+                    <el-col v-if="newDiscountForm.choose == '2' || newDiscountForm.choose == '3'" :span="5">
                       <el-form-item label="Subcategory" prop="subCategory">
                         <el-select class="gd-width-220" v-model="newDiscountForm.subCategoryId" placeholder="Subcategories" @change="onSubCategoryChange">
                           <el-option
@@ -62,9 +62,9 @@
                         </el-select>
                       </el-form-item>
                     </el-col>
-                    <el-col v-if="newDiscountForm.choose == '3'" :span="6">
+                    <el-col v-if="newDiscountForm.choose == '3'" :span="7">
                       <el-form-item label="Item" prop="item">
-                        <el-select class="gd-width-220" v-model="newDiscountForm.itemId" placeholder="Items" v-loading="itemsLoading">
+                        <el-select class="gd-width-350" v-model="newDiscountForm.itemId" placeholder="Items" v-loading="itemsLoading">
                           <el-option
                             v-for="item in items"
                             :key="item.id"
@@ -76,7 +76,7 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="9">
+                    <el-col :span="8">
                       <el-form-item label="Discount" prop="discount">
                         <el-input-number :min="0" v-model="newDiscountForm.discount"></el-input-number>
                       </el-form-item>
@@ -207,6 +207,8 @@ export default {
     },
     onCategoryChange () {
       this.newDiscountForm.subCategoryId = null
+      this.newDiscountForm.itemId = null
+      this.onOptionChange()
       this.categories
         .forEach((category, index) => {
           if (category.id === this.newDiscountForm.categoryId) {
@@ -216,7 +218,16 @@ export default {
       this.loadItems()
     },
     onSubCategoryChange () {
+      this.newDiscountForm.itemId = null
       this.loadItems()
+    },
+    onOptionChange () {
+      if (this.newDiscountForm.choose === 1) {
+        this.newDiscountForm.subCategoryId = null
+      }
+      if (this.newDiscountForm.choose !== 3) {
+        this.newDiscountForm.itemId = null
+      }
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
@@ -243,7 +254,6 @@ export default {
         categoryID: null,
         subCategoryID: null
       }
-
       if (this.newDiscountForm.choose === 3) {
         discount.itemID = this.newDiscountForm.itemId
       } else if (this.newDiscountForm.choose === 2) {
@@ -278,11 +288,14 @@ export default {
     float: left;
     margin-left: 8px
   }
+  .gd-width-350{
+    width: 350px;
+  }
   .gd-width-220{
     width: 220px;
   }
-  .gd-width-190{
-    width: 190px;
+  .gd-width-200{
+    width: 200px;
   }
 </style>
 

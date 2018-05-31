@@ -1,28 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Store from '@/store'
+import ShopView from '@/views/mainViews/ShopView'
 import Profile from '@/views/user/account/Profile'
 import Home from '@/views/user/Home'
 import Login from '@/views/user/account/Login'
 import Register from '@/views/user/account/Register'
 import ForgotPassword from '@/views/user/account/ForgotPassword'
-import AdminUsers from '@/views/admin/Users'
 import ResetPassword from '@/views/user/account/ResetPassword'
 import ConfirmAccount from '@/views/user/account/ConfirmAccount'
-import AdminItems from '@/views/admin/Items'
-import NewAdminItems from '@/views/admin/NewItems'
-import AdminCategories from '@/views/admin/Categories'
 import ItemDetails from '@/views/user/ItemDetails'
 import Checkout from '@/views/user/Checkout'
-import Store from '@/store'
-import ShopView from '@/views/mainViews/ShopView'
-import AdminView from '@/views/mainViews/AdminView'
-import AdminImportItems from '@/views/admin/ImportItems'
 
-import ArchivedAdminItems from '@/views/AdminArchivedItems'
-import AdminOrders from '@/views/AdminOrders'
-import AdminFeedback from '@/views/AdminFeedback'
-import AdminDiscount from '@/views/AdminDiscount'
-import NewAdminDiscount from '@/views/NewAdminDiscount'
+import AdminView from '@/views/mainViews/AdminView'
+import AdminUsers from '@/views/admin/Users'
+import AdminItems from '@/views/admin/Items'
+import AdminNewItems from '@/views/admin/NewItems'
+import AdminImportItems from '@/views/admin/ImportItems'
+import AdminCategories from '@/views/admin/Categories'
+import ArchivedAdminItems from '@/views/admin/ArchivedItems'
+import AdminOrders from '@/views/admin/Orders'
+import AdminFeedback from '@/views/admin/Feedback'
+import AdminDiscount from '@/views/admin/Discount'
+import AdminNewDiscount from '@/views/admin/NewDiscount'
 
 Vue.use(Router)
 
@@ -147,13 +147,13 @@ export default new Router({
         {
           path: '/admin/items/add',
           name: 'adminItemsAdd',
-          component: NewAdminItems,
+          component: AdminNewItems,
           beforeEnter: isAdminAuthenticated
         },
         {
           path: '/admin/items/edit/:itemid',
           name: 'adminItemsEdit',
-          component: NewAdminItems,
+          component: AdminNewItems,
           beforeEnter: isAdminAuthenticated,
           props: true
         },
@@ -195,7 +195,7 @@ export default new Router({
         {
           path: '/admin/discount/add',
           name: 'adminDiscountAdd',
-          component: NewAdminDiscount,
+          component: AdminNewDiscount,
           beforeEnter: isAdminAuthenticated
         }
       ]
