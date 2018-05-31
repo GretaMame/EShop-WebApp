@@ -19,7 +19,7 @@
       </el-header>
       <el-main>
         <el-form ref="newDiscountForm" :model="newDiscountForm" :rules="rules" label-position="right">
-          <el-card>
+          <el-card class="gd_right">
               <el-row class="main-row">
                 <el-col>
                   <el-form-item label="Discount description" prop="description">
@@ -303,7 +303,7 @@ export default {
     width: 200px;
   }
   .gd_right {
-    align-items: left;
+    text-align: left;
   }
 </style>
 
