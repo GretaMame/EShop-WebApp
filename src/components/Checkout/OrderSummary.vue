@@ -157,7 +157,11 @@ export default {
           var arrayLength = items.length
           this.discount = 0
           for (var i = 0; i < arrayLength; i++) {
-            this.discount += items[i].discount * items[i].count
+            if (items[i].discount) {
+              this.discount += items[i].discount * items[i].count
+            } else {
+              this.discount += items[i].price * items[i].count
+            }
           }
           if (this.discount !== 0) {
             this.discount = this.subtotal - this.discount

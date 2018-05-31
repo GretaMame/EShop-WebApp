@@ -57,7 +57,7 @@
         {{this.item.description}}
       </el-row>
     </el-card>
-    <div class="gd-no-items" v-else>
+    <div class="gd-no-items" v-else v-loading="loading">
       Item cannot be found.
     </div>
   </el-row>
