@@ -7,10 +7,10 @@
     <div v-else class="gd_container gd_left_text">
       <h2>Select import file</h2>
       <el-row>
-        <el-col :span="3">
+        <el-col :lg="2" :md="3" :sm="4">
         <el-button @click="importItems" size="medium"  type="primary" :disabled="file.length === 0">Import</el-button>
         </el-col>
-        <el-col :span="3">
+        <el-col :lg="22" :md="21" :sm="20">
         <el-upload
           action=""
           :on-change="setFile"
@@ -113,7 +113,7 @@ export default {
       var attributes = ''
       if (attributeList) {
         for (var i = 0; i < attributeList.length; i++) {
-          attributes = attributes + attributeList[i].name + ': ' + attributeList[i].value + ', '
+          attributes = attributes + attributeList[i].name + ': ' + attributeList[i].value + '\r\n '
         }
         attributes = attributes.substring(0, attributes.length - 2)
       }
