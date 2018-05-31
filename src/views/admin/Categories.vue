@@ -91,7 +91,7 @@ import EventBus from '@/eventBus/index.js'
       createCategory (node) {
         let dictKey = `${node.parent.level > 0 ? node.parent.data.name : ''}${node.parent.level}`
 
-        if (this.addNewName[dictKey] && (this.addNewName[dictKey].length < 3 || this.addNewName[dictKey].length > 50)) {
+        if (!this.addNewName[dictKey] || (this.addNewName[dictKey].length < 3 || this.addNewName[dictKey].length > 50)) {
           this.$notify.error({
             title: 'Error',
             message: 'The category name should be between 3 and 50 characters',
@@ -156,7 +156,7 @@ import EventBus from '@/eventBus/index.js'
         this.$prompt('Please enter new category name', 'Edit', {
           confirmButtonText: 'Edit',
           cancelButtonText: 'Cancel',
-          inputPattern: /\w{3,50}/,
+          inputPattern: /^\w{3,50}$/,
           inputErrorMessage: 'The category name should be between 3 and 50 characters'
         }).then(value => {
           this.loading = true
