@@ -16,9 +16,9 @@
               {{category.name}}
             </span>
           </template>
-          <el-menu-item v-if="category.subCategories" 
-          v-for="subcategory in category.subCategories" 
-          :key="subcategory.name" 
+          <el-menu-item v-if="category.subCategories"
+          v-for="subcategory in category.subCategories"
+          :key="subcategory.name"
           :index="`/home/${category.id}/${subcategory.id}`">
             <template slot="title">
               <span class="gd-category">
@@ -44,7 +44,7 @@
         <el-menu-item index="/user/orderhistory" route="/user/orderhistory">
           Order history
         </el-menu-item>
-        <el-menu-item index="/user/signout" @click="$emit('signOut')"> 
+        <el-menu-item index="/user/signout" @click="$emit('signOut')">
           Sign out
         </el-menu-item>
       </el-submenu>
@@ -57,6 +57,9 @@
             {{(itemsInCart)}}
           </el-col>
         </el-row>
+      </el-menu-item>
+      <el-menu-item class="gd-float-right" index="/admin" v-if="this.$store.getters.isAdminAuthenticated" route="/admin">
+        Admin panel
       </el-menu-item>
     </el-menu>
   </div>

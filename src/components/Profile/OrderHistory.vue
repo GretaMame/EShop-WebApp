@@ -8,27 +8,27 @@
       shadow="hover">
         <div slot="header" class="gd_order_header" align="left">
           <el-row>
-            <el-col :xs="24" :sm="14" :md="14" :lg="14">
-              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+            <el-col :xs="24" :sm="8" :md="8" :lg="7">
+              <el-col :xs="12" :sm="12" :md="12" :lg="12">
                 <span class="gd_label">Order no.:</span>
               </el-col>
-              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+              <el-col :xs="12" :sm="10" :md="10" :lg="10">
                 {{order.orderNumber}}
               </el-col>
             </el-col>
-            <el-col :xs="24" :sm="5" :md="5" :lg="5">
-              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+            <el-col :xs="24" :sm="8" :md="8" :lg="8">
+              <el-col :xs="12" :sm="12" :md="12" :lg="12">
                 <span class="gd_label">Order date:</span>
               </el-col>
-              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+              <el-col :xs="12" :sm="10" :md="10" :lg="10">
                 {{order.createDate}}
               </el-col>
             </el-col>
-            <el-col :xs="24" :sm="5" :md="5" :lg="5">
-              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+            <el-col :xs="24" :sm="9" :md="9" :lg="9">
+              <el-col :xs="12" :sm="13" :md="13" :lg="13">
               <span class="gd_label">Order status:</span>
               </el-col>
-              <el-col :xs="12" :sm="24" :md="24" :lg="24">
+              <el-col :xs="12" :sm="11" :md="11" :lg="11">
                 {{order.status}}
               </el-col>
             </el-col>

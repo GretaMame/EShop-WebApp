@@ -86,6 +86,7 @@ const store = new Vuex.Store({
       state.user.authenticated = false
       state.importedItems = null
       state.importErrors = null
+      state.user.role = ''
     },
     addItemToCart (state, item) {
       if (!state.cart) {
