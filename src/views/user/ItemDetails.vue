@@ -121,7 +121,7 @@
               message: 'Item was added to cart.',
               offset: 50
             })
-            EventBus.$emit('cartItemCountChanged')
+            EventBus.$emit('updateCartCount')
           })
           .catch(err => {
             // try again if cookie expired, so items will be added to local storage cart

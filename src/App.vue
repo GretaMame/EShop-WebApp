@@ -6,26 +6,43 @@
   import EventBus from './eventBus'
   export default {
     name: 'app',
+    data () {
+      return {
+        loggedOutMessage: null
+      }
+    },
     created () {
       this.axios.get('account/renewcsrftoken').catch(err => {
         console.log(err)
       })
 
-      EventBus.$on('cookieExpired', () => {
-        this.$router.push({
-          name: 'login',
-          query: {
-            redirect: this.$router.currentRoute.path
-          }
-        })
-        this.$notify.info({
-          title: 'Logged out',
-          message: 'You were logged out',
-          offset: 50
-        })
-      })
+      EventBus.$on('cookieExpired', this.cookieExpired)
+      EventBus.$on('onLogin', this.onLogin)
+    },
+    beforeDestroy () {
+      EventBus.$off('cookieExpired', this.cookieExpired)
+      EventBus.$off('onLogin', this.onLogin)
+    },
+    methods: {
+      cookieExpired () {
+        if (!this.loggedOutMessage) {
+          this.$router.push({
+            name: 'login',
+            query: {
+              redirect: this.$router.currentRoute.path
+            }
+          })
+          EventBus.$emit('updateCartCount')
 
-      EventBus.$on('onLogin', () => {
+          this.loggedOutMessage = this.$notify.info({
+            title: 'Logged out',
+            message: 'You were logged out',
+            offset: 50,
+            onClose: () => { this.loggedOutMessage = null }
+          })
+        }
+      },
+      onLogin () {
         var cart = this.$store.getters.localCart
         if (!cart || cart.length === 0) {
           return
@@ -42,7 +59,7 @@
             console.log('Error while mergin cart ' + err)
             EventBus.$emit('cartMerged', false)
           })
-      })
+      }
     }
   }
 
