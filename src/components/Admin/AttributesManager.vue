@@ -9,6 +9,7 @@
           v-model="attribute.value"
           size="mini"
           filterable
+          allow-create
           placeholder="Please enter a keyword"
           >
           <el-option

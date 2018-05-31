@@ -67,7 +67,7 @@ export default{
       pageOptions: [5, 10, 25, 50],
       perPage: 10,
       currentPage: 1,
-      discounts: null,
+      discounts: {},
       totalRows: 0
     }
   },
@@ -107,10 +107,6 @@ export default{
             })
           })
       })
-    },
-    onFiltered (filtereddiscounts) {
-      this.totalRows = filtereddiscounts.length
-      this.currentPage = 1
     },
     fetchData () {
       this.loading = true

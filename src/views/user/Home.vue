@@ -286,7 +286,8 @@ export default {
     min-height: 85vh;
   }
   .gd-filters {
-    min-height: 85vh;
+    min-height: 80vh;
+    max-height: 80vh;
     overflow-x: hidden;
     box-sizing: border-box;
     padding-left: 10px;

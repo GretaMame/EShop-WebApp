@@ -5,8 +5,12 @@
       <span>Import is in progress... Please wait</span>
     </div>
     <div v-else class="gd_container gd_left_text">
-      <h2 class="gd_title">Select import file</h2>
-      <div>
+      <h2>Select import file</h2>
+      <el-row>
+        <el-col :lg="2" :md="3" :sm="4">
+        <el-button @click="importItems" size="medium"  type="primary" :disabled="file.length === 0">Import</el-button>
+        </el-col>
+        <el-col :lg="22" :md="21" :sm="20">
         <el-upload
           action=""
           :on-change="setFile"
@@ -15,12 +19,12 @@
           accept=".xlsx">
           <el-button size="medium">Select file</el-button>
         </el-upload>
-        <el-button @click="importItems" size="medium"  type="primary">Import</el-button>
-      </div>
+        </el-col>
+      </el-row>
       <div
         v-if="this.$store.getters.importedItems && this.$store.getters.importedItems.length > 0"
         class="gd_left_text">
-        <h2 class="gd_title">Last import items</h2>
+        <h2>Last import items</h2>
         <h4 class="gd_title">Successfully imported {{this.$store.getters.importedItems.length}} items</h4>
         <el-table
           :data="this.$store.getters.importedItems"
@@ -73,8 +77,8 @@
         </el-table>
       </div>
       <div v-if="this.$store.getters.importErrors && this.$store.getters.importErrors.length > 0" class="gd_left_text">
-        <h2 class="gd_title">Last import errors</h2>
-        <h4 class="gd_title">Total number of errors ({{this.$store.getters.importErrors.length}})</h4>
+        <h2>Last import errors</h2>
+        <h4>Total number of errors ({{this.$store.getters.importErrors.length}})</h4>
         <el-table
           :data="this.$store.getters.importErrors"
           :stripe="true"
@@ -103,12 +107,13 @@ export default {
   methods: {
     importItems () {
       EventBus.$emit('importStarted', this.file)
+      this.file = []
     },
     concatinateAttributes (attributeList) {
       var attributes = ''
       if (attributeList) {
         for (var i = 0; i < attributeList.length; i++) {
-          attributes = attributes + attributeList[i].name + ': ' + attributeList[i].value + ', '
+          attributes = attributes + attributeList[i].name + ': ' + attributeList[i].value + '\r\n '
         }
         attributes = attributes.substring(0, attributes.length - 2)
       }
