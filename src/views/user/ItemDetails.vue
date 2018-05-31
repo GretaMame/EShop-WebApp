@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-card v-loading="loading" class="box-card">
+    <el-card v-loading="loading" class="box-card" v-if="item.id">
       <el-row>
         <el-breadcrumb class="gd-itemDetailsBread">
           <el-breadcrumb-item v-if="item.category" :to="`/home/${item.category.id}`">
@@ -57,6 +57,9 @@
         {{this.item.description}}
       </el-row>
     </el-card>
+    <div class="gd-no-items" v-else>
+      Item cannot be found.
+    </div>
   </el-row>
 </template>
 
@@ -240,6 +243,12 @@
     font-size: 24px;
     color: brown;
     font-weight: bold;
+  }
+
+  .gd-no-items{
+    position: relative;
+    transform: translateY(200%);
+    font-size: 18pt;
   }
 
 </style>
