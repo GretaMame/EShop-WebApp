@@ -8,9 +8,8 @@
           </router-link>
         </el-col>
       </el-row>
-      <el-main>
+      <el-main class="table-div">
         <el-table
-          class="table"
           :data="discounts"
           :stripe="true"
           size="medium"
@@ -153,7 +152,7 @@ export default{
   }
 }
 </script>
-<style>
+<style scoped>
   .discount-table{
     padding: 16px 0 0 0;
     display: flex;
@@ -171,7 +170,8 @@ export default{
   .el-select {
     width: 120px;
   }
-  .table {
-    height: 70vh;
+
+  .table-div {
+    height: 80vh;
   }
 </style>
