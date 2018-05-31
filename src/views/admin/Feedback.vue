@@ -72,7 +72,7 @@ export default{
       possibleRatings: ['All', '1', '2', '3', '4', '5'],
       loading: false,
       pageOptions: [5, 10, 25, 50],
-      perPage: 5,
+      perPage: 10,
       currentPage: 1,
       filter: null,
       items: null,
