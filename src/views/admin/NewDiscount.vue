@@ -25,7 +25,7 @@
                   <el-form-item label="Discount description" prop="description">
                     <el-input placeholder="Description" v-model="newDiscountForm.description"></el-input>
                   </el-form-item>
-                  <el-row>
+                  <el-row class="gd_right">
                     <el-col :span="5">
                       <el-form-item label="Choose" prop="choose">
                         <el-select class="gd-width-200" v-model="newDiscountForm.choose" placeholder="Select" @change="onOptionChange">
@@ -301,6 +301,9 @@ export default {
   }
   .gd-width-200{
     width: 200px;
+  }
+  .gd_right {
+    align-items: left;
   }
 </style>
 
