@@ -113,7 +113,7 @@
           </el-collapse-item>
         </el-collapse>
       </el-card>
-      <el-row v-if="order">
+      <el-row v-if="orders">
         <el-col class="hidden-xs-only">
           <el-pagination
             @size-change="handleSizeChange"
@@ -228,6 +228,7 @@ export default {
             message: 'Items were added to cart.',
             offset: 50
           })
+          EventBus.$emit('updateCartCount')
         })
         .catch(this.handleError)
     },
@@ -244,6 +245,7 @@ export default {
           message: 'Item was added to cart.',
           offset: 50
         })
+        EventBus.$emit('updateCartCount')
       })
       .catch(this.handleError)
     },
