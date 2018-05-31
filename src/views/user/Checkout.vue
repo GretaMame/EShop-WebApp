@@ -118,7 +118,7 @@ export default {
           this.loading = false
         }).catch((err) => {
           this.loading = false
-          console.log('something bad happened ' + err)
+          console.log('something bad happened: ' + err)
         })
       } else {
         var cartPromise = this.loadCart()
@@ -245,6 +245,7 @@ export default {
         this.nextStep()
         this.loading = false
       }).catch(err => {
+        this.formatCardInput()
         this.$notify.error({
             title: 'Error',
             message: err.response.data.message,
@@ -252,6 +253,15 @@ export default {
           })
         this.loading = false
       })
+    },
+    formatCardInput () {
+      this.cardDetails.number = this.cardDetails.number.split(' ').join('')
+      var split = 4
+      var chunk = []
+      for (var i = 0, len = this.cardDetails.number.length; i < len; i += split) {
+        chunk.push(this.cardDetails.number.substr(i, split))
+      }
+      this.cardDetails.number = chunk.join(' ')
     },
     setLoading (value) {
       this.loading = value
