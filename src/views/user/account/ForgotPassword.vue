@@ -62,7 +62,8 @@
           this.loading = false
           this.$notify.error({
             title: 'Error',
-            message: err.response.data.message
+            message: err.response.data.message,
+          offset: 50
           })
         })
       }

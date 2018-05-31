@@ -62,14 +62,12 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column
-            label="Price"
-            prop="price"
-            width="100px"/>
-          <el-table-column
-            label="Category"
-            prop="category"
-            width="130px"/>
+          <el-table-column label="Price" prop="price" width="100px">
+                    <template slot-scope="scope">
+              {{scope.row.price}} €
+            </template>
+          </el-table-column>
+          <el-table-column label="Category" prop="category" width="130px" />
           <el-table-column
             label="Archived"
             prop="isDeleted"
@@ -162,10 +160,10 @@ export default {
           })
           .catch(err => {
             this.loading = false
-            console.log(err)
             this.$notify.error({
               title: 'Error',
-              message: 'There was a problem while archiving the items: ' + err
+              message: err.response.data.message,
+              offset: 50
             })
           })
       })

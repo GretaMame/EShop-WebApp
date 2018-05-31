@@ -93,10 +93,10 @@ export default {
       })
       .catch(err => {
         this.newAttribute.namesLoading = false
-        console.log(err)
         this.$notify.error({
           title: 'Error',
-          message: 'There was a problem while getting attribute names'
+          message: err.response.data.message,
+          offset: 50
         })
       })
   },
@@ -134,10 +134,10 @@ export default {
         })
         .catch(err => {
           this.newAttribute.valuesLoading = false
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting attribute values'
+            message: err.response.data.message,
+            offset: 50
           })
         })
       }
@@ -173,18 +173,19 @@ export default {
         })
         .catch(err => {
           this.newAttribute.valuesLoading = false
-          console.log(err)
           this.$notify.error({
             title: 'Error',
-            message: 'There was a problem while getting attribute values'
+            message: err.response.data.message,
+            offset: 50
           })
         })
     },
     buildAttribute () {
       if (!this.newAttribute.key || !this.newAttribute.value || /^\s+$/.test(this.newAttribute.key) || /^\s+$/.test(this.newAttribute.value)) {
         this.$notify.warning({
-            title: 'Warning',
-            message: 'Attribute key and value cannot be empty/whitespace only'
+          title: 'Warning',
+          message: 'Attribute key and value cannot be empty/whitespace only',
+          offset: 50
         })
         return
       }

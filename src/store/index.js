@@ -129,7 +129,6 @@ const store = new Vuex.Store({
       state.importErrors = errors
     },
     setImportedItems (state, items) {
-      console.log(items)
       state.importedItems = items
     }
   },

@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
   .gd_status_bar {
-    background: #df3a01
+    background: #df3a01;
   }
 
 </style>
