@@ -101,7 +101,7 @@
           </el-table-column>
           <el-table-column label="Order count" prop="orderCount" />
           <el-table-column label="Total money spent" prop="moneySpent" />
-          <el-table-column label="Average money spent" prop="averageMoneySpent" />
+          <el-table-column label="Average money spent" prop="averageMoneySpent" :formatter="formatAverage"/>
           <el-table-column label="Role" prop="role" width="100px" />
           <el-table-column fixed="right" label="Operations" width="140">
             <template slot-scope="scope">
@@ -134,10 +134,10 @@
       return {
         loading: false,
         pageOptions: [5, 10, 25, 50],
-        perPage: 5,
+        perPage: 10,
         currentPage: 1,
         filter: null,
-        items: null,
+        items: [],
         totalRows: 0,
         searchText: '',
         searchBy: 'email',
@@ -152,9 +152,12 @@
     },
     methods: {
       countItems (items) {
-        var length = items.length
-        if (length === 1) return length + ' item'
-        return length + ' items'
+        if (items) {
+          var length = items.length
+          if (length === 1) return length + ' item'
+          return length + ' items'
+        }
+        return null
       },
       handleSizeChange (pageSize) {
         this.perPage = pageSize
@@ -213,8 +216,6 @@
         var rowsPromise = this.axios.get(`odata/Users?$count=true&$top=0${filterText ? `&$filter=${filterText}` : ''}`)
         rowsPromise.then(response => {
           this.totalRows = response.data['@odata.count']
-        }).catch(err => {
-          console.log(err)
         })
 
         // get items of current page
@@ -223,7 +224,7 @@
         )
         itemsPromise.then(response => {
           this.items = response.data.value
-        }).catch(err => console.log(err))
+        })
 
         // wait for both promises to end
         Promise.all([rowsPromise, itemsPromise]).then(() => {
@@ -259,6 +260,9 @@
               offset: 50
             })
           })
+      },
+      formatAverage (row, column, cellValue, index) {
+        return cellValue.toFixed(2)
       }
     }
   }

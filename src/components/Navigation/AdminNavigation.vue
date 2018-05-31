@@ -39,11 +39,11 @@
           <i class="el-icon-d-caret"></i>
           <span slot="title">Categories</span>
         </el-menu-item>
-        <el-menu-item index="4" :route="{name:'adminDiscount'}">
+        <el-menu-item index="5" :route="{name:'adminDiscount'}">
           <i class="el-icon-bell"></i>
           <span slot="title">Discounts</span>
         </el-menu-item>
-        <el-menu-item index="5" :route="{name:'adminFeedback'}">
+        <el-menu-item index="6" :route="{name:'adminFeedback'}">
           <i class="el-icon-star-off"></i>
           <span slot="title">Feedback</span>
         </el-menu-item>

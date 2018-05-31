@@ -125,6 +125,7 @@ export default {
         var addressPromise = this.loadAddress()
         Promise.all([cartPromise, addressPromise]).then(() => {
           this.calculateSubtotal()
+          EventBus.$emit('updateCartCount')
           this.loading = false
         }).catch((err) => {
           this.loading = false
@@ -246,6 +247,10 @@ export default {
         this.loading = false
         EventBus.$emit('updateCartCount')
       }).catch(err => {
+        if (err.cookieExpired) {
+          EventBus.$emit('cookieExpired')
+          return
+        }
         this.$notify.error({
             title: 'Error',
             message: err.response.data.message,
