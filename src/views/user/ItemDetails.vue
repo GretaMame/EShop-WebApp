@@ -28,29 +28,26 @@
           </el-row>
         </el-col>
         <el-col :lg="12" :md="24" :sm="24">
-          <el-row class="gd-itemName">
-            <h2>{{this.item.name}}</h2>
-            <span>SKU: {{this.item.sku}}</span>
-          </el-row>
-          <el-row v-for="attr in this.item.attributes" :key="attr.attributeID" :gutter="10">
-            <el-col class="gd-attributeName" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-              {{attr.name}}:
-            </el-col>
-            <el-col class="gd-attributeValue" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-              {{attr.value}}
-            </el-col>
-          </el-row>
-          <el-row class="gd-itemPrice">
-            <span v-if="item.discount === 0">{{item.price}} €</span>
-            <span v-else>
-              <el-row class="gd-itemPrice-strike">{{item.price}} €</el-row>
-              <el-row class="gd-discount-price">{{item.discount}} €</el-row>
-            </span>
-          </el-row>
-          <el-row class="gd-addToCard">
-            <el-input-number size="medium" :min="1" v-model="count" />
-            <el-button type="primary" @click="addToCart()">Add to cart</el-button>
-          </el-row>
+            <el-row class="gd-itemName">
+                <h2>{{this.item.name}}</h2>
+                <span>SKU: {{this.item.sku}}</span>
+            </el-row>
+            <el-row v-for="attr in this.item.attributes" :key="attr.attributeID" :gutter="10">
+              <el-col class="gd-attributeName" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+                {{attr.name}}:
+              </el-col>
+              <el-col class="gd-attributeValue" :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+                {{attr.value}}
+              </el-col>
+            </el-row>
+            <el-row class="gd-itemPrice">
+                <el-row v-bind:class="{'gd-itemPrice-strike': item.discount}">{{item.price}} €</el-row>
+                <el-row v-if="item.discount" class="gd-discount-price">{{item.discount}} €</el-row>
+            </el-row>
+            <el-row class="gd-addToCard">
+              <el-input-number size="medium" :min="1" v-model="count"/>
+              <el-button type="primary" @click="addToCart()">Add to cart</el-button>
+            </el-row>
         </el-col>
       </el-row>
       <el-row class="gd-description">
@@ -217,7 +214,8 @@
     color: midnightblue;
   }
 
-  .gd-itemPrice-strike {
+  .gd-itemPrice-strike{
+    font-size: 16pt;
     text-decoration: line-through solid;
   }
 

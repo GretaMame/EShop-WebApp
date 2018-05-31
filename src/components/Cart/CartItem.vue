@@ -22,8 +22,12 @@
               <el-col :xs="24" :sm="24" :md="19" :lg="18">
                 {{item.name}}
               </el-col>
-              <el-col class="item-price hidden-sm-and-down" :push="1" :md="4" :lg="4">
-                <span>{{item.price}} €</span>
+              <el-col class="item-price hidden-sm-and-down" :push="1" :xs="6" :sm="6">
+                <span v-if="!item.discount">{{item.price}} €</span>
+                <span v-else>
+                  <el-row class="gd-itemPrice-strike">{{item.price}} €</el-row>
+                  <el-row v-if="item.discount" class="gd-discount-price">{{item.discount}} €</el-row>
+                </span>
               </el-col>
             </el-row>
             <el-row class="item-font-size-10pt item-padding-bottom">
@@ -36,10 +40,14 @@
               <el-col v-else :push="1" :xs="15" :sm="15" :md="11" :lg="19">
                 &nbsp;
               </el-col>
-                <el-col class="item-price hidden-md-and-up" :push="1" :xs="6" :sm="6">
-                  <span>{{item.price}} €</span>
-                </el-col>
-              </el-row>
+              <el-col class="item-price hidden-md-and-up" :push="1" :xs="6" :sm="6">
+                <span v-if="!item.discount">{{item.price}} €</span>
+                <span v-else>
+                  <el-col class="gd-itemPrice-strike">{{item.price}} €</el-col>
+                  <el-col v-if="item.discount" class="gd-discount-price">{{item.discount}} €</el-col>
+                </span>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
         <el-row v-if="editable">
@@ -136,10 +144,17 @@ export default {
   .item-price{
     font-size: 18pt;
     color: midnightblue;
-    font-weight: bold;
     text-align: right;
     display: flex;
     justify-content: center;
+  }
+  .gd-itemPrice-strike{
+    font-size: 16pt;
+    text-decoration: line-through solid;
+  }
+  .gd-discount-price{
+    color:brown;
+    font-weight: bold;
   }
   .item-delete{
     justify-content: flex-end;
